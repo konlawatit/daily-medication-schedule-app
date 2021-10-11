@@ -4,9 +4,12 @@ import { StyleSheet, Text, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
+//firebase
+// import firebase from 'firebase';
+// import firebaseConfig from './firebaseConfig.json'
+
 //sqlite
 import { DatabaseConnection } from "./src/database/database-connection";
-
 const db = DatabaseConnection.getConnection();
 
 //Screens
@@ -19,12 +22,19 @@ import AppContext from "./src/components/AppContext";
 
 const Stack = createNativeStackNavigator();
 
+
+
 export default function App() {
+  
+
   const [uid, setUID] = useState("it6207007");
   const [name, setName] = useState("Bas");
   const [age, setAge] = useState(21);
 
+  
+
   useEffect(() => {
+    
     db.transaction((tx) => {
       // tx.executeSql("DROP TABLE USERS", []);
       tx.executeSql(
@@ -49,12 +59,12 @@ export default function App() {
             );
           }
 
-          tx.executeSql(
-            `SELECT * FROM USERS`,
-            [],
-            (tx, results) => console.log(results.rows),
-            (error) => console.log(error)
-          );
+          // tx.executeSql(
+          //   `SELECT * FROM USERS`,
+          //   [],
+          //   (tx, results) => console.log(results.rows),
+          //   (error) => console.log(error)
+          // );
         },
         (error) => console.log(error)
       );
