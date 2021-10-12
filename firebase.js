@@ -1,6 +1,7 @@
 import fb from "firebase/app";
 import "firebase/auth";
 import * as Google from "expo-google-app-auth";
+import * as Facebook from "expo-facebook";
 import firebaseConfig from "./firebaseConfig.json";
 
 if (!fb.apps.length) {
@@ -61,7 +62,7 @@ function isUserEqual(googleUser, firebaseUser) {
 }
 
 function onSignIn(googleUser) {
-//   console.log("Google Auth Response", googleUser);
+  //   console.log("Google Auth Response", googleUser);
   // We need to register an Observer on Firebase Auth to make sure auth is initialized.
   var unsubscribe = fb.auth().onAuthStateChanged((firebaseUser) => {
     unsubscribe();
@@ -96,3 +97,32 @@ function onSignIn(googleUser) {
   });
 }
 
+export async function logInFacebook() {
+  try {
+    await Facebook.initializeAsync({
+      appId: "905477617072521",
+    });
+    const { type, token, expirationDate, permissions, declinedPermissions } =
+      await Facebook.logInWithReadPermissionsAsync({
+        permissions: ["public_profile", "email"],
+      });
+    if (type === "success") {
+      // Get the user's name using Facebook's Graph API
+      const response = await fetch(
+        `https://graph.facebook.com/me?access_token=${token}`
+      );
+
+      const credential = fb.auth.FacebookAuthProvider.credential(token);
+      await fb.auth()
+        .signInWithCredential(credential)
+        .then(() => console.log("sync facebook with firebase"))
+        .catch(err => console.log('sync facebook with firebase fail', err));
+      // Alert.alert("Logged in!", `Hi ${(await response.json()).name}!`);
+      console.log("Logged in facebook", `Hi ${(await response.json()).name}!`);
+    } else {
+      // type === 'cancel'
+    }
+  } catch ({ message }) {
+    alert(`Facebook Login Error: ${message}`);
+  }
+}

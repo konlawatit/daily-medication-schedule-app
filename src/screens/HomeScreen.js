@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { StyleSheet, Text, View, Button } from "react-native";
 import AppContext from "../components/AppContext";
 
-import { signInAnonymous, signInWithGoogleAsync, firebase } from "../../firebase";
+import { signInAnonymous, signInWithGoogleAsync, firebase, logInFacebook } from "../../firebase";
 
 export default function HomeScreen({ navigation }) {
   const context = useContext(AppContext);
@@ -33,6 +33,9 @@ export default function HomeScreen({ navigation }) {
       }} />
       <Button title="signin google" onPress={() => {
         signInWithGoogleAsync();
+      }} />
+      <Button title="sigin facebook" onPress={() => {
+        logInFacebook();
       }} />
       <Button title="logout"  onPress={() => {firebase.auth().signOut()}} />
     </View>
