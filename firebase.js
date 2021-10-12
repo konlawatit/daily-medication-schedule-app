@@ -1,5 +1,6 @@
 import fb from "firebase/app";
 import "firebase/auth";
+import { getFirestore, setDoc, doc } from "firebase/firestore"
 import * as Google from "expo-google-app-auth";
 import * as Facebook from "expo-facebook";
 import firebaseConfig from "./firebaseConfig.json";
@@ -15,14 +16,32 @@ export const firebase = !fb.apps.length
   ? fb.initializeApp(firebaseConfig)
   : fb.app();
 
-export async function signInAnonymous() {
-  await fb
-    .auth()
-    .signInAnonymously()
-    .then(() => {
-      console.log("signIn anonymous successfully");
-    })
-    .catch((err) => console.log("sigIn anonymous fail", err));
+export async function signInAnonymous(username, password) {
+  const firestore = fb.firestore()
+  const usersCol = firestore.collection('users')
+  const snapshot = await usersCol.get();
+  let isUsername = true;
+  snapshot.forEach(doc => {
+    let data = doc.data();
+    console.log(doc.id, data)
+    if (data.username === username) isUsername = false;
+  })
+  console.log('----->', isUsername);
+  if (isUsername) {
+    await fb
+      .auth()
+      .signInAnonymously()
+      .then(async (results) => {
+        console.log(results.user.uid)
+        const uid = results.user.uid
+        await usersCol.doc(uid).set({
+          username: username,
+          password: password
+        })
+        console.log("signIn anonymous successfully");
+      })
+      .catch((err) => console.log("sigIn anonymous fail", err));
+  }
 }
 
 export async function signInWithGoogleAsync() {
@@ -118,6 +137,7 @@ export async function logInFacebook() {
         .then(() => console.log("sync facebook with firebase"))
         .catch(err => console.log('sync facebook with firebase fail', err));
       // Alert.alert("Logged in!", `Hi ${(await response.json()).name}!`);
+      fb.auth().si
       console.log("Logged in facebook", `Hi ${(await response.json()).name}!`);
     } else {
       // type === 'cancel'
