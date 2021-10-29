@@ -4,7 +4,7 @@ import { StyleSheet, Text, View } from 'react-native';
 export default function DashboardScreen({navigation, route}) {
   return (
     <View style={styles.container}>
-      <Text>This is {route.params.name}</Text>
+      <Text>This is</Text>
     </View>
   );
 }
