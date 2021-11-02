@@ -1,5 +1,5 @@
 import React from "react";
-import { Dimensions, Text, View, StyleSheet } from "react-native";
+import { Button, Dimensions, Text, View, StyleSheet } from "react-native";
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -13,45 +13,7 @@ import Register from "../screens/RegisterScreen";
 import Daily from "../screens/DailyScreen";
 import MedicineScreen from "../screens/MedicineScreen";
 import HistoryScreen from "../screens/HistoryScreen";
-
-function LoginNavigation() {
-  return (
-    <Stack.Navigator
-      // mode="modal"
-      screenOptions={{
-        headerShown: false
-      }}
-    >
-      <Stack.Screen name="Login" component={Login} />
-      <Stack.Screen
-        name="Home"
-        component={HomeNavigation}
-        options={{ animation: "slide_from_right" }}
-      />
-    </Stack.Navigator>
-  );
-}
-
-function LineTitle() {
-  return (
-    <View>
-      <Text>ยาที่ต้องทานในวันนี้</Text>
-      <View></View>
-    </View>
-  );
-}
-
-function HeaderTitle(props) {
-  return (
-    <View style={styles.headerTitleContain}>
-      <View style={styles.line}></View>
-      <View>
-        <Text style={styles.title}>{props.name}</Text>
-        <View style={styles.line2}></View>
-      </View>
-    </View>
-  );
-}
+import AddMedicineScreen from "../screens/AddMedicineScreen";
 
 const MyTheme = {
   ...DefaultTheme,
@@ -61,7 +23,7 @@ const MyTheme = {
   }
 };
 
-function HomeNavigation() {
+function HomeNavigator() {
   return (
     <Tab.Navigator
       screenOptions={{
@@ -101,7 +63,43 @@ export default function MyNavigator() {
     <NavigationContainer
     // theme={MyTheme}
     >
-      <LoginNavigation />
+      {/* <LoginNavigator /> */}
+
+      <Stack.Navigator
+        // mode="modal"
+        screenOptions={{
+          headerShown: false
+        }}
+      >
+        <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen
+          name="Home"
+          component={HomeNavigator}
+          options={{ animation: "slide_from_right" }}
+        />
+
+        <Stack.Screen
+          name="MedicineStack"
+          component={MedicineScreen}
+          options={{
+            headerShown: false,
+            headerTitle: (props) => <Text>'tets'</Text>,
+            headerRight: () => (
+              <Button
+                onPress={() => alert("This is a button!")}
+                title="Info"
+                color="#fff"
+              />
+            )
+          }}
+        />
+
+        <Stack.Screen
+          name="addMedicine"
+          component={AddMedicineScreen}
+          options={{ title: "เพิ่มข้อมูลยา", headerShown: true }}
+        />
+      </Stack.Navigator>
     </NavigationContainer>
   );
 }

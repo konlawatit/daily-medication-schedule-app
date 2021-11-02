@@ -4,7 +4,8 @@ import {
   View,
   TextInput,
   FlatList,
-  Image
+  Image,
+  TouchableOpacity
 } from "react-native";
 import { EvilIcons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
@@ -59,7 +60,9 @@ export default function MedicineScreen({ navigation }) {
       />
 
       <View style={{position:'absolute', justifyContent:'flex-end', flex:1, height: '100%', width:'100%'}} >
-        <Image style={{zIndex: 100,position:'absolute', alignSelf:'flex-end'}} source={require('../../assets/add.png')} />
+        <TouchableOpacity style={{zIndex: 100,position:'absolute', alignSelf:'flex-end'}} onPress={() => navigation.navigate("addMedicine")} >
+          <Image source={require('../../assets/add.png')} />
+        </TouchableOpacity>
       </View>
 
       <HeaderTitle title="รายการยา" />

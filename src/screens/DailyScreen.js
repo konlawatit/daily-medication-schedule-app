@@ -40,7 +40,6 @@ export default function DailyScreen({ navigation }) {
           verify={itemData.item.verify}
           checkBox={true}
           image="checkmark.png"
-
         />
       </View>
     );

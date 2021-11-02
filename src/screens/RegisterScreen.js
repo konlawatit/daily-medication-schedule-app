@@ -61,13 +61,9 @@ export default function RegisterScreen({ navigation }) {
         <View style={{ flexDirection: "column", flex: 1 }}>
           <Text>ประวัติการแพ้ยา(อย่าลืมลองกับ IOS)</Text>
           <TextInput
-            style={{
-              borderRadius: 5,
-              backgroundColor: "white",
-              padding: 5
-            }}
+            style={{padding: 10}}
             numberOfLines={5}
-            multiline
+            multiline={true}
           />
         </View>
       </View>
