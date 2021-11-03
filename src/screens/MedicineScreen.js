@@ -46,6 +46,7 @@ export default function MedicineScreen({ navigation }) {
           title={itemData.item.title}
           image="checkmark.png"
           subTitle={itemData.item.note}
+          navigation={navigation}
         />
       </View>
     );

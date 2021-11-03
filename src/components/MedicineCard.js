@@ -3,7 +3,8 @@ import {
   StyleSheet,
   Text,
   View,
-  Image
+  Image,
+  TouchableOpacity
 } from "react-native";
 
 
@@ -11,11 +12,12 @@ export default function MedicineCard(props) {
   //   let image2 = require("../../assets/" + props.image)
   let title = props.title
   let subTitle = props.subTitle
+  const navigation = props.navigation
 
   
 
   return (
-    <View style={styles.card}>
+    <TouchableOpacity style={styles.card} onPress={() => navigation.navigate("DrugInfo")} >
       <View style={{ flex: 0.7 }}>
         <Image
           style={{ width: "100%", height: 150 }}
@@ -30,7 +32,7 @@ export default function MedicineCard(props) {
 
         <Text style={{ fontSize: 18 }}>{subTitle}</Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 }
 

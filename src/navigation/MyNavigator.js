@@ -72,9 +72,8 @@ export default function MyNavigator() {
           headerShown: false
         }}
       >
-        <Stack.Screen name="drugInfo" component={DrugInfoScreen} />
-        {/* <Stack.Screen name="Login" component={Login} /> */}
-        {/* <Stack.Screen
+        <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen
           name="Home"
           component={HomeNavigator}
           options={{ animation: "slide_from_right" }}
@@ -95,12 +94,12 @@ export default function MyNavigator() {
             )
           }}
         />
-
+        <Stack.Screen name="DrugInfo" component={DrugInfoScreen} options={{title:"ข้อมูลยา" , headerShown: true}} />
         <Stack.Screen
           name="addMedicine"
           component={AddMedicineScreen}
           options={{ title: "เพิ่มข้อมูลยา", headerShown: true }}
-        /> */}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
