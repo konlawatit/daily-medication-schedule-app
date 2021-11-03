@@ -69,7 +69,6 @@ export default function DrugInfoScreen({ navigation }) {
               paddingRight: 15,
               paddingTop: 15,
               paddingBottom: 10,
-              // justifyContent: 'center'
             }}
           >
             <View
@@ -146,9 +145,6 @@ const styles = StyleSheet.create({
   infoContain: {
     width: "90%",
     height: 350,
-    // borderWidth: 2,
-    // borderColor: "green",
-    // flexDirection: "",
     borderRadius: 20,
     padding: 15,
     backgroundColor: "#ffff",
