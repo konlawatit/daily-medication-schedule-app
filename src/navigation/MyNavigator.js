@@ -14,6 +14,7 @@ import Daily from "../screens/DailyScreen";
 import MedicineScreen from "../screens/MedicineScreen";
 import HistoryScreen from "../screens/HistoryScreen";
 import AddMedicineScreen from "../screens/AddMedicineScreen";
+import DrugInfoScreen from "../screens/DrugInfoScreen";
 
 const MyTheme = {
   ...DefaultTheme,
@@ -71,8 +72,9 @@ export default function MyNavigator() {
           headerShown: false
         }}
       >
-        <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen
+        <Stack.Screen name="drugInfo" component={DrugInfoScreen} />
+        {/* <Stack.Screen name="Login" component={Login} /> */}
+        {/* <Stack.Screen
           name="Home"
           component={HomeNavigator}
           options={{ animation: "slide_from_right" }}
@@ -98,7 +100,7 @@ export default function MyNavigator() {
           name="addMedicine"
           component={AddMedicineScreen}
           options={{ title: "เพิ่มข้อมูลยา", headerShown: true }}
-        />
+        /> */}
       </Stack.Navigator>
     </NavigationContainer>
   );

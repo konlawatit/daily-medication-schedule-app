@@ -13,11 +13,12 @@ import {
   FlatList
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
+import { EvilIcons } from "@expo/vector-icons";
 
 //Components
 import NotificationCard from "../components/NotificationCard";
 
-export default function AddMedicineScreen({ navigation }) {
+export default function DrugInfoScreen({ navigation }) {
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
   const [data, setData] = useState([
@@ -48,40 +49,45 @@ export default function AddMedicineScreen({ navigation }) {
         style={styles.background}
       />
 
-      <TouchableOpacity style={{ width: 150, justifyContent: "flex-end" }}>
-        <View style={styles.imageBox}>
-          <Image
-            style={{ width: "100%", height: "100%" }}
-            source={require("../../assets/test.jpg")}
-          />
-        </View>
-        <Image
-          style={styles.addButton}
-          source={require("../../assets/add.png")}
+      <View style={styles.infoContain}>
+        <EvilIcons
+          style={{ position: "absolute", alignSelf: "flex-end", zIndex: 100 }}
+          name="pencil"
+          size={54}
+          color="black"
         />
-      </TouchableOpacity>
-
-      <View style={{ width: "100%", alignItems: "center" }}>
-        <View style={{ width: "80%", borderColor: "grey" }}>
-          <Text>ชื่อตัวยา</Text>
-          <TextInput placeholder="กรอกชื่อตัวยา" style={styles.textInput} />
-        </View>
-        <View style={{ width: "80%", borderColor: "grey" }}>
-          <Text>หมายเหตุ</Text>
-          <TextInput placeholder="หมายเหตุการใช้ยา" style={styles.textInput} />
-        </View>
-        <View style={{ width: "80%", borderColor: "grey" }}>
-          <Text>คำอธิบายตัวยา</Text>
-          <TextInput
+        <View style={{ flexDirection: "row", flex: 1 }}>
+          <View style={{ flex: 0.7 }}>
+            <Image
+              style={{ width: "90%", height: "90%" }}
+              source={require("../../assets/test.jpg")}
+            />
+          </View>
+          <View
             style={{
-              borderRadius: 5,
-              backgroundColor: "white",
-              padding: 5
+              flex: 1,
+              paddingRight: 15,
+              paddingTop: 15,
+              paddingBottom: 10,
+              // justifyContent: 'center'
             }}
-            numberOfLines={5}
-            textAlignVertical={"top"} 
-            multiline
-          />
+          >
+            <View
+              style={{ flexDirection: "row", height: 50, alignItems: 'flex-end', marginTop: 10 }}
+            >
+              <Text style={{ fontSize: 30 }}>ยาแก้ไอ</Text>
+            </View>
+            <View style={styles.line}></View>
+
+            <Text style={{ fontSize: 18 }}>ทานหลังจากทานอาหาร</Text>
+          </View>
+        </View>
+
+        <View style={{width: "100%", height: '100%',  borderColor: "grey", flex: 1 }}>
+          <Text>คำอธิบายตัวยา</Text>
+          <ScrollView >
+            <Text style={{fontSize: 18}} >1111111111111111111111sssssss11111111111sssssss11111111111sssssss11111111111sssssss11111111111sssssss11111111111sssssss11111111111sssssss11111111111sssssss11111111111ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss111111111111111111111111111111111111111111111111111111111111111111111</Text>
+          </ScrollView>
         </View>
       </View>
 
@@ -119,22 +125,6 @@ const styles = StyleSheet.create({
     height: "150%",
     flex: 1
   },
-  imageBox: {
-    width: 150,
-    height: 150,
-    overflow: "hidden",
-    borderRadius: 150,
-    borderWidth: 1,
-    alignItems: "center",
-    justifyContent: "center"
-  },
-  addButton: {
-    position: "absolute",
-    alignSelf: "flex-end",
-    right: -5,
-    width: 50,
-    height: 50
-  },
   textInput: {
     textAlign: "center",
     backgroundColor: "white",
@@ -153,29 +143,25 @@ const styles = StyleSheet.create({
     opacity: 0.25,
     alignSelf: "center"
   },
-  daysOfweek: {
-    marginBottom: 5,
-    marginRight: 5,
-    marginLeft: 5,
-    color: "white"
-  },
-  cardMedicine: {
-    flexDirection: "row",
-    backgroundColor: "rgba(85,194,255,8)",
+  infoContain: {
     width: "90%",
-    height: 100,
-    padding: 10,
-    borderRadius: 10,
-    marginTop: 10,
-    marginBottom: 10,
+    height: 350,
+    // borderWidth: 2,
+    // borderColor: "green",
+    // flexDirection: "",
+    borderRadius: 20,
+    padding: 15,
+    backgroundColor: "#ffff",
     shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 6
-    },
-    shadowOpacity: 0.39,
-    shadowRadius: 100.3,
-
-    elevation: 5
+    elevation: 5,
+    marginTop: 50
+  },
+  line: {
+    // marginTop: 8,
+    borderWidth: 1.5,
+    borderRadius: 5,
+    borderColor: "grey",
+    // backgroundColor:'grey',
+    opacity: 0.25
   }
 });
