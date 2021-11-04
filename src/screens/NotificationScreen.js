@@ -19,7 +19,7 @@ import HeaderTitle from "../components/HeaderTitle";
 import MedicineCard from "../components/MedicineCard";
 import DropDownPicker from "../components/DropDownPicker";
 
-export default function MedicineScreen({ navigation }) {
+export default function NotificationScreen({ navigation }) {
   const [data, setData] = useState(false);
 
   const [open, setOpen] = useState(false);
@@ -83,17 +83,17 @@ export default function MedicineScreen({ navigation }) {
           <View style={styles.sectionIcon}>
         <TouchableOpacity onPress={()=>{}} style={{flex:1,alignItems:"center"}}>
             <View>
-                <Icon name="times-circle"type='font-awesome' size="48"/>
+                <Icon name="times-circle"type='font-awesome' size={48}/>
             </View>
         </TouchableOpacity>
         <TouchableOpacity onPress={()=>{}} style={{flex:1,alignItems:"center"}}>
             <View>
-                <Icon name="history"type='font-awesome' size="48"/>
+                <Icon name="history"type='font-awesome' size={48}/>
             </View>
         </TouchableOpacity>
         <TouchableOpacity onPress={()=>{}} style={{flex:1,alignItems:"center"}}>
             <View>
-                <Icon name="check-circle"type='font-awesome' size="48"/>
+                <Icon name="check-circle"type='font-awesome' size={48}/>
             </View>
         </TouchableOpacity>
         </View>
