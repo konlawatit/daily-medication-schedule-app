@@ -14,6 +14,8 @@ import {
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 
+import styles from "../stylesheet/screenStyle"
+
 import { signInWithGoogleAsync, logInFacebook } from "../../firebase";
 
 //Components
@@ -54,7 +56,7 @@ export default function DailyScreen({ navigation }) {
 
       />
 
-      <HeaderTitle title="ยาที่ต้องทานวันนี้" />
+      <HeaderTitle style="styles.font" title="ยาที่ต้องทานวันนี้" />
 
       <FlatList
         keyExtractor={(item, index) => index.toString()}
@@ -66,64 +68,3 @@ export default function DailyScreen({ navigation }) {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  screen: {
-    marginBottom: 15,
-    alignItems: "center"
-  },
-  container: {
-    backgroundColor: "rgba(85,194,255,0.8)",
-    height: "100%"
-  },
-  background: {
-    position: "absolute",
-    left: 0,
-    right: 0,
-    top: 0,
-    height: "150%",
-    flex: 1
-  },
-  line: {
-    borderWidth: 1.5,
-    borderRadius: 5,
-    borderColor: "grey",
-    opacity: 0.25
-  },
-  card: {
-    width: "90%",
-    borderWidth: 2,
-    borderColor: "green",
-    flexDirection: "row",
-    borderRadius: 20,
-    padding: 10,
-    backgroundColor: "#ffff",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 3
-    },
-    shadowOpacity: 0.27,
-    shadowRadius: 4.65,
-    elevation: 6,
-    marginBottom: 10
-  },
-  card2: {
-    width: "90%",
-    borderWidth: 2,
-    borderColor: "grey",
-    flexDirection: "row",
-    borderRadius: 20,
-    padding: 10,
-    backgroundColor: "#ffff",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 3
-    },
-    shadowOpacity: 0.27,
-    shadowRadius: 4.65,
-    elevation: 6,
-    marginBottom: 10
-  }
-});
