@@ -17,7 +17,7 @@ import { LinearGradient } from "expo-linear-gradient";
 //Components
 import NotificationCard from "../components/NotificationCard";
 
-export default function AddMedicineScreen({ navigation }) {
+export default function NotificationScreen({ navigation }) {
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
   const [data, setData] = useState([

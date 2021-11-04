@@ -63,6 +63,9 @@ export default function DailyScreen({ navigation }) {
         renderItem={renderItem}
       />
       
+
+      
+      
     </View>
   );
 }

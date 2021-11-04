@@ -15,6 +15,7 @@ import MedicineScreen from "../screens/MedicineScreen";
 import HistoryScreen from "../screens/HistoryScreen";
 import AddMedicineScreen from "../screens/AddMedicineScreen";
 import DrugInfoScreen from "../screens/DrugInfoScreen";
+import NotiScreen from "../screens/NotificationScreen";
 import NotificationTimeScreen from "../screens/NotificationTimeScreen";
 
 const MyTheme = {
@@ -53,6 +54,11 @@ function HomeNavigator() {
       <Tab.Screen
         name="History"
         component={HistoryScreen}
+        options={{ animation: "slide_from_right" }}
+      />
+      <Tab.Screen
+        name="Test Noti"
+        component={NotiScreen}
         options={{ animation: "slide_from_right" }}
       />
     </Tab.Navigator>
