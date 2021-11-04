@@ -16,12 +16,12 @@ import { LinearGradient } from "expo-linear-gradient";
 
 //Components
 
-export default function NotificationCard({ navigation }) {
+export default function NotificationCard(props) {
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
 
   return (
-    <View style={styles.cardMedicine}>
+    <TouchableOpacity style={styles.cardMedicine} onPress={()=> props.navigation.navigate("NotificationTime")} >
       <View style={styles.imagePart}>
         <Image
           style={{ width: "60%", height: "50%", marginTop: 10 }}
@@ -50,7 +50,7 @@ export default function NotificationCard({ navigation }) {
           value={isEnabled}
         />
       </View>
-    </View>
+    </TouchableOpacity>
   );
 }
 
