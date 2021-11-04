@@ -36,7 +36,7 @@ export default function DrugInfoScreen({ navigation }) {
   const renderItem = (itemData) => {
     return (
       <View style={{ alignItems: "center" }}>
-        <NotificationCard />
+        <NotificationCard navigation={navigation} />
       </View>
     );
   };

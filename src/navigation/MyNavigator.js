@@ -16,6 +16,7 @@ import HistoryScreen from "../screens/HistoryScreen";
 import AddMedicineScreen from "../screens/AddMedicineScreen";
 import DrugInfoScreen from "../screens/DrugInfoScreen";
 import NotiScreen from "../screens/NotificationScreen";
+import NotificationTimeScreen from "../screens/NotificationTimeScreen";
 
 const MyTheme = {
   ...DefaultTheme,
@@ -100,7 +101,9 @@ export default function MyNavigator() {
             )
           }}
         />
+        
         <Stack.Screen name="DrugInfo" component={DrugInfoScreen} options={{title:"ข้อมูลยา" , headerShown: true}} />
+        <Stack.Screen name="NotificationTime" component={NotificationTimeScreen} />
         <Stack.Screen
           name="addMedicine"
           component={AddMedicineScreen}
