@@ -10,7 +10,8 @@ import {
   ScrollView,
   SafeAreaView,
   Switch,
-  FlatList
+  FlatList,
+  Linking
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 
@@ -86,7 +87,13 @@ export default function AddMedicineScreen({ navigation }) {
       </View>
 
       <View style={{ width: "90%" }}>
-        <Text>เวลาที่จะต้องทาน</Text>
+        <View style={{flexDirection: "row", width: '90%', alignItems: 'center', alignSelf: 'center'}}>
+          <Text style={{flex: 1}} >เวลาที่จะต้องทาน</Text>
+          <TouchableOpacity style={{flex: 1, marginLeft: 5, borderWidth: 0}} >
+            <Image style={{width: 30, height: 30, alignSelf: 'flex-end'}} source={require('../../assets/add.png')} />
+            {/* //แก้ไอคอนได้เลยคับ  */}
+          </TouchableOpacity>
+        </View>
         <View style={styles.showLine}></View>
       </View>
 
