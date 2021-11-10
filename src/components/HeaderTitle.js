@@ -5,7 +5,7 @@ export default function HeaderTitle(props) {
     <View style={styles.headerTitleContain}>
       <View style={styles.hiddenLine}></View>
       <View>
-        <Text style={{ fontSize: 25 }}>{props.title}</Text>
+        <Text style={{ fontSize: 25 ,fontFamily:"Prompt-Light"}}>{props.title}</Text>
         <View style={styles.showLine}></View>
       </View>
     </View>

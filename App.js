@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, version } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -21,25 +21,34 @@ import DashboardScreen from "./src/screens/DashboardScreen";
 import AppContext from "./src/components/AppContext";
 
 //Navigation
-import MyNavigator from "./src/navigation/MyNavigator"
+import MyNavigator from "./src/navigation/MyNavigator";
 
+//Fonts by npm install expo-font and expo-app-loading
+import AppLoading from 'expo-app-loading';
+import * as Font from 'expo-font';
 
 const Stack = createNativeStackNavigator();
 
 
+const getFonts = () =>
+  Font.loadAsync({
+    "Prompt-Regular": require("./assets/fonts/Prompt-Regular.ttf"),
+    "Prompt-Light": require("./assets/fonts/Prompt-Light.ttf"),
+  });
 
 export default function App() {
+  const [fontsLoaded, setFontsLoaded] = useState(false);
+  if (!fontsLoaded) {
+    return (
+      <AppLoading
+        startAsync={getFonts}
+        onError={() => console.log("Cannot loaded fonts")}
+        onFinish={() => setFontsLoaded(true)}
+      ></AppLoading>
+    );
+  }
   return (
-    // <LoginScreen />
     <MyNavigator />
-  );
+  )
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});

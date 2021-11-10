@@ -14,7 +14,8 @@ import {
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 
-import styles from "../stylesheet/screenStyle"
+import styles from "../stylesheet/screenStyle";
+
 
 import { signInWithGoogleAsync, logInFacebook } from "../../firebase";
 
@@ -56,7 +57,7 @@ export default function DailyScreen({ navigation }) {
 
       />
 
-      <HeaderTitle style="styles.font" title="ยาที่ต้องทานวันนี้" />
+      <HeaderTitle title="ยาที่ต้องทานวันนี้" />
 
       <FlatList
         keyExtractor={(item, index) => index.toString()}

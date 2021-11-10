@@ -20,7 +20,7 @@ const MyTheme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
-    background: "rgba(255,255,255,1)"
+    background: "#a3d0f4"
   }
 };
 
@@ -105,28 +105,3 @@ export default function MyNavigator() {
   );
 }
 
-let styles = StyleSheet.create({
-  title: {
-    fontSize: 25
-  },
-  headerTitleContain: {
-    paddingTop: "5%",
-    width: "100%",
-    alignItems: "center",
-    flex: 1
-  },
-  line: {
-    width: Dimensions.get("screen").width,
-    height: 10
-    // backgroundColor:'red',
-  },
-  line2: {
-    marginTop: 8,
-    width: (Dimensions.get("screen").width * 90) / 100,
-    borderWidth: 1.5,
-    borderRadius: 5,
-    borderColor: "grey",
-    // backgroundColor:'grey',
-    opacity: 0.25
-  }
-});

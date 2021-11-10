@@ -1,12 +1,13 @@
 import { StyleSheet } from "react-native";
 
+//AddMedicineScreens , Dailyscreens
 export default StyleSheet.create({
   screen: {
     marginBottom: 15,
     alignItems: "center",
   },
-  font:{
-      
+  textThai:{
+    fontFamily:'Prompt-Light',
   },
   //container ของ AddMedicineScreens
   Addcontainer: {
@@ -45,7 +46,6 @@ export default StyleSheet.create({
     width: 50,
     height: 50,
   },
-  //ชื่อตัวยาและหมายเหตุ
   textInput: {
     textAlign: "center",
     backgroundColor: "white",
@@ -71,5 +71,15 @@ export default StyleSheet.create({
     borderRadius: 5,
     borderColor: "grey",
     opacity: 0.25
+  },
+  infoContain: {
+    width: "90%",
+    height: 350,
+    borderRadius: 20,
+    padding: 15,
+    backgroundColor: "#ffff",
+    shadowColor: "#000",
+    elevation: 5,
+    marginTop: 50
   },
 });

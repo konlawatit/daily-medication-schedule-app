@@ -27,7 +27,7 @@ export default function DailyCard(props) {
       </View>
       <View style={{ flex: 1, padding: 15 }}>
         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-          <Text style={{ fontSize: 50 }}>{title}</Text>
+          <Text style={{ fontSize: 50, fontFamily:"Prompt-Light"}}>{title}</Text>
           {/* <CheckBox style={{borderRadius: 20, transform: [{ scaleX: 2 }, { scaleY: 2 }] }} value={data} onValueChange={setData} /> */}
           {checkBox ? (
             <View style={styles.circle}>
@@ -47,7 +47,7 @@ export default function DailyCard(props) {
 
         <View style={styles.line}></View>
 
-        <Text style={{ fontSize: 30 }}>{subTitle}</Text>
+        <Text style={{ fontSize: 30,fontFamily:"Prompt-Light" }}>{subTitle}</Text>
       </View>
     </View>
   );

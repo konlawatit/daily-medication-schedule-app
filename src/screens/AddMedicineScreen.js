@@ -68,15 +68,15 @@ export default function AddMedicineScreen({ navigation }) {
 
       <View style={{ width: "100%", alignItems: "center" }}>
         <View style={{ width: "80%", borderColor: "grey" }}>
-          <Text>ชื่อตัวยา</Text>
+          <Text style={styles.textThai}>ชื่อตัวยา</Text>
           <TextInput placeholder="กรอกชื่อตัวยา" style={styles.textInput} />
         </View>
         <View style={{ width: "80%", borderColor: "grey" }}>
-          <Text>หมายเหตุ</Text>
+          <Text style={styles.textThai}>หมายเหตุ</Text>
           <TextInput placeholder="หมายเหตุการใช้ยา" style={styles.textInput} />
         </View>
         <View style={{ width: "80%", borderColor: "grey" }}>
-          <Text>คำอธิบายตัวยา</Text>
+          <Text style={styles.textThai}>คำอธิบายตัวยา</Text>
           <TextInput
             style={{
               borderRadius: 5,
@@ -91,7 +91,7 @@ export default function AddMedicineScreen({ navigation }) {
       </View>
 
       <View style={{ width: "90%" }}>
-        <Text>เวลาที่จะต้องทาน</Text>
+        <Text style={styles.textThai}>เวลาที่จะต้องทาน</Text>
         <View style={styles.showLine}></View>
       </View>
 
