@@ -110,12 +110,14 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     alignItems: "center"
   },
+  ///
   container: {
     backgroundColor: "rgba(85,194,255,0.8)",
     height: "100%",
     alignItems: "center",
     flex: 1
   },
+  ///
   background: {
     position: "absolute",
     left: 0,
@@ -124,6 +126,7 @@ const styles = StyleSheet.create({
     height: "150%",
     flex: 1
   },
+  ///
   textInput: {
     textAlign: "center",
     backgroundColor: "white",
@@ -132,6 +135,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderWidth: 1
   },
+  ///
   showLine: {
     marginTop: 8,
     width: "95%",
@@ -142,6 +146,7 @@ const styles = StyleSheet.create({
     opacity: 0.25,
     alignSelf: "center"
   },
+  ///
   infoContain: {
     width: "90%",
     height: 350,

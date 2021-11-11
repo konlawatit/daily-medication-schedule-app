@@ -24,8 +24,8 @@ export default function LoginScreen({navigation}) {
               <View>
                 <Image style={{width: 30, height: 30}} source={require('../../assets/profile.png')} />
               </View>
-              <View style={{marginLeft: "10%", width: "60%", alignItems:"center"}} >
-                <Text style={styles.submitText} >เข้าใช้งาน</Text>
+              <View style={{marginLeft: "13%", width: "60%", alignItems:"center"}} >
+                <Text style={styles.submitText}>เข้าใช้งาน</Text>
               </View>
           </View>
       </TouchableOpacity>
@@ -39,7 +39,7 @@ export default function LoginScreen({navigation}) {
               <View>
                 <Image style={{width: 30, height: 30}} source={require('../../assets/google-logo.png')} />
               </View>
-              <View style={{marginLeft: "10%"}} >
+              <View style={{marginLeft: "13%"}} >
                 <Text style={styles.submitText} >เข้าสู่ระบบด้วย Google</Text>
               </View>
           </View>
@@ -52,8 +52,8 @@ export default function LoginScreen({navigation}) {
               <View>
                 <Image style={{width: 30, height: 30}} source={require('../../assets/facebook-logo.png')} />
               </View>
-              <View style={{marginLeft: "10%"}}>
-                <Text style={{color: "white", fontSize: 16}} >เข้าสู่ระบบด้วย Facebook</Text>
+              <View style={{marginLeft: "9%"}}>
+                <Text style={{color: "white", fontSize: 16, fontFamily: "Prompt-Light"}} >เข้าสู่ระบบด้วย Facebook</Text>
               </View>
           </View>
       </TouchableOpacity>
@@ -65,7 +65,7 @@ export default function LoginScreen({navigation}) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "rgba(236,59,255,0.5)",
+    backgroundColor: "#f3c7ff",
     alignItems: "center",
     justifyContent: "center",
   },
@@ -93,14 +93,15 @@ const styles = StyleSheet.create({
       marginBottom: 20     
   },
   title: {
-      fontSize: 35,
+      fontSize: 29,
       fontWeight: "bold",
-      color: "white"
+      color: "white",
+      fontFamily: "Prompt-Regular"
   },
   submit: {
     marginRight: 40,
     marginLeft: 40,
-    paddingLeft: 25,
+    paddingLeft: "5%",
     backgroundColor: '#fff',
     borderRadius: 10,
     width: '75%',
@@ -112,7 +113,7 @@ const styles = StyleSheet.create({
   submitGoogle: {
     marginRight: 40,
     marginLeft: 40,
-    paddingLeft: 25,
+    paddingLeft: '5%',
     backgroundColor: '#fff',
     borderRadius: 10,
     width: '75%',
@@ -125,7 +126,7 @@ const styles = StyleSheet.create({
     marginRight: 40,
     marginLeft: 40,
     marginTop: 10,
-    paddingLeft: 25,
+    paddingLeft: "5%",
     backgroundColor: '#4267B2',
     borderRadius: 10,
     width: '75%',
@@ -137,16 +138,17 @@ const styles = StyleSheet.create({
   },
   submitText: {
     color: '#000',
-    fontSize: 16
+    fontSize: 16,
+    fontFamily: 'Prompt-Light'
   },
   insideSubmit: {
       flexDirection: "row",
       alignItems: "center",
   },
   line: {
-      borderWidth: 1,
+      borderWidth: 0.7,
       borderColor: "white",
-      width: "70%",
+      width: "75%",
       marginTop: 20,
       marginBottom: 20
   },
