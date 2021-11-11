@@ -1,5 +1,18 @@
 {
   "expo": {
+    "plugins": [
+      [
+        "expo-notifications",
+        {
+          "icon": "./local/assets/notification-icon.png",
+          "color": "#ffffff",
+          "sounds": [
+            "./assets/TF050.WAV"
+          ],
+          "mode": "production"
+        }
+      ]
+    ],
     "name": "daily-medication-schedule-app",
     "slug": "daily-medication-schedule-app",
     "version": "1.0.0",

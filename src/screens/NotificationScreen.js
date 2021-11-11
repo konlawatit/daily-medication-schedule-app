@@ -81,7 +81,7 @@ export default function NotificationScreen({ navigation }) {
                 <Text style={{flex:1,alignItems:"center",textAlign:"center",fontSize:18}}>ยืนยัน</Text>
           </View>
           <View style={styles.sectionIcon}>
-        <TouchableOpacity onPress={()=>{}} style={{flex:1,alignItems:"center"}}>
+        <TouchableOpacity onPress={()=>{navigation.goBack()}} style={{flex:1,alignItems:"center"}}>
             <View>
                 <Icon name="times-circle"type='font-awesome' size={48}/>
             </View>

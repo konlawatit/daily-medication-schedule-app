@@ -17,6 +17,7 @@ import AddMedicineScreen from "../screens/AddMedicineScreen";
 import DrugInfoScreen from "../screens/DrugInfoScreen";
 import NotiScreen from "../screens/NotificationScreen";
 import NotificationTimeScreen from "../screens/NotificationTimeScreen";
+import TestNoti from "../screens/TestNoti";
 
 const MyTheme = {
   ...DefaultTheme,
@@ -57,8 +58,8 @@ function HomeNavigator() {
         options={{ animation: "slide_from_right" }}
       />
       <Tab.Screen
-        name="Test Noti"
-        component={NotiScreen}
+        name="ReqNoti"
+        component={TestNoti}
         options={{ animation: "slide_from_right" }}
       />
     </Tab.Navigator>
@@ -80,6 +81,7 @@ export default function MyNavigator() {
         }}
       >
         <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen name="Noti" component={NotiScreen} />
         <Stack.Screen
           name="Home"
           component={HomeNavigator}
