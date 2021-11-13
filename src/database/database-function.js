@@ -1,4 +1,4 @@
-import { setMedicine } from "../store/actions/medicineAction";
+import { setMedicine, setTime } from "../store/actions/medicineAction";
 
 
 //sqlite
@@ -103,7 +103,9 @@ export function initDB(dispatch) {
     );
 
     tx.executeSql(
-      `INSERT INTO TIME ("time","status","day","MEDICINE_id") VALUES ('12:00',0,'{mo: 1,tu: 1,we: 1,th:1,fr:1,sa:1,su:1}',1)`,
+      `INSERT INTO TIME ("time","status","day","MEDICINE_id") VALUES ('12:00',0,'{"mo": 0,"tu": 1,"we": 0,"th":1,"fr":0,"sa":1,"su":0}',1),
+      ('13:00',0,'{"mo": 1,"tu": 1,"we": 1,"th":1,"fr":1,"sa":1,"su":1}',1),
+      ('13:00',0,'{"mo": 1,"tu": 1,"we": 1,"th":1,"fr":1,"sa":1,"su":1}',2)`,
       [],
       (tx, results) => {
         console.log("Insert TIME");
@@ -115,7 +117,8 @@ export function initDB(dispatch) {
     );
 
     tx.executeSql(
-      `SELECT * FROM MEDICINE`,
+      `SELECT *
+      FROM MEDICINE`,
       [],
       (tx, results) => {
         console.log(results.rows);
@@ -128,17 +131,40 @@ export function initDB(dispatch) {
     );
 
     tx.executeSql(
-      `SELECT * FROM TIME`,
+      `SELECT *
+      FROM MEDICINE
+      INNER JOIN TIME
+      ON MEDICINE.id = TIME.MEDICINE_id`,
       [],
       (tx, results) => {
-        console.log(results.rows);
-        dispatch(setMedicine(results.rows._array))
+        let result = results.rows._array
+        let newArray = result.map((data) => {
+          return {...data, day: JSON.parse(data.day)}
+        })
+        console.log(newArray);
+        
+        // dispatch(setTime(newArray))
+        dispatch(setTime(newArray))
+        
       },
       (_, err) => {
-        console.log("insert medicine error", err);
+        console.log("insert time error", err);
         return true;
       }
     );
+
+    // tx.executeSql(
+    //   `SELECT * FROM TIME`,
+    //   [],
+    //   (tx, results) => {
+    //     console.log(results.rows);
+    //     dispatch(setMedicine(results.rows._array))
+    //   },
+    //   (_, err) => {
+    //     console.log("insert medicine error", err);
+    //     return true;
+    //   }
+    // );
   });
 }
 
@@ -152,7 +178,7 @@ export function delDB() {
           /* do something with the items */
           // results.rows._array holds all the results.
           console.log(JSON.stringify(results.rows._array));
-          console.log("table dropped");
+          console.log("TIME table dropped");
         } else {
           console.log("no results");
         }
@@ -170,7 +196,7 @@ export function delDB() {
           /* do something with the items */
           // results.rows._array holds all the results.
           console.log(JSON.stringify(results.rows._array));
-          console.log("table dropped");
+          console.log("MEDICINE table dropped");
         } else {
           console.log("no results");
         }
@@ -189,7 +215,7 @@ export function delDB() {
           /* do something with the items */
           // results.rows._array holds all the results.
           console.log(JSON.stringify(results.rows._array));
-          console.log("table dropped");
+          console.log("HISTORY table dropped");
         } else {
           console.log("no results");
         }

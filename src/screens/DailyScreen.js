@@ -28,17 +28,17 @@ import DailyCard from "../components/DailyCard";
 
 export default function DailyScreen({ navigation }) {
   const [dailyMedicine, setDailyMedicine] = useState();
-  const medicineList = useSelector((state) => state.medicine.medicine);
+  const timeList = useSelector((state) => state.medicine.time);
 
   const renderItem = (itemData) => {
     return (
       <View style={globalStyle.screen}>
           <DailyCard
-            title={itemData.item.notiTime}
+            title={itemData.item.time}
             subTitle={itemData.item.name}
-            verify={itemData.item.isNoti}
+            verify={itemData.item.status}
             checkBox={true}
-            id={itemData.item.id}
+            id={itemData.item.MEDICINE_id}
             navigation={navigation}
             image="checkmark.png"
           />
@@ -60,7 +60,7 @@ export default function DailyScreen({ navigation }) {
       <FlatList
         keyExtractor={(item, index) => index.toString()}
         style={{ marginTop: 10, marginBottom: "0%" }}
-        data={medicineList}
+        data={timeList}
         renderItem={renderItem}
       />
     </View>

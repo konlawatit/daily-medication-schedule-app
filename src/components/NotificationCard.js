@@ -18,11 +18,18 @@ import { LinearGradient } from "expo-linear-gradient";
 
 export default function NotificationCard(props) {
   const [isEnabled, setIsEnabled] = useState(false);
+  const [time, setTime] = useState(props.time)
+  const [day, setDay] = useState(props.day)
+  // console.log(day)
   const toggleSwitch = () =>
     setIsEnabled(
       (previousState) => !previousState,
       console.log("" + isEnabled)
     );
+
+    const dayCheck = (d) => {
+      return d == 1 ? 'white' : 'grey'
+    }
     
 
   return (
@@ -40,15 +47,15 @@ export default function NotificationCard(props) {
         />
       </View>
       <View style={styles.infoPart}>
-        <Text style={styles.time}>12:00</Text>
+        <Text style={styles.time}>{time}</Text>
         <View style={{ flexDirection: "row", marginBottom: 5 }}>
-          <Text style={styles.daysOfweek}>จ</Text>
-          <Text style={styles.daysOfweek}>อ</Text>
-          <Text style={styles.daysOfweek}>พ</Text>
-          <Text style={styles.daysOfweek}>พฤ</Text>
-          <Text style={styles.daysOfweek}>ศ</Text>
-          <Text style={styles.daysOfweek}>ส</Text>
-          <Text style={styles.daysOfweek}>อา</Text>
+          <Text style={[styles.daysOfweek, {color: dayCheck(day.mo) }]}>จ</Text>
+          <Text style={[styles.daysOfweek, {color: dayCheck(day.tu) }]}>อ</Text>
+          <Text style={[styles.daysOfweek, {color: dayCheck(day.we) }]}>พ</Text>
+          <Text style={[styles.daysOfweek, {color: dayCheck(day.th) }]}>พฤ</Text>
+          <Text style={[styles.daysOfweek, {color: dayCheck(day.fr) }]}>ศ</Text>
+          <Text style={[styles.daysOfweek, {color: dayCheck(day.sa) }]}>ส</Text>
+          <Text style={[styles.daysOfweek, {color: dayCheck(day.su) }]}>อา</Text>
         </View>
       </View>
       <View style={styles.switchPart}>
@@ -76,7 +83,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     marginRight: 5,
     marginLeft: 5,
-    color: "white",
+    // color: "white" ,
     fontFamily: "Prompt-Light",
   },
   cardOn: {
