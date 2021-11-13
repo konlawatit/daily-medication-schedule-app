@@ -11,7 +11,7 @@ import {
   SafeAreaView,
   Switch,
   FlatList,
-  Linking,
+  Linking
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 
@@ -20,20 +20,20 @@ import { globalStyle } from "../stylesheet/globalStylesheet";
 //Components
 import NotificationCard from "../components/NotificationCard";
 
-export default function AddMedicineScreen({ navigation, route }) {
+export default function AddMedicineScreen({ navigation }) {
   // console.disableYellowBox = true;
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
   const [data, setData] = useState([
     {
-      time: "12:00",
+      time: "12:00"
     },
     {
-      time: "12:00",
+      time: "12:00"
     },
     {
-      time: "12:00",
-    },
+      time: "12:00"
+    }
   ]);
 
   const renderItem = (itemData) => {
@@ -44,9 +44,9 @@ export default function AddMedicineScreen({ navigation, route }) {
     );
   };
 
-  return (
-    <ScrollView>
-      <SafeAreaView style={globalStyle.Addcontainer}>
+  const ContentThatGoesAboveTheFlatList = () => {
+    return (
+        <View style={globalStyle.Addcontainer}>
         <LinearGradient
           // Background Linear Gradient
           colors={["rgba(255,255,255,1)", "transparent"]}
@@ -87,7 +87,7 @@ export default function AddMedicineScreen({ navigation, route }) {
               style={{
                 borderRadius: 5,
                 backgroundColor: "white",
-                padding: 5,
+                padding: 5
               }}
               numberOfLines={5}
               textAlignVertical={"top"}
@@ -97,23 +97,37 @@ export default function AddMedicineScreen({ navigation, route }) {
         </View>
         <View style={{ width: "90%", marginTop: 10 }}>
           <View style={globalStyle.SectionStyle}>
-            <Text style={{ fontFamily: "Prompt-Light",fontSize:16 }}>เวลาที่จะต้องทาน</Text>
-            <TouchableOpacity style={{marginLeft:"58%"}}>
-            <Image
-              source={require("../../assets/add.png")} //Change your icon image here
-              style={globalStyle.ImageStyle}
-            /></TouchableOpacity>
+            <Text style={{ fontFamily: "Prompt-Light", fontSize: 16 }}>
+              เวลาที่จะต้องทาน
+            </Text>
+            <TouchableOpacity style={{ marginLeft: "58%" }}>
+              <Image
+                source={require("../../assets/add.png")} //Change your icon image here
+                style={globalStyle.ImageStyle}
+              />
+            </TouchableOpacity>
           </View>
           <View style={globalStyle.showLine}></View>
         </View>
+        <SafeAreaView style={{ flex: 1, width: "100%" }}>
+          <FlatList
+            data={data}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={renderItem}
+            style={{ width: "100%" }}
+          />
+        </SafeAreaView>
+      </View>
+    )
+  }
 
-        <FlatList
-          data={data}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={renderItem}
-          style={{ width: "100%" }}
-        />
-      </SafeAreaView>
-    </ScrollView>
+  return (
+    <SafeAreaView style={{ flex: 1 }}>
+      <FlatList
+        data={[]}
+        ListHeaderComponent={ContentThatGoesAboveTheFlatList}
+        // ListFooterComponent={ContentThatGoesBelowTheFlatList}
+      />
+    </SafeAreaView>
   );
 }
