@@ -29,7 +29,11 @@ export default function AddMedicineScreen({ navigation }) {
   const renderItem = (itemData) => {
     return (
       <View style={{ alignItems: "center" }}>
+<<<<<<< HEAD
         <NotificationCard time={itemData.item.time} day={itemData.item.day} />
+=======
+        {/* <NotificationCard /> */}
+>>>>>>> 22de5d36a0ed960b619fde04fb7f034813f89a22
       </View>
     );
   };

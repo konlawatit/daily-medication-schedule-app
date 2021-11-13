@@ -9,15 +9,18 @@ import {
   Text,
   Button,
 } from "react-native";
-import { EvilIcons } from "@expo/vector-icons";
+import { Feather,MaterialIcons,FontAwesome } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import DropDown from "react-native-dropdown-picker";
-import Icon from 'react-native-vector-icons/FontAwesome';
+
 
 //Components
 import HeaderTitle from "../components/HeaderTitle";
 import MedicineCard from "../components/MedicineCard";
 import DropDownPicker from "../components/DropDownPicker";
+
+//styles
+import { globalStyle } from "../stylesheet/globalStylesheet";
 
 export default function NotificationScreen({ navigation }) {
   const [data, setData] = useState(false);
@@ -26,7 +29,7 @@ export default function NotificationScreen({ navigation }) {
   const [value, setValue] = useState(null);
   const [items, setItems] = useState([
     { label: "Apple", value: 0 },
-    { label: "Banana", value: 1 }
+    { label: "Banana", value: 1 },
   ]);
 
   const listData = [
@@ -34,12 +37,12 @@ export default function NotificationScreen({ navigation }) {
       time: "12:00",
       title: "ยาแก้ปวด",
       verify: true,
-      note: "ทานหลังอาหาร2เม็ด"
+      note: "ทานหลังอาหาร2เม็ด",
     },
     { time: "12:00", title: "ยาแก้ปวด", verify: true },
     { time: "12:00", title: "ยาแก้ปวด", verify: true },
-    {time :"12:00", title:"ยาแก้ปวด", verify: true},
-    {time :"12:00", title:"ยาแก้ปวด", verify: true}
+    { time: "12:00", title: "ยาแก้ปวด", verify: true },
+    { time: "12:00", title: "ยาแก้ปวด", verify: true },
   ];
 
   const renderItem = (itemData) => {
@@ -51,7 +54,7 @@ export default function NotificationScreen({ navigation }) {
           subTitle={itemData.item.note}
           navigation={navigation}
         />
-        </View>
+      </View>
     );
   };
 
@@ -59,46 +62,60 @@ export default function NotificationScreen({ navigation }) {
     <View style={styles.container}>
       <LinearGradient
         // Background Linear Gradient
-        colors={["rgba(255,255,255,1)", "transparent"]}
+        colors={["rgba(85,194,255,0.5)", "transparent"]}
         style={styles.background}
       />
-      <HeaderTitle title="แจ้งเตือน"/>
       <View style={styles.section1}>
-      <Image 
-  source={require('../../assets/test.jpg')}  
-  style={{width: 250, height: 250, borderRadius: 400/ 2}} 
-       />
+        <Image
+          source={require("../../assets/test.jpg")}
+          style={{ width: 200, height: 200, borderRadius: 400 / 2 }}
+        />
       </View>
-      <View style={styles.section2}>
-          <Text style={{fontSize:48,flex:1}}>12:00 น.</Text>
-          <Text style={{fontSize:36,flex:0.8}}>ยาแก้อักเสบ</Text>
-          <Text style={{fontSize:24,flex:0.8}}>ทานก่อนอาหาร</Text>
-      </View>
+        <Text style={{ fontFamily: "Prompt-Regular", fontSize: 70}}>
+          12:00
+        </Text>
+        <Text style={{ fontFamily: "Prompt-Light", fontSize: 36 }}>
+          ยาแก้อักเสบ
+        </Text>
+        <View style={styles.line} />
+        <Text style={{ fontFamily: "Prompt-Light", fontSize: 24,marginBottom:"22%" }}>
+          ทานก่อนอาหาร
+        </Text>
       <View style={styles.section3}>
-          <View style={styles.sectionIconName}>
-                <Text style={{flex:1,alignItems:"center",textAlign:"center",fontSize:18}}>ยกเลิก</Text>
-                <Text style={{flex:1,alignItems:"center",textAlign:"center",fontSize:18}}>เลื่อน 5 นาที</Text>
-                <Text style={{flex:1,alignItems:"center",textAlign:"center",fontSize:18}}>ยืนยัน</Text>
-          </View>
-          <View style={styles.sectionIcon}>
-        <TouchableOpacity onPress={()=>{navigation.goBack()}} style={{flex:1,alignItems:"center"}}>
+        <View style={styles.sectionIconName}>
+          <Text style={styles.textIcon}>ยกเลิก</Text>
+          <Text style={styles.textIcon}>เลื่อน 5 นาที</Text>
+          <Text style={styles.textIcon}>ยืนยัน</Text>
+        </View>
+        <View style={styles.sectionIcon}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.goBack();
+            }}
+            style={{ flex: 1, alignItems: "center" }}
+          >
             <View>
-                <Icon name="times-circle"type='font-awesome' size={48}/>
+            <MaterialIcons name="cancel" size={70} color="#f44336" />
             </View>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={()=>{}} style={{flex:1,alignItems:"center"}}>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {}}
+            style={{ flex: 1, alignItems: "center" }}
+          >
             <View>
-                <Icon name="history"type='font-awesome' size={48}/>
+            <MaterialIcons name="history" size={70} color="black" />
             </View>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={()=>{}} style={{flex:1,alignItems:"center"}}>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {}}
+            style={{ flex: 1, alignItems: "center" }}
+          >
             <View>
-                <Icon name="check-circle"type='font-awesome' size={48}/>
+            <Feather name="check-circle" size={70} color="#8bc34a" />
             </View>
-        </TouchableOpacity>
+          </TouchableOpacity>
         </View>
       </View>
-
     </View>
   );
 }
@@ -106,11 +123,13 @@ export default function NotificationScreen({ navigation }) {
 const styles = StyleSheet.create({
   screen: {
     marginBottom: 15,
-    alignItems: "center"
+    alignItems: "center",
   },
   container: {
-    backgroundColor: "rgba(85,194,255,0.8)",
-    height: "100%"
+    flex: 1,
+    backgroundColor: "#f3c7ff",
+    alignItems: "center",
+    justifyContent: "center",
   },
   background: {
     position: "absolute",
@@ -118,39 +137,54 @@ const styles = StyleSheet.create({
     right: 0,
     top: 0,
     height: "150%",
-    flex: 1
+    flex: 1,
   },
   section1: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginLeft: 10
+    marginLeft: 10,
+    marginTop:"10%"
   },
   section2: {
     flex: 0.5,
     justifyContent: "center",
     alignItems: "center",
-    marginLeft: 10
+    marginLeft: 10,
   },
   section3: {
     flex: 0.5,
     justifyContent: "flex-end",
     alignItems: "center",
-    marginBottom: 50,
+    marginBottom: 10,
+    paddingTop:20
   },
-  icon:{
-      width:50,
-      height:50
+  icon: {
+    width: 50,
+    height: 50,
   },
-  sectionIcon:{
-      flexDirection:"row",
-      justifyContent: "center",
-      alignItems: "center",
+  textIcon: {
+    flex: 1,
+    alignItems: "center",
+    textAlign: "center",
+    fontFamily: "Prompt-Light",
+    fontSize: 24,
   },
-  sectionIconName:{
-      marginBottom:15,
-      flexDirection:"row",
-      justifyContent:"center",
-      alignItems:"center"
-  }
+  sectionIcon: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  sectionIconName: {
+    marginBottom: 15,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  line: {
+    borderWidth: 0.3,
+    borderColor: "grey",
+    width: "40%",
+    margin:2
+},
 });
