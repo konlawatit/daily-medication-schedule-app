@@ -26,10 +26,13 @@ export default function NotificationCard(props) {
     
 
   return (
+    // <View style={[isEnabled ? styles.cardOn : styles.cardOff]} >
+
     <TouchableOpacity
       style={styles.cardOn}
       onPress={() => props.navigation.navigate("NotificationTime")}
     >
+      
       <View style={styles.imagePart}>
         <Image
           style={{ width: "60%", height: "50%", marginTop: 10 }}
@@ -59,6 +62,7 @@ export default function NotificationCard(props) {
         />
       </View>
     </TouchableOpacity>
+    // </View>
   );
 }
 

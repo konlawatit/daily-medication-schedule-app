@@ -23,7 +23,7 @@ import { globalStyle } from "../stylesheet/globalStylesheet";
 
 
 
-export default function DrugInfoScreen({ navigation }) {
+export default function DrugInfoScreen({ navigation, route }) {
   // console.disableYellowBox = true; 
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);

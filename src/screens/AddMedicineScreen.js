@@ -20,8 +20,8 @@ import { globalStyle } from "../stylesheet/globalStylesheet";
 //Components
 import NotificationCard from "../components/NotificationCard";
 
-export default function AddMedicineScreen({ navigation }) {
-  console.disableYellowBox = true;
+export default function AddMedicineScreen({ navigation, route }) {
+  // console.disableYellowBox = true;
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
   const [data, setData] = useState([
