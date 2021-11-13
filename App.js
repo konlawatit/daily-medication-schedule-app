@@ -46,7 +46,7 @@ const Stack = createNativeStackNavigator();
 const getFonts = () =>
   Font.loadAsync({
     "Prompt-Regular": require("./assets/fonts/Prompt-Regular.ttf"),
-    "Prompt-Light": require("./assets/fonts/Prompt-Light.ttf"),
+    "Prompt-Light": require("./assets/fonts/Prompt-Light.ttf")
   });
 
 export default function App() {
