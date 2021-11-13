@@ -1,4 +1,5 @@
 import React, { useContext, useState } from "react";
+import {AccordionList} from "accordion-collapse-react-native";
 import {
   StyleSheet,
   View,
@@ -8,17 +9,20 @@ import {
   Text,
   TouchableOpacity
 } from "react-native";
+import { DataTable } from 'react-native-paper';
 import { MaterialIcons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import DropDown from "react-native-dropdown-picker";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import DateTimePicker from '@react-native-community/datetimepicker';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 
 //Components
 import HeaderTitle from "../components/HeaderTitle";
 import MedicineCard from "../components/MedicineCard";
 import DropDownPicker from "../components/DropDownPicker";
+
 
 //stylesheets
 import { globalStyle } from "../stylesheet/globalStylesheet";
@@ -39,6 +43,8 @@ export default function HistoryScreen({ navigation }) {
     hideDatePicker();
   };
 
+
+  const tableHead = []
   const listData = [
     {
       time: "12:00",
@@ -85,32 +91,34 @@ export default function HistoryScreen({ navigation }) {
   // console.log(listDataSort);
   const renderItem = (itemData) => {
     return (
-      <View style={styles.screen}>
-        {itemData.item.date !== stackDate ? (
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "center",
-              alignItems: "center",
-              paddingLeft: "10%",
-              paddingRight: "10%"
-            }}
-          >
-            {changeStackDate(itemData.item.date)}
-            <View style={styles.line}></View>
-            <Text style={globalStyle.textThai}>{itemData.item.date} </Text>
-            <View style={styles.line}></View>
-          </View>
-        ) : (
-          <View></View>
-        )}
+      <DataTable.Row>
+          <DataTable.Cell style={{justifyContent:'center'}}>
+            <Text style={{fontSize:16,fontFamily:"Prompt-Light"}}>{itemData.date}</Text></DataTable.Cell>
+          <DataTable.Cell style={{justifyContent:'center'}}>
+          <Text style={{fontSize:16,fontFamily:"Prompt-Light"}}>{itemData.time}</Text></DataTable.Cell>
+          <DataTable.Cell style={{justifyContent:'center'}}>
+          <Text style={{fontSize:16,fontFamily:"Prompt-Light"}}>{itemData.title}</Text></DataTable.Cell>
+          <DataTable.Cell style={{justifyContent:'center'}}><Icon name="caret-down"type='font-awesome' size={24}/></DataTable.Cell>
+        </DataTable.Row>
+    );
+  };
 
-        <MedicineCard
-          title={itemData.item.title}
-          image="checkmark.png"
-          subTitle={itemData.item.note}
-        />
-      </View>
+  const collapseItem = (itemData) =>{
+    return (
+
+      <View style={{marginLeft:20,flexDirection:"row"}}>
+        <View style={{flex:0.5,alignItems:'center',justifyContent:'center',padding:(0,0,10,10)}}>
+          <Image
+        style={styles.tinyLogo}
+        source={{
+          uri: 'https://reactnative.dev/img/tiny_logo.png',
+        }}/>
+        </View>
+        <View style={{flex:1,alignItems:'flex-start',justifyContent:'center'}}>
+        <Text style={{fontSize:16,fontFamily:"Prompt-Light"}}>{itemData.note}</Text>
+        </View>
+        </View>
+
     );
   };
 
@@ -126,7 +134,7 @@ export default function HistoryScreen({ navigation }) {
 
       <View style={styles.sectionFilter}>
         <View style={styles.sectionDropDown}>
-          <DropDownPicker />
+          <DropDownPicker/>
         </View>
         <View style={styles.sectionDate}>
           <TouchableOpacity onPress={()=>showDatePicker()}>
@@ -142,12 +150,22 @@ export default function HistoryScreen({ navigation }) {
         </View>
       </View>
 
-      <FlatList
-        keyExtractor={(item, index) => index.toString()}
-        style={{ marginTop: 10, marginBottom: "0%" }}
-        data={listDataSort}
-        renderItem={renderItem}
-      />
+      <DataTable>
+        <DataTable.Header style={{zIndex:0}}>
+          <DataTable.Title style={{justifyContent:'center'}}><Text style={{fontSize:18,fontWeight:"bold",zIndex:1}}>Date</Text></DataTable.Title>
+          <DataTable.Title style={{justifyContent:'center'}}><Text style={{fontSize:18,fontWeight:"bold"}}>Time</Text></DataTable.Title>
+          <DataTable.Title style={{justifyContent:'center'}}><Text style={{fontSize:18,fontWeight:"bold"}}>Name</Text></DataTable.Title>
+          <DataTable.Title style={{justifyContent:'center'}}><Text style={{fontSize:18,fontWeight:"bold"}}>More</Text></DataTable.Title>
+        </DataTable.Header>
+
+      </DataTable>
+      <AccordionList
+            list={listData}
+            header={renderItem}
+            body={collapseItem}
+            keyExtractor={(item,index)=>index.toString()}
+          />
+
     </View>
   );
 }
@@ -159,7 +177,7 @@ const styles = StyleSheet.create({
   },
   container: {
     backgroundColor: "rgba(85,194,255,0.8)",
-    height: "100%"
+    height: "100%",
   },
   background: {
     position: "absolute",
@@ -173,7 +191,8 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginLeft: 10
+    marginLeft: 10,
+    zIndex:1000,
   },
   sectionDate: {
     // flexDirection: "row",
@@ -187,6 +206,7 @@ const styles = StyleSheet.create({
     width: "90%",
     alignSelf: "center",
     marginTop: 15,
+    marginBottom:15,
     height: 45
   },
   line: {
@@ -197,5 +217,9 @@ const styles = StyleSheet.create({
     // backgroundColor:'grey',
     opacity: 0.25,
     flex: 0.5
-  }
+  },
+  tinyLogo: {
+    width: 80,
+    height: 80,
+  },
 });
