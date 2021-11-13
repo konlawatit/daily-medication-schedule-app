@@ -7,18 +7,38 @@ import {
   TextInput,
   Image,
   CheckBox,
-  Dimensions
+  Dimensions,
+  TouchableOpacity
 } from "react-native";
+import { useDispatch } from "react-redux";
+import { selectMedicine } from "../store/actions/medicineAction";
+
+import { updateVerify } from "../database/database-function";
 
 export default function DailyCard(props) {
   //   let image2 = require("../../assets/" + props.image)
   let title = props.title;
   let subTitle = props.subTitle;
-  let verify = props.verify ? props.verify : false;
+  const [verify, setVerify] = useState(props.verify ? props.verify : false);
   let checkBox = props.checkBox ? props.checkBox : false;
+  let id = props.id;
+  const navigation = props.navigation;
+
+  const dispatch = useDispatch()
+
+  const toggleVerify = () => {
+    updateVerify(!verify, id)
+    setVerify(!verify);
+  };
 
   return (
-    <View style={styles.card}>
+    <TouchableOpacity
+      style={styles.card}
+      onPress={() => {
+        dispatch(selectMedicine(id))
+        navigation.navigate("DrugInfo", { id });
+      }}
+    >
       <View style={{ flex: 0.7 }}>
         <Image
           style={{ width: "100%", height: 150 }}
@@ -27,10 +47,15 @@ export default function DailyCard(props) {
       </View>
       <View style={{ flex: 1, padding: 15 }}>
         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-          <Text style={{ fontSize: 50, fontFamily:"Prompt-Light"}}>{title}</Text>
+          <Text style={{ fontSize: 50, fontFamily: "Prompt-Light" }}>
+            {title}
+          </Text>
           {/* <CheckBox style={{borderRadius: 20, transform: [{ scaleX: 2 }, { scaleY: 2 }] }} value={data} onValueChange={setData} /> */}
           {checkBox ? (
-            <View style={styles.circle}>
+            <TouchableOpacity
+              style={styles.circle}
+              onPress={() => toggleVerify()}
+            >
               {verify ? (
                 <Image
                   style={{ width: "80%", height: "80%" }}
@@ -39,7 +64,7 @@ export default function DailyCard(props) {
               ) : (
                 <View></View>
               )}
-            </View>
+            </TouchableOpacity>
           ) : (
             <View></View>
           )}
@@ -47,9 +72,11 @@ export default function DailyCard(props) {
 
         <View style={styles.line}></View>
 
-        <Text style={{ fontSize: 30,fontFamily:"Prompt-Light" }}>{subTitle}</Text>
+        <Text style={{ fontSize: 30, fontFamily: "Prompt-Light" }}>
+          {subTitle}
+        </Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 }
 

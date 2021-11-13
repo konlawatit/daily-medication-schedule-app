@@ -1,8 +1,10 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { Button, Dimensions, Text, View, StyleSheet } from "react-native";
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { useDispatch } from "react-redux"
+
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -27,6 +29,7 @@ const MyTheme = {
 };
 
 function HomeNavigator() {
+  
   return (
     <Tab.Navigator
       screenOptions={{
@@ -66,7 +69,16 @@ function HomeNavigator() {
 }
 
 // สร้าง Navigator หลัก
+import { initDB, delDB } from "../database/database-function";
 export default function MyNavigator() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    delDB()
+    initDB(dispatch)
+  }, [])
+
+
   return (
     <NavigationContainer
     // theme={MyTheme}

@@ -10,6 +10,7 @@ import {
 import { EvilIcons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import DropDown from "react-native-dropdown-picker";
+import { useSelector } from "react-redux";
 
 //Components
 import HeaderTitle from "../components/HeaderTitle";
@@ -39,12 +40,14 @@ export default function MedicineScreen({ navigation }) {
     {time :"12:00", title:"ยาแก้ปวด", verify: true}
   ];
 
+  const medicineList = useSelector(state => state.medicine.medicine)
   const renderItem = (itemData) => {
     return (
       <View style={styles.screen}>
         <MedicineCard
-          title={itemData.item.title}
+          title={itemData.item.name}
           image="checkmark.png"
+          id={itemData.id}
           subTitle={itemData.item.note}
           navigation={navigation}
         />
@@ -81,7 +84,7 @@ export default function MedicineScreen({ navigation }) {
       <FlatList
         keyExtractor={(item, index) => index.toString()}
         style={{ marginTop: 10, marginBottom: "0%" }}
-        data={listData}
+        data={medicineList}
         renderItem={renderItem}
       />
     </View>

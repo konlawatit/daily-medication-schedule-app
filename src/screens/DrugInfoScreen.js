@@ -14,13 +14,17 @@ import {
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { EvilIcons } from "@expo/vector-icons";
-
+import { useSelector } from "react-redux";
 //Components
 import NotificationCard from "../components/NotificationCard";
 
-export default function DrugInfoScreen({ navigation }) {
+export default function DrugInfoScreen({ navigation, route }) {
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
+  const medicineInfo = useSelector((state) => state.medicine.selectMedicine);
+  console.log(medicineInfo)
+  
+  const [id, setId] = useState(route.params.id)
   const [data, setData] = useState([
     {
       time: "12:00"
@@ -32,6 +36,8 @@ export default function DrugInfoScreen({ navigation }) {
       time: "12:00"
     }
   ]);
+
+
 
   const renderItem = (itemData) => {
     return (
@@ -74,18 +80,18 @@ export default function DrugInfoScreen({ navigation }) {
             <View
               style={{ flexDirection: "row", height: 50, alignItems: 'flex-end', marginTop: 10 }}
             >
-              <Text style={{ fontSize: 30 }}>ยาแก้ไอ</Text>
+              <Text style={{ fontSize: 30 }}>{medicineInfo.name}</Text>
             </View>
             <View style={styles.line}></View>
 
-            <Text style={{ fontSize: 18 }}>ทานหลังจากทานอาหาร</Text>
+            <Text style={{ fontSize: 18 }}>{medicineInfo.note}</Text>
           </View>
         </View>
 
         <View style={{width: "100%", height: '100%',  borderColor: "grey", flex: 1 }}>
           <Text>คำอธิบายตัวยา</Text>
           <ScrollView >
-            <Text style={{fontSize: 18}} >1111111111111111111111sssssss11111111111sssssss11111111111sssssss11111111111sssssss11111111111sssssss11111111111sssssss11111111111sssssss11111111111sssssss11111111111ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss111111111111111111111111111111111111111111111111111111111111111111111</Text>
+            <Text style={{fontSize: 18}} >{medicineInfo.description}</Text>
           </ScrollView>
         </View>
       </View>

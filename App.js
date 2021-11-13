@@ -4,12 +4,25 @@ import { StyleSheet, Text, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
+import { createStore, combineReducers } from "redux"
+import { Provider, useDispatch } from "react-redux"
+
+
+import medicineReducer from "./src/store/reducers/medicineReducer";
+
+const rootReducer = combineReducers({
+  medicine: medicineReducer
+})
+
+const store = createStore(rootReducer);
+
 //firebase
 // import firebase from 'firebase';
 // import firebaseConfig from './firebaseConfig.json'
 
 //sqlite
 import { DatabaseConnection } from "./src/database/database-connection";
+import { initDB, delDB } from "./src/database/database-function";
 const db = DatabaseConnection.getConnection();
 
 //Screens
@@ -38,6 +51,13 @@ const getFonts = () =>
 
 export default function App() {
   const [fontsLoaded, setFontsLoaded] = useState(false);
+  
+
+  useEffect(() => {
+    // delDB();
+    // initDB(dispatch);
+  }, [])
+
   if (!fontsLoaded) {
     return (
       <AppLoading
@@ -48,7 +68,9 @@ export default function App() {
     );
   }
   return (
-    <MyNavigator />
+    <Provider store={store} >
+      <MyNavigator />
+    </Provider>
   )
 }
 

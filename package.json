@@ -10,12 +10,12 @@
   "dependencies": {
     "@expo/vector-icons": "^12.0.0",
     "@react-native-community/datetimepicker": "^3.5.2",
-    "@react-native-picker/picker": "^2.1.0",
+    "@react-native-picker/picker": "1.16.1",
     "@react-navigation/bottom-tabs": "^6.0.9",
     "@react-navigation/native": "^6.0.4",
     "@react-navigation/native-stack": "^6.2.2",
     "expo": "^42.0.5",
-    "expo-app-loading": "^1.1.2",
+    "expo-app-loading": "1.1.2",
     "expo-facebook": "~11.3.1",
     "expo-font": "~9.2.1",
     "expo-google-app-auth": "^8.2.2",
@@ -35,6 +35,8 @@
     "react-native-select-dropdown": "^1.2.0",
     "react-native-sqlite-storage": "^6.0.1",
     "react-native-web": "~0.13.12",
+    "react-redux": "^7.2.6",
+    "redux": "^4.1.2",
     "yup": "^0.32.10"
   },
   "devDependencies": {

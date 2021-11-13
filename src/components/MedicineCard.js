@@ -6,10 +6,14 @@ import {
   Image,
   TouchableOpacity
 } from "react-native";
+import { useDispatch } from "react-redux";
+import { getMedicine } from "../store/actions/medicineAction";
 
 
 export default function MedicineCard(props) {
   //   let image2 = require("../../assets/" + props.image)
+  const dispatch = useDispatch();
+  const [id, setId] = useState(props.id)
   let title = props.title
   let subTitle = props.subTitle
   const navigation = props.navigation
@@ -17,7 +21,10 @@ export default function MedicineCard(props) {
   
 
   return (
-    <TouchableOpacity style={styles.card} onPress={() => navigation.navigate("DrugInfo")} >
+    <TouchableOpacity style={styles.card} onPress={() => {
+      dispatch(getMedicine(id))
+      navigation.navigate("DrugInfo")
+      }} >
       <View style={{ flex: 0.7 }}>
         <Image
           style={{ width: "100%", height: 150 }}

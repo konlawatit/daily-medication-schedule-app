@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, Button, TextInput } from "react-native";
 import AppContext from "../components/AppContext";
 import * as Yup from 'yup';
 import { Formik } from 'formik';
+import { useSelector } from "react-redux";
 
 import {
   signInAnonymous,
@@ -15,6 +16,8 @@ export default function HomeScreen({ navigation }) {
   const context = useContext(AppContext);
   const [username, setUsernmae] = useState("");
   const [password, setPassword] = useState("");
+
+  
 
   // firebase.auth().onAuthStateChanged((user) => {
   //   console.log(user) //get user data
