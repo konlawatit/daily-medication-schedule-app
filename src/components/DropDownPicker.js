@@ -5,6 +5,9 @@ import {
 
 import DropDown from "react-native-dropdown-picker";
 
+//stylesheet
+import { globalStyle } from "../stylesheet/globalStylesheet";
+
 export default function DropDownPicker({ navigation }) {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);

@@ -10,7 +10,7 @@ import {
   ScrollView,
   SafeAreaView,
   Switch,
-  FlatList
+  FlatList,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 
@@ -18,10 +18,18 @@ import { LinearGradient } from "expo-linear-gradient";
 
 export default function NotificationCard(props) {
   const [isEnabled, setIsEnabled] = useState(false);
-  const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
+  const toggleSwitch = () =>
+    setIsEnabled(
+      (previousState) => !previousState,
+      console.log("" + isEnabled)
+    );
+    
 
   return (
-    <TouchableOpacity style={styles.cardMedicine} onPress={()=> props.navigation.navigate("NotificationTime")} >
+    <TouchableOpacity
+      style={styles.cardOn}
+      onPress={() => props.navigation.navigate("NotificationTime")}
+    >
       <View style={styles.imagePart}>
         <Image
           style={{ width: "60%", height: "50%", marginTop: 10 }}
@@ -29,7 +37,7 @@ export default function NotificationCard(props) {
         />
       </View>
       <View style={styles.infoPart}>
-        <Text style={{ fontSize: 40, color: "white" }}>12:00</Text>
+        <Text style={styles.time}>12:00</Text>
         <View style={{ flexDirection: "row", marginBottom: 5 }}>
           <Text style={styles.daysOfweek}>จ</Text>
           <Text style={styles.daysOfweek}>อ</Text>
@@ -55,45 +63,69 @@ export default function NotificationCard(props) {
 }
 
 const styles = StyleSheet.create({
+  time: {
+    fontFamily: "Prompt-Light",
+    fontSize: 40,
+    color: "white",
+  },
   daysOfweek: {
     marginBottom: 5,
     marginRight: 5,
     marginLeft: 5,
-    color: "white"
+    color: "white",
+    fontFamily: "Prompt-Light",
   },
-  cardMedicine: {
+  cardOn: {
     flexDirection: "row",
-    backgroundColor: "rgba(85,194,255,8)",
     width: "90%",
+    backgroundColor: "rgba(85,194,255,8)",
     height: 100,
     padding: 10,
     borderRadius: 10,
     marginTop: 15,
-    marginBottom: 15,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 6
+      height: 6,
     },
     shadowOpacity: 0.39,
     shadowRadius: 100.3,
     elevation: 5,
-    alignItems: "center"
+    alignItems: "center",
+  },
+  cardOff: {
+    flexDirection: "row",
+    width: "90%",
+    backgroundColor: "rgba(85,194,255,8)",
+    height: 100,
+    padding: 10,
+    borderRadius: 10,
+    marginTop: 15,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 6,
+    },
+    shadowOpacity: 0.39,
+    shadowRadius: 100.3,
+    elevation: 5,
+    alignItems: "center",
+    opacity:0.5
   },
   imagePart: {
     flex: 0.3,
     alignItems: "center",
     justifyContent: "flex-start",
     width: "100%",
-    height: "100%"
+    height: "100%",
   },
   infoPart: {
     flex: 1,
-    justifyContent: "flex-start"
+    justifyContent: "flex-start",
   },
   switchPart: {
     flex: 0.5,
     justifyContent: "center",
-    alignItems: "center"
-  }
+    alignItems: "center",
+  },
 });

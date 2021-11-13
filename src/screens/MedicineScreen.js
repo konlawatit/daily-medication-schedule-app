@@ -17,6 +17,9 @@ import HeaderTitle from "../components/HeaderTitle";
 import MedicineCard from "../components/MedicineCard";
 import DropDownPicker from "../components/DropDownPicker";
 
+//stylesheet
+import { globalStyle } from "../stylesheet/globalStylesheet";
+
 export default function MedicineScreen({ navigation }) {
   const [data, setData] = useState(false);
 
@@ -43,7 +46,7 @@ export default function MedicineScreen({ navigation }) {
   const medicineList = useSelector(state => state.medicine.medicine)
   const renderItem = (itemData) => {
     return (
-      <View style={styles.screen}>
+      <View style={globalStyle.screen}>
         <MedicineCard
           title={itemData.item.name}
           image="checkmark.png"
@@ -56,11 +59,11 @@ export default function MedicineScreen({ navigation }) {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={globalStyle.container}>
       <LinearGradient
         // Background Linear Gradient
         colors={["rgba(255,255,255,1)", "transparent"]}
-        style={styles.background}
+        style={globalStyle.background}
       />
 
       <View style={{position:'absolute', justifyContent:'flex-end', flex:1, height: '100%', width:'100%'}} >
@@ -70,13 +73,13 @@ export default function MedicineScreen({ navigation }) {
       </View>
 
       <HeaderTitle title="รายการยา" />
-      <View style={styles.sectionFilter}>
-        <View style={styles.sectionTextInput}>
+      <View style={globalStyle.sectionFilter}>
+        <View style={globalStyle.sectionTextInput}>
           <EvilIcons name="search" size={24} color="black" />
-          <TextInput placeholder="ค้นหา" style={{ width: "100%" }} />
+          <TextInput placeholder="ค้นหา" style={{ width: "100%" ,fontFamily:"Prompt-Light"}} />
         </View>
 
-        <View style={styles.sectionDropDown}>
+        <View style={globalStyle.sectionDropDown}>
           <DropDownPicker />
         </View>
       </View>
@@ -91,43 +94,4 @@ export default function MedicineScreen({ navigation }) {
   );
 }
 
-const styles = StyleSheet.create({
-  screen: {
-    marginBottom: 15,
-    alignItems: "center"
-  },
-  container: {
-    backgroundColor: "rgba(85,194,255,0.8)",
-    height: "100%"
-  },
-  background: {
-    position: "absolute",
-    left: 0,
-    right: 0,
-    top: 0,
-    height: "150%",
-    flex: 1
-  },
-  sectionDropDown: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    marginLeft: 10
-  },
-  sectionTextInput: {
-    flexDirection: "row",
-    borderWidth: 1,
-    borderRadius: 10,
-    flex: 1,
-    paddingRight: "10%",
-    alignItems: "center",
-    backgroundColor: "white"
-  },
-  sectionFilter: {
-    flexDirection: "row",
-    width: "90%",
-    alignSelf: "center",
-    marginTop: 15,
-    height: 45
-  }
-});
+

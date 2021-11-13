@@ -163,8 +163,10 @@ const styles = StyleSheet.create({
   },
   dayChar: {
     color: "rgba(255,255,255,1)",
-    fontSize: 34
+    fontSize: 34,
+    fontFamily:"Prompt-Light"
     // margin: 5
+    
   },
   line: {
     marginTop: 15,
@@ -187,14 +189,6 @@ const styles = StyleSheet.create({
     flex: 0.3
     // justifyContent: 'center'
   },
-  title: {
-    color: "white",
-    fontSize: 25
-  },
-  subTitle: {
-    color: "white",
-    fontSize: 18
-  },
   confirmBox: {
     flex: 1,
     justifyContent: "center",
@@ -202,6 +196,7 @@ const styles = StyleSheet.create({
   },
   confirmText: {
     color: "rgba(255,210,59,1)",
-    fontSize: 24
+    fontSize: 24,
+    fontFamily: "Prompt-Light",
   }
 });

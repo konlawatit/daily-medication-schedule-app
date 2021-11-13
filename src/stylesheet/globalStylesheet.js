@@ -1,13 +1,13 @@
 import { StyleSheet } from "react-native";
 
 //AddMedicineScreens , Dailyscreens
-export default StyleSheet.create({
+export const globalStyle = StyleSheet.create({
   screen: {
     marginBottom: 15,
     alignItems: "center",
   },
-  textThai:{
-    fontFamily:'Prompt-Light',
+  textThai: {
+    fontFamily: "Prompt-Light",
   },
   //container ของ AddMedicineScreens
   Addcontainer: {
@@ -16,7 +16,7 @@ export default StyleSheet.create({
     alignItems: "center",
     flex: 1,
   },
-  container:{
+  container: {
     backgroundColor: "rgba(85,194,255,0.8)",
     height: "100%",
   },
@@ -70,7 +70,7 @@ export default StyleSheet.create({
     borderWidth: 1.5,
     borderRadius: 5,
     borderColor: "grey",
-    opacity: 0.25
+    opacity: 0.25,
   },
   infoContain: {
     width: "90%",
@@ -80,6 +80,41 @@ export default StyleSheet.create({
     backgroundColor: "#ffff",
     shadowColor: "#000",
     elevation: 5,
-    marginTop: 50
+    marginTop: 50,
+  },
+  sectionDropDown: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginLeft: 10,
+  },
+  sectionTextInput: {
+    flexDirection: "row",
+    borderWidth: 1,
+    borderRadius: 10,
+    flex: 1,
+    paddingRight: "10%",
+    alignItems: "center",
+    backgroundColor: "white",
+  },
+  sectionFilter: {
+    flexDirection: "row",
+    width: "90%",
+    alignSelf: "center",
+    marginTop: 15,
+    height: 45,
+  },
+  ImageStyle: {
+    padding: 2,
+    marginLeft: "10%",
+    height: 30,
+    width: 30,
+    resizeMode: "stretch",
+  },
+  SectionStyle: {
+    flexDirection: "row",
+    alignItems: "center",
+    height: 25,
+    margin: 2,
   },
 });

@@ -33,11 +33,11 @@ export default function MedicineCard(props) {
       </View>
       <View style={{ flex: 1, padding: 15 }}>
         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-          <Text style={{ fontSize: 30 }}>{title}</Text>
+          <Text style={{fontFamily:"Prompt-Light" ,fontSize: 30 }}>{title}</Text>
         </View>
         <View style={styles.line}></View>
 
-        <Text style={{ fontSize: 18 }}>{subTitle}</Text>
+        <Text style={{fontFamily:"Prompt-Light" ,fontSize: 18 }}>{subTitle}</Text>
       </View>
     </TouchableOpacity>
   );

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState,u} from "react";
 import {
   StyleSheet,
   Text,
@@ -18,7 +18,13 @@ import { useSelector } from "react-redux";
 //Components
 import NotificationCard from "../components/NotificationCard";
 
-export default function DrugInfoScreen({ navigation, route }) {
+//gloabalStylesheet
+import { globalStyle } from "../stylesheet/globalStylesheet";
+
+
+
+export default function DrugInfoScreen({ navigation }) {
+  // console.disableYellowBox = true; 
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
   const medicineInfo = useSelector((state) => state.medicine.selectMedicine);
@@ -48,11 +54,13 @@ export default function DrugInfoScreen({ navigation, route }) {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <ScrollView>
+    <SafeAreaView style={globalStyle.Addcontainer}>
+      
       <LinearGradient
         // Background Linear Gradient
         colors={["rgba(255,255,255,1)", "transparent"]}
-        style={styles.background}
+        style={globalStyle.background}
       />
 
       <View style={styles.infoContain}>
@@ -80,79 +88,44 @@ export default function DrugInfoScreen({ navigation, route }) {
             <View
               style={{ flexDirection: "row", height: 50, alignItems: 'flex-end', marginTop: 10 }}
             >
-              <Text style={{ fontSize: 30 }}>{medicineInfo.name}</Text>
+              <Text style={{ fontFamily:'Prompt-Light',fontSize: 30 }}>{medicineInfo.name}</Text>
             </View>
-            <View style={styles.line}></View>
+            <View style={globalStyle.line}></View>
 
-            <Text style={{ fontSize: 18 }}>{medicineInfo.note}</Text>
+            <Text style={{ fontFamily:'Prompt-Light',fontSize: 18 }}>{medicineInfo.note}</Text>
           </View>
         </View>
 
         <View style={{width: "100%", height: '100%',  borderColor: "grey", flex: 1 }}>
-          <Text>คำอธิบายตัวยา</Text>
+          <Text style={globalStyle.textThai}>คำอธิบายตัวยา</Text>
           <ScrollView >
-            <Text style={{fontSize: 18}} >{medicineInfo.description}</Text>
+            <Text style={{fontFamily:'Prompt-Light',fontSize: 18}} >{medicineInfo.description}</Text>
           </ScrollView>
         </View>
       </View>
-
-      <View style={{ width: "90%" }}>
-        <Text>เวลาที่จะต้องทาน</Text>
-        <View style={styles.showLine}></View>
-      </View>
-
+      <View style={{ width: "90%", marginTop: 10 }}>
+          <View style={globalStyle.SectionStyle}>
+            <Text style={{ fontFamily: "Prompt-Light",fontSize:16 }}>เวลาที่จะต้องทาน</Text>
+            <TouchableOpacity style={{marginLeft:"58%"}}>
+            <Image
+              source={require("../../assets/add.png")} //Change your icon image here
+              style={globalStyle.ImageStyle}
+            /></TouchableOpacity>
+          </View>
+          <View style={globalStyle.showLine}></View>
+        </View>
       <FlatList
         data={data}
         keyExtractor={(item, index) => index.toString()}
         renderItem={renderItem}
-        style={{ width: "100%" }}
+        style={{ width: "100%"}}
       />
     </SafeAreaView>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  screen: {
-    marginBottom: 15,
-    alignItems: "center"
-  },
-  ///
-  container: {
-    backgroundColor: "rgba(85,194,255,0.8)",
-    height: "100%",
-    alignItems: "center",
-    flex: 1
-  },
-  ///
-  background: {
-    position: "absolute",
-    left: 0,
-    right: 0,
-    top: 0,
-    height: "150%",
-    flex: 1
-  },
-  ///
-  textInput: {
-    textAlign: "center",
-    backgroundColor: "white",
-    height: 40,
-    borderColor: "grey",
-    borderRadius: 5,
-    borderWidth: 1
-  },
-  ///
-  showLine: {
-    marginTop: 8,
-    width: "95%",
-    borderWidth: 1.5,
-    borderRadius: 5,
-    borderColor: "grey",
-    // backgroundColor:'grey',
-    opacity: 0.25,
-    alignSelf: "center"
-  },
-  ///
   infoContain: {
     width: "90%",
     height: 350,
@@ -161,14 +134,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#ffff",
     shadowColor: "#000",
     elevation: 5,
-    marginTop: 50
+    marginTop: 20
   },
-  line: {
-    // marginTop: 8,
-    borderWidth: 1.5,
-    borderRadius: 5,
-    borderColor: "grey",
-    // backgroundColor:'grey',
-    opacity: 0.25
-  }
 });

@@ -17,7 +17,7 @@ import {
 import { useSelector } from "react-redux";
 import { LinearGradient } from "expo-linear-gradient";
 
-import styles from "../stylesheet/screenStyle";
+import {globalStyle} from "../stylesheet/globalStylesheet";
 
 //sqlite
 import { getDailyMedicine } from "../database/database-function";
@@ -32,7 +32,7 @@ export default function DailyScreen({ navigation }) {
 
   const renderItem = (itemData) => {
     return (
-      <View style={styles.screen}>
+      <View style={globalStyle.screen}>
           <DailyCard
             title={itemData.item.notiTime}
             subTitle={itemData.item.name}
@@ -47,11 +47,12 @@ export default function DailyScreen({ navigation }) {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={globalStyle.container}>
       <LinearGradient
         // Background Linear Gradient
         colors={["rgba(255,255,255,1)", "transparent"]}
-        style={styles.background}
+        style={globalStyle.background}
+
       />
 
       <HeaderTitle title="ยาที่ต้องทานวันนี้" />
