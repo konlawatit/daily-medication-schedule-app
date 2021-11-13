@@ -24,8 +24,8 @@ export default function LoginScreen({navigation}) {
               <View>
                 <Image style={{width: 30, height: 30}} source={require('../../assets/profile.png')} />
               </View>
-              <View style={{marginLeft: "13%", width: "60%", alignItems:"center"}} >
-                <Text style={styles.submitText}>เข้าใช้งาน</Text>
+              <View style={{marginLeft: "14%"}} >
+                <Text style={styles.submitText}>เข้าใช้งานแบบออฟไลน์</Text>
               </View>
           </View>
       </TouchableOpacity>
@@ -52,7 +52,7 @@ export default function LoginScreen({navigation}) {
               <View>
                 <Image style={{width: 30, height: 30}} source={require('../../assets/facebook-logo.png')} />
               </View>
-              <View style={{marginLeft: "9%"}}>
+              <View style={{marginLeft: "10%"}}>
                 <Text style={{color: "white", fontSize: 16, fontFamily: "Prompt-Light"}} >เข้าสู่ระบบด้วย Facebook</Text>
               </View>
           </View>
@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
     paddingLeft: "5%",
     backgroundColor: '#fff',
     borderRadius: 10,
-    width: '75%',
+    width: '75  %',
     height: 50,
     flex: 0,
     alignItems: 'center',

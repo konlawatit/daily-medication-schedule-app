@@ -3,6 +3,7 @@ import { Button, Dimensions, Text, View, StyleSheet } from "react-native";
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { FontAwesome5, FontAwesome, Fontisto } from "@expo/vector-icons";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -22,8 +23,8 @@ const MyTheme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
-    background: "#a3d0f4"
-  }
+    background: "#a3d0f4",
+  },
 };
 
 function HomeNavigator() {
@@ -34,27 +35,40 @@ function HomeNavigator() {
         headerTransparent: true,
         headerTitleStyle: {
           paddingTop: "10%",
-          fontSize: 30
+          fontSize: 30,
           // opacity: 0
-        }
+        },
       }}
     >
       <Tab.Screen
         name="Daily"
         component={Daily}
         options={{
-          animation: "slide_from_right"
+          animation: "slide_from_right",
+          tabBarIcon: ({ color, size }) => (
+            <FontAwesome name="calendar" size={size} color={color} />
+          ),
         }}
       />
       <Tab.Screen
         name="Medicine"
         component={MedicineScreen}
-        options={{ animation: "slide_from_right" }}
+        options={{
+          animation: "slide_from_right",
+          tabBarIcon: ({ color, size }) => (
+            <Fontisto name="drug-pack" size={size} color={color} />
+          ),
+        }}
       />
       <Tab.Screen
         name="History"
         component={HistoryScreen}
-        options={{ animation: "slide_from_right" }}
+        options={{
+          animation: "slide_from_right",
+          tabBarIcon: ({ color, size }) => (
+            <Fontisto name="history" size={size} color={color} />
+          ),
+        }}
       />
       <Tab.Screen
         name="Test Noti"
@@ -76,7 +90,7 @@ export default function MyNavigator() {
       <Stack.Navigator
         // mode="modal"
         screenOptions={{
-          headerShown: false
+          headerShown: false,
         }}
       >
         <Stack.Screen name="Login" component={Login} />
@@ -98,19 +112,39 @@ export default function MyNavigator() {
                 title="Info"
                 color="#fff"
               />
-            )
+            ),
           }}
         />
-        
-        <Stack.Screen name="DrugInfo" component={DrugInfoScreen} options={{title:"ข้อมูลยา" , headerShown: true}} />
-        <Stack.Screen name="NotificationTime" component={NotificationTimeScreen} />
+
+        <Stack.Screen
+          name="DrugInfo"
+          component={DrugInfoScreen}
+          options={{
+            title: "ข้อมูลยา",
+            headerShown: true,
+            headerTitleStyle: {
+              fontFamily: "Prompt-Light",
+              color: "#0080fe",
+            },
+          }}
+        />
+        <Stack.Screen
+          name="NotificationTime"
+          component={NotificationTimeScreen}
+        />
         <Stack.Screen
           name="addMedicine"
           component={AddMedicineScreen}
-          options={{ title: "เพิ่มข้อมูลยา", headerShown: true }}
+          options={{
+            title: "เพิ่มข้อมูลยา",
+            headerShown: true,
+            headerTitleStyle: {
+              fontFamily: "Prompt-Light",
+              color: "#0080fe",
+            },
+          }}
         />
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
-

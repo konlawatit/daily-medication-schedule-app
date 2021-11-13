@@ -11,30 +11,29 @@ import {
   SafeAreaView,
   Switch,
   FlatList,
-  Linking
+  Linking,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 
-import styles from '../stylesheet/screenStyle'
-
-
+import { globalStyle } from "../stylesheet/globalStylesheet";
 
 //Components
 import NotificationCard from "../components/NotificationCard";
 
 export default function AddMedicineScreen({ navigation }) {
+  console.disableYellowBox = true;
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
   const [data, setData] = useState([
     {
-      time: "12:00"
+      time: "12:00",
     },
     {
-      time: "12:00"
+      time: "12:00",
     },
     {
-      time: "12:00"
-    }
+      time: "12:00",
+    },
   ]);
 
   const renderItem = (itemData) => {
@@ -45,69 +44,76 @@ export default function AddMedicineScreen({ navigation }) {
     );
   };
 
-
   return (
-    <SafeAreaView style={styles.Addcontainer}>
-      <LinearGradient
-        // Background Linear Gradient
-        colors={["rgba(255,255,255,1)", "transparent"]}
-        style={styles.background}
-      />
-
-      <TouchableOpacity style={{ width: 150, justifyContent: "flex-end" }}>
-        <View style={styles.imageBox}>
-          <Image
-            style={{ width: "100%", height: "100%" }}
-            source={require("../../assets/test.jpg")}
-          />
-        </View>
-        <Image
-          style={styles.addButton}
-          source={require("../../assets/add.png")}
+    <ScrollView>
+      <SafeAreaView style={globalStyle.Addcontainer}>
+        <LinearGradient
+          // Background Linear Gradient
+          colors={["rgba(255,255,255,1)", "transparent"]}
+          style={globalStyle.background}
         />
-      </TouchableOpacity>
 
-      <View style={{ width: "100%", alignItems: "center" }}>
-        <View style={{ width: "80%", borderColor: "grey" }}>
-          <Text style={styles.textThai}>ชื่อตัวยา</Text>
-          <TextInput placeholder="กรอกชื่อตัวยา" style={styles.textInput} />
-        </View>
-        <View style={{ width: "80%", borderColor: "grey" }}>
-          <Text style={styles.textThai}>หมายเหตุ</Text>
-          <TextInput placeholder="หมายเหตุการใช้ยา" style={styles.textInput} />
-        </View>
-        <View style={{ width: "80%", borderColor: "grey" }}>
-          <Text style={styles.textThai}>คำอธิบายตัวยา</Text>
-          <TextInput
-            style={{
-              borderRadius: 5,
-              backgroundColor: "white",
-              padding: 5
-            }}
-            numberOfLines={5}
-            textAlignVertical={"top"} 
-            multiline
+        <TouchableOpacity style={{ width: 150, justifyContent: "flex-end" }}>
+          <View style={globalStyle.imageBox}>
+            <Image
+              style={{ width: "100%", height: "100%" }}
+              source={require("../../assets/test.jpg")}
+            />
+          </View>
+          <Image
+            style={globalStyle.addButton}
+            source={require("../../assets/add.png")}
           />
-        </View>
-      </View>
+        </TouchableOpacity>
 
-      <View style={{ width: "90%" }}>
-        <View style={{flexDirection: "row", width: '90%', alignItems: 'center', alignSelf: 'center'}}>
-          <Text style={{flex: 1}} >เวลาที่จะต้องทาน</Text>
-          <TouchableOpacity style={{flex: 1, marginLeft: 5, borderWidth: 0}} >
-            <Image style={{width: 30, height: 30, alignSelf: 'flex-end'}} source={require('../../assets/add.png')} />
-            {/* //แก้ไอคอนได้เลยคับ  */}
-          </TouchableOpacity>
+        <View style={{ width: "100%", alignItems: "center" }}>
+          <View style={{ width: "80%", borderColor: "grey" }}>
+            <Text style={globalStyle.textThai}>ชื่อตัวยา</Text>
+            <TextInput
+              placeholder="กรอกชื่อตัวยา"
+              style={globalStyle.textInput}
+            />
+          </View>
+          <View style={{ width: "80%", borderColor: "grey" }}>
+            <Text style={globalStyle.textThai}>หมายเหตุ</Text>
+            <TextInput
+              placeholder="หมายเหตุการใช้ยา"
+              style={globalStyle.textInput}
+            />
+          </View>
+          <View style={{ width: "80%", borderColor: "grey" }}>
+            <Text style={globalStyle.textThai}>คำอธิบายตัวยา</Text>
+            <TextInput
+              style={{
+                borderRadius: 5,
+                backgroundColor: "white",
+                padding: 5,
+              }}
+              numberOfLines={5}
+              textAlignVertical={"top"}
+              multiline
+            />
+          </View>
         </View>
-        <View style={styles.showLine}></View>
-      </View>
+        <View style={{ width: "90%", marginTop: 10 }}>
+          <View style={globalStyle.SectionStyle}>
+            <Text style={{ fontFamily: "Prompt-Light",fontSize:16 }}>เวลาที่จะต้องทาน</Text>
+            <TouchableOpacity style={{marginLeft:"58%"}}>
+            <Image
+              source={require("../../assets/add.png")} //Change your icon image here
+              style={globalStyle.ImageStyle}
+            /></TouchableOpacity>
+          </View>
+          <View style={globalStyle.showLine}></View>
+        </View>
 
-      <FlatList
-        data={data}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={renderItem}
-        style={{ width: "100%" }}
-      />
-    </SafeAreaView>
+        <FlatList
+          data={data}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={renderItem}
+          style={{ width: "100%" }}
+        />
+      </SafeAreaView>
+    </ScrollView>
   );
 }

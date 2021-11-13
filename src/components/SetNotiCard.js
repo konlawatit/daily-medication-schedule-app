@@ -72,11 +72,13 @@ const styles = StyleSheet.create({
   },
   title: {
     color: "white",
-    fontSize: 25
+    fontSize: 25,
+    fontFamily: "Prompt-Light"
   },
   subTitle: {
     color: "white",
-    fontSize: 18
+    fontSize: 18,
+    fontFamily: "Prompt-Light"
   },
   line: {
     marginTop: 5,

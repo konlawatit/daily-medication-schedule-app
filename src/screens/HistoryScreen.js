@@ -20,6 +20,9 @@ import HeaderTitle from "../components/HeaderTitle";
 import MedicineCard from "../components/MedicineCard";
 import DropDownPicker from "../components/DropDownPicker";
 
+//stylesheets
+import { globalStyle } from "../stylesheet/globalStylesheet";
+
 export default function HistoryScreen({ navigation }) {
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
@@ -95,7 +98,7 @@ export default function HistoryScreen({ navigation }) {
           >
             {changeStackDate(itemData.item.date)}
             <View style={styles.line}></View>
-            <Text>{itemData.item.date} </Text>
+            <Text style={globalStyle.textThai}>{itemData.item.date} </Text>
             <View style={styles.line}></View>
           </View>
         ) : (
