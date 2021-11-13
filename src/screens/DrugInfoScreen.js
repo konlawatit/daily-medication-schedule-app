@@ -50,7 +50,7 @@ export default function DrugInfoScreen({ navigation, route }) {
 
   const ContentThatGoesAboveTheFlatList = () => {
     return (
-      <>
+
         <SafeAreaView style={globalStyle.Addcontainer}>
           <LinearGradient
             // Background Linear Gradient
@@ -141,7 +141,7 @@ export default function DrugInfoScreen({ navigation, route }) {
             style={{ width: "100%" }}
           />
         </SafeAreaView>
-      </>
+    
     );
   };
 
