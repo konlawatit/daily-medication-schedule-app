@@ -60,7 +60,7 @@ function HomeNavigator() {
         options={{
           animation: "slide_from_right",
           tabBarIcon: ({ color, size }) => (
-            <Fontisto name="drug-pack" size={size} color={color} />
+            <Fontisto name="pills" size={size} color={color} />
           ),
         }}
       />
@@ -85,6 +85,7 @@ function HomeNavigator() {
 
 // สร้าง Navigator หลัก
 import { initDB, delDB } from "../database/database-function";
+import NotificationScreen from "../screens/NotificationScreen";
 export default function MyNavigator() {
   const dispatch = useDispatch();
 
