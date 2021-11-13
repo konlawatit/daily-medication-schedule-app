@@ -11,7 +11,8 @@ import {
   SafeAreaView,
   Switch,
   FlatList,
-  Linking
+  Linking,
+  Dimensions
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 
@@ -24,29 +25,21 @@ export default function AddMedicineScreen({ navigation }) {
   // console.disableYellowBox = true;
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
-  const [data, setData] = useState([
-    {
-      time: "12:00"
-    },
-    {
-      time: "12:00"
-    },
-    {
-      time: "12:00"
-    }
-  ]);
 
   const renderItem = (itemData) => {
     return (
       <View style={{ alignItems: "center" }}>
-        <NotificationCard />
+        <NotificationCard time={itemData.item.time} day={itemData.item.day} />
       </View>
     );
   };
 
-  const ContentThatGoesAboveTheFlatList = () => {
+  const ContentThatGoesAboveTheFlatList = ({ item, index }) => {
+    const [name, setName] = useState();
+    const [note, setNote] = useState();
+    const [description, setDescription] = useState();
     return (
-        <View style={globalStyle.Addcontainer}>
+      <View style={globalStyle.Addcontainer}>
         <LinearGradient
           // Background Linear Gradient
           colors={["rgba(255,255,255,1)", "transparent"]}
@@ -71,6 +64,8 @@ export default function AddMedicineScreen({ navigation }) {
             <Text style={globalStyle.textThai}>ชื่อตัวยา</Text>
             <TextInput
               placeholder="กรอกชื่อตัวยา"
+              value={name}
+              onChangeText={setName}
               style={globalStyle.textInput}
             />
           </View>
@@ -79,6 +74,8 @@ export default function AddMedicineScreen({ navigation }) {
             <TextInput
               placeholder="หมายเหตุการใช้ยา"
               style={globalStyle.textInput}
+              value={note}
+              onChangeText={setNote}
             />
           </View>
           <View style={{ width: "80%", borderColor: "grey" }}>
@@ -89,18 +86,21 @@ export default function AddMedicineScreen({ navigation }) {
                 backgroundColor: "white",
                 padding: 5
               }}
+              value={description}
+              onChangeText={setDescription}
               numberOfLines={5}
               textAlignVertical={"top"}
               multiline
             />
           </View>
         </View>
+
         <View style={{ width: "90%", marginTop: 10 }}>
           <View style={globalStyle.SectionStyle}>
             <Text style={{ fontFamily: "Prompt-Light", fontSize: 16 }}>
               เวลาที่จะต้องทาน
             </Text>
-            <TouchableOpacity style={{ marginLeft: "58%" }}>
+            <TouchableOpacity style={{ marginLeft: "58%" }} onPress={() => navigation.navigate("NotificationTime")} >
               <Image
                 source={require("../../assets/add.png")} //Change your icon image here
                 style={globalStyle.ImageStyle}
@@ -109,24 +109,29 @@ export default function AddMedicineScreen({ navigation }) {
           </View>
           <View style={globalStyle.showLine}></View>
         </View>
-        <SafeAreaView style={{ flex: 1, width: "100%" }}>
+        
+        <SafeAreaView style={{ width: "100%", height: "100%" }}>
           <FlatList
-            data={data}
+            data={[]}
             keyExtractor={(item, index) => index.toString()}
             renderItem={renderItem}
-            style={{ width: "100%" }}
+            style={{ flex: 1, width: "100%" }}
           />
         </SafeAreaView>
       </View>
-    )
-  }
+    );
+  };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1, height: "150%" }}>
       <FlatList
+      contentContainerStyle={{ flexGrow: 1 }}
         data={[]}
+        // style={{height: '150%', flex: 1}}
         ListHeaderComponent={ContentThatGoesAboveTheFlatList}
-        // ListFooterComponent={ContentThatGoesBelowTheFlatList}
+        // ListHeaderComponent={test}
+
+        // ListFooterComponent={test}
       />
     </SafeAreaView>
   );

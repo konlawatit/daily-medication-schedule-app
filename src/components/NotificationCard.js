@@ -10,7 +10,7 @@ import {
   ScrollView,
   SafeAreaView,
   Switch,
-  FlatList,
+  FlatList
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 
@@ -18,8 +18,9 @@ import { LinearGradient } from "expo-linear-gradient";
 
 export default function NotificationCard(props) {
   const [isEnabled, setIsEnabled] = useState(false);
-  const [time, setTime] = useState(props.time)
-  const [day, setDay] = useState(props.day)
+  const [time, setTime] = useState(props.time);
+  const [day, setDay] = useState(props.day);
+  console.log(day);
   // console.log(day)
   const toggleSwitch = () =>
     setIsEnabled(
@@ -27,10 +28,9 @@ export default function NotificationCard(props) {
       console.log("" + isEnabled)
     );
 
-    const dayCheck = (d) => {
-      return d == 1 ? 'white' : 'grey'
-    }
-    
+  const dayCheck = (d) => {
+    return d == 1 ? "white" : "grey";
+  };
 
   return (
     // <View style={[isEnabled ? styles.cardOn : styles.cardOff]} >
@@ -39,7 +39,6 @@ export default function NotificationCard(props) {
       style={styles.cardOn}
       onPress={() => props.navigation.navigate("NotificationTime")}
     >
-      
       <View style={styles.imagePart}>
         <Image
           style={{ width: "60%", height: "50%", marginTop: 10 }}
@@ -49,13 +48,27 @@ export default function NotificationCard(props) {
       <View style={styles.infoPart}>
         <Text style={styles.time}>{time}</Text>
         <View style={{ flexDirection: "row", marginBottom: 5 }}>
-          <Text style={[styles.daysOfweek, {color: dayCheck(day.mo) }]}>จ</Text>
-          <Text style={[styles.daysOfweek, {color: dayCheck(day.tu) }]}>อ</Text>
-          <Text style={[styles.daysOfweek, {color: dayCheck(day.we) }]}>พ</Text>
-          <Text style={[styles.daysOfweek, {color: dayCheck(day.th) }]}>พฤ</Text>
-          <Text style={[styles.daysOfweek, {color: dayCheck(day.fr) }]}>ศ</Text>
-          <Text style={[styles.daysOfweek, {color: dayCheck(day.sa) }]}>ส</Text>
-          <Text style={[styles.daysOfweek, {color: dayCheck(day.su) }]}>อา</Text>
+          <Text style={[styles.daysOfweek, { color: dayCheck(day.mo) }]}>
+            จ
+          </Text>
+          <Text style={[styles.daysOfweek, { color: dayCheck(day.tu) }]}>
+            อ
+          </Text>
+          <Text style={[styles.daysOfweek, { color: dayCheck(day.we) }]}>
+            พ
+          </Text>
+          <Text style={[styles.daysOfweek, { color: dayCheck(day.th) }]}>
+            พฤ
+          </Text>
+          <Text style={[styles.daysOfweek, { color: dayCheck(day.fr) }]}>
+            ศ
+          </Text>
+          <Text style={[styles.daysOfweek, { color: dayCheck(day.sa) }]}>
+            ส
+          </Text>
+          <Text style={[styles.daysOfweek, { color: dayCheck(day.su) }]}>
+            อา
+          </Text>
         </View>
       </View>
       <View style={styles.switchPart}>
@@ -77,14 +90,14 @@ const styles = StyleSheet.create({
   time: {
     fontFamily: "Prompt-Light",
     fontSize: 40,
-    color: "white",
+    color: "white"
   },
   daysOfweek: {
     marginBottom: 5,
     marginRight: 5,
     marginLeft: 5,
     // color: "white" ,
-    fontFamily: "Prompt-Light",
+    fontFamily: "Prompt-Light"
   },
   cardOn: {
     flexDirection: "row",
@@ -92,17 +105,18 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(85,194,255,8)",
     height: 100,
     padding: 10,
+    marginBottom: '5%',
     borderRadius: 10,
-    marginTop: 15,
+    // marginTop: 15,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 6,
+      height: 6
     },
     shadowOpacity: 0.39,
     shadowRadius: 100.3,
     elevation: 5,
-    alignItems: "center",
+    alignItems: "center"
   },
   cardOff: {
     flexDirection: "row",
@@ -115,28 +129,28 @@ const styles = StyleSheet.create({
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 6,
+      height: 6
     },
     shadowOpacity: 0.39,
     shadowRadius: 100.3,
     elevation: 5,
     alignItems: "center",
-    opacity:0.5
+    opacity: 0.5
   },
   imagePart: {
     flex: 0.3,
     alignItems: "center",
     justifyContent: "flex-start",
     width: "100%",
-    height: "100%",
+    height: "100%"
   },
   infoPart: {
     flex: 1,
-    justifyContent: "flex-start",
+    justifyContent: "flex-start"
   },
   switchPart: {
     flex: 0.5,
     justifyContent: "center",
-    alignItems: "center",
-  },
+    alignItems: "center"
+  }
 });

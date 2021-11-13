@@ -6,13 +6,15 @@ import {
   FlatList,
   Image,
   Text,
-  TouchableOpacity
+  TouchableOpacity,
+  Button
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import DropDown from "react-native-dropdown-picker";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import DateTimePicker from '@react-native-community/datetimepicker';
+import DatePicker from 'react-native-date-picker'
 
 
 //Components
@@ -26,6 +28,11 @@ import { globalStyle } from "../stylesheet/globalStylesheet";
 export default function HistoryScreen({ navigation }) {
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
+  const [date, setDate] = useState(new Date())
+  const [open, setOpen] = useState(false)
+  const [data, setData] = useState()
+
+
   const showDatePicker = () => {
     setDatePickerVisibility(true);
   };
@@ -35,7 +42,7 @@ export default function HistoryScreen({ navigation }) {
   };
 
   const handleConfirm = (date) => {
-    console.warn("A date has been picked: ", date);
+    console.log("A date has been picked: ", date);
     hideDatePicker();
   };
 
@@ -116,29 +123,54 @@ export default function HistoryScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
+      
       <LinearGradient
         // Background Linear Gradient
         colors={["rgba(255,255,255,1)", "transparent"]}
         style={styles.background}
       />
 
+
       <HeaderTitle title="ประวัติการทานยา" />
+      <Button title="Open" onPress={() => setOpen(true)} />
+      <DatePicker
+        modal
+        open={open}
+        date={date}
+        onConfirm={(date) => {
+          setOpen(false)
+          setDate(date)
+        }}
+        onCancel={() => {
+          setOpen(false)
+        }}
+      />
 
       <View style={styles.sectionFilter}>
         <View style={styles.sectionDropDown}>
           <DropDownPicker />
         </View>
         <View style={styles.sectionDate}>
-          <TouchableOpacity onPress={()=>showDatePicker()}>
+          <TouchableOpacity style={{colro: 'black'}} onPress={()=>showDatePicker()}>
             <MaterialIcons name="date-range" size={40} color="black" />
             <DateTimePickerModal
+            style={{
+              shadowColor: '#fff',
+              shadowRadius: 0,
+              shadowOpacity: 1,
+              shadowOffset: { height: 0, width: 0 },
+            }}
               isVisible={isDatePickerVisible}
-              mode="date"
+              mode="time"
+              display="spinner"
+              isDarkModeEnabled={true}
               onConfirm={handleConfirm}
               onCancel={hideDatePicker}
               locale="th_TH"
             />
           </TouchableOpacity>
+
+          
         </View>
       </View>
 

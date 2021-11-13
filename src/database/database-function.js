@@ -145,7 +145,6 @@ export function initDB(dispatch) {
         
         // dispatch(setTime(newArray))
         dispatch(setTime(newArray))
-        
       },
       (_, err) => {
         console.log("insert time error", err);

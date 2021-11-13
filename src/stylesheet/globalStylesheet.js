@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
 
 //AddMedicineScreens , Dailyscreens
 export const globalStyle = StyleSheet.create({
@@ -12,9 +12,8 @@ export const globalStyle = StyleSheet.create({
   //container ของ AddMedicineScreens
   Addcontainer: {
     backgroundColor: "rgba(85,194,255,0.8)",
-    height: "100%",
     alignItems: "center",
-    flex: 1,
+    height: '100%',
   },
   container: {
     backgroundColor: "rgba(85,194,255,0.8)",
