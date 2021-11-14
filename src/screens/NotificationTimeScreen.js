@@ -12,13 +12,27 @@ import {
 import { EvilIcons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import DropDown from "react-native-dropdown-picker";
+import ScrollPicker from "react-native-wheel-scrollview-picker";
 
 //Components
 import SetNotiCard from "../components/SetNotiCard";
 
 export default function NotificationTimeScreen({ navigation }) {
+  const [selectedItem, setSelectedItem] = useState(2);
+  const [itemList, setItemList] = useState([
+    "Item 1",
+    "Item 2",
+    "Item 3",
+    "Item 4",
+    "Item 5"
+  ]);
+
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
+  const [hour, setHour] = useState();
+  const [min, setMin] = useState();
+  const [hourIndex, setHourIndex] = useState(1);
+  const [minIndex, setMinIndex] = useState(1);
   const [data, setData] = useState([
     { title: "เสียงการแจ้งเตือน", subTitle: "Homecoming" },
     { title: "ระบบสั่น", subTitle: "Homecoming" },
@@ -37,16 +51,75 @@ export default function NotificationTimeScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <View style={styles.section1}>
-        <View style={styles.time}>
-          <View style={styles.timeBox}>
+        <View style={[styles.time]}>
+          {/* <View
+            style={{
+              borderRadius: 10,
+              paddingLeft: 10,
+              paddingRight: 10,
+              justifyContent: "center",
+              alignItems: "center",
+              backgroundColor: "rgba(255,255,255,0.3)"
+            }}
+          > */}
+            <ScrollPicker
+            wrapperColor ="rgba(255,255,255,0)"
+              dataSource={["01", "02", "03", "04", "05", "06"]}
+              selectedIndex={1}
+              style={{ backgroundColor: "black" }}
+              renderItem={(data, index) => {
+                return (
+                  <View >
+                    <Text style={[styles.timeChar, {color: index == hourIndex ? 'white' : 'rgba(255,255,255,0.5)'}]}>{data}</Text>
+                  </View>
+                );
+              }}
+              onValueChange={(data, selectedIndex) => {
+                //
+                setHourIndex(selectedIndex);
+                setHour(data);
+                console.log(data, selectedIndex);
+              }}
+              wrapperHeight={180}
+              wrapperWidth={150}
+              itemHeight={65}
+              highlightColor="#C5C5C5"
+              highlightBorderWidth={2}
+            />
+          {/* </View> */}
+          {/* <View style={styles.timeBox}>
             <Text style={styles.timeChar}>18</Text>
-          </View>
-          <View style={{ flex: 0.3, paddingBottom: 10 }}>
+          </View> */}
+          <View style={{ flex: 0, paddingBottom: 10 }}>
             <Text style={styles.timeChar}>:</Text>
           </View>
-          <View style={styles.timeBox}>
+          <ScrollPicker
+          wrapperColor ="rgba(255,255,255,0)"
+              dataSource={["01", "02", "03", "04", "05", "06"]}
+              selectedIndex={1}
+              style={{ backgroundColor: "black" }}
+              renderItem={(data, index) => {
+                return (
+                  <View >
+                    <Text style={[styles.timeChar, {color: index == minIndex ? 'white' : 'rgba(255,255,255,0.5)'}]}>{data}</Text>
+                  </View>
+                );
+              }}
+              onValueChange={(data, selectedIndex) => {
+                //
+                setMinIndex(selectedIndex);
+                setMin(data);
+                console.log(data, selectedIndex);
+              }}
+              wrapperHeight={180}
+              wrapperWidth={150}
+              itemHeight={65}
+              highlightColor="#C5C5C5"
+              highlightBorderWidth={2}
+            />
+          {/* <View style={styles.timeBox}>
             <Text style={styles.timeChar}>18</Text>
-          </View>
+          </View> */}
         </View>
         <View style={styles.dayOfWeek}>
           <Text style={styles.dayChar}>จ.</Text>
@@ -79,7 +152,10 @@ export default function NotificationTimeScreen({ navigation }) {
             backgroundColor: "rgba(42,42,42,1)"
           }}
         >
-          <TouchableOpacity style={styles.confirmBox} onPress={() => navigation.goBack()} >
+          <TouchableOpacity
+            style={styles.confirmBox}
+            onPress={() => navigation.goBack()}
+          >
             <Text style={styles.confirmText}>ยกเลิก</Text>
           </TouchableOpacity>
           <View style={styles.confirmBox}>
@@ -104,7 +180,7 @@ const styles = StyleSheet.create({
     paddingTop: 30
   },
   section1: {
-    flex: 0.5,
+    flex: 0.9,
     width: "90%",
     marginBottom: 10,
     // height: "100%",
@@ -114,6 +190,7 @@ const styles = StyleSheet.create({
   },
   section2: {
     flex: 1,
+
     width: "75%"
     // justifyContent: 'space-evenly'
     // height: "100%",
@@ -121,7 +198,7 @@ const styles = StyleSheet.create({
   },
   section3: {
     flex: 0.2,
-    
+
     // borderWidth: 1,
     width: "100%",
     justifyContent: "flex-end",
@@ -136,21 +213,16 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
   timeBox: {
-    // flex: 1,
-    // width: 120,
-    // height: 120,
-    // height: '100%',
     borderRadius: 10,
     paddingLeft: 10,
     paddingRight: 10,
-    // paddingRight: 25,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "rgba(255,255,255,0.3)"
   },
   timeChar: {
     alignSelf: "center",
-    fontSize: 80,
+    fontSize: 50,
     color: "rgba(255,255,255,1)"
   },
   dayOfWeek: {
@@ -164,9 +236,8 @@ const styles = StyleSheet.create({
   dayChar: {
     color: "rgba(255,255,255,1)",
     fontSize: 34,
-    fontFamily:"Prompt-Light"
+    fontFamily: "Prompt-Light"
     // margin: 5
-    
   },
   line: {
     marginTop: 15,
@@ -197,6 +268,6 @@ const styles = StyleSheet.create({
   confirmText: {
     color: "rgba(255,210,59,1)",
     fontSize: 24,
-    fontFamily: "Prompt-Light",
+    fontFamily: "Prompt-Light"
   }
 });

@@ -107,6 +107,10 @@ export default function MyNavigator() {
           headerShown: false,
         }}
       >
+        <Stack.Screen
+          name="NotificationTime"
+          component={NotificationTimeScreen}
+        />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Noti" component={NotiScreen} />
         <Stack.Screen
@@ -143,10 +147,7 @@ export default function MyNavigator() {
             },
           }}
         />
-        <Stack.Screen
-          name="NotificationTime"
-          component={NotificationTimeScreen}
-        />
+        
         <Stack.Screen
           name="addMedicine"
           component={AddMedicineScreen}
