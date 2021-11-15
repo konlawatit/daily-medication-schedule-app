@@ -1,21 +1,22 @@
 import { setMedicine, setTime } from "../store/actions/medicineAction";
 
-
 //sqlite
 import { DatabaseConnection } from "../database/database-connection";
 const db = DatabaseConnection.getConnection();
 
 export async function updateVerify(isNoti, id) {
-  db.transaction(tx => {
-    tx.executeSql(`UPDATE MEDICINE SET isNoti = ${isNoti ? 1 : 0} WHERE id = ${id} `,
-    [],
-    (tx, results) => {
-      console.log('update success')
-    },
-    (tx, err) => {
-      console.log('update verify error', err)
-    })
-  })
+  db.transaction((tx) => {
+    tx.executeSql(
+      `UPDATE MEDICINE SET isNoti = ${isNoti ? 1 : 0} WHERE id = ${id} `,
+      [],
+      (tx, results) => {
+        console.log("update success");
+      },
+      (tx, err) => {
+        console.log("update verify error", err);
+      }
+    );
+  });
 }
 
 export async function getDailyMedicine() {
@@ -37,8 +38,94 @@ export async function getDailyMedicine() {
   });
 }
 
+export async function addMedicine(name, note, description, timeList, dispatch) {
+  await db.transaction(async (tx) => {
+    let setId = timeList;
+    let resultsSetId;
+    let te 
+    tx.executeSql(
+      `INSERT INTO "MEDICINE" ("name","note","description","image") VALUES ('${name}','${note}','${description}',NULL)`,
+      [],
+      (tx, results) => {
+        console.log("Insert medicine", results.insertId);
+
+        resultsSetId = setId.map((data) => {
+          return { ...data, MEDICINE_id: results.insertId };
+        });
+        te = results.insertId
+
+        console.log(121221255555, resultsSetId);
+
+        let ls = []
+        let countResult = 0
+        let values = ""
+        
+        resultsSetId.forEach(data => {
+          ls.push(data.time)
+          ls.push(data.status)
+          if (data.day) {
+            countResult += 1
+            if (countResult !== 1) {
+              values += ",(?, ?, ?, ?)"
+            }
+            ls.push(`{"fr": ${data.day.fr},"mo": ${data.day.mo},"sa": ${data.day.sa},"su": ${data.day.su},"th": ${data.day.th},"tu": ${data.day.tu},"we": ${data.day.we}}`)
+          }
+          ls.push(data.MEDICINE_id)
+        })
+
+        tx.executeSql(
+          `INSERT INTO "TIME" ("time","status","day","MEDICINE_id") VALUES (?, ?, ?, ?)${values}`,
+          ls,
+          (tx, results) => {
+            console.log("Insert Time---------------------------");
+          },
+          (tx, err) => {
+            console.log("err time", err);
+          }
+        );
+
+        tx.executeSql(
+          `SELECT *
+          FROM TIME`,
+          [],
+          (tx, results) => {
+            console.log("TIME", results.rows);
+            // dispatch(setMedicine(results.rows._array));
+          },
+          (_, err) => {
+            console.log("insert TIME error", err);
+            return true;
+          }
+        );
+      },
+      (_, err) => {
+        console.log("insert medicine error", err);
+        return true;
+      }
+      );
+
+
+    // console.log(111111111111111111111111111,resultsSetId)
+
+    tx.executeSql(
+      `SELECT *
+      FROM MEDICINE`,
+      [],
+      (tx, results) => {
+        console.log(results.rows);
+        dispatch(setMedicine(results.rows._array));
+      },
+      (_, err) => {
+        console.log("insert medicine error", err);
+        return true;
+      }
+    );
+  });
+}
+
+export function addTime(payload) {}
+
 export function initDB(dispatch) {
-  
   db.transaction((tx) => {
     // tx.executeSql("DROP TABLE USERS", []);
     tx.executeSql(
@@ -122,7 +209,7 @@ export function initDB(dispatch) {
       [],
       (tx, results) => {
         console.log(results.rows);
-        dispatch(setMedicine(results.rows._array))
+        dispatch(setMedicine(results.rows._array));
       },
       (_, err) => {
         console.log("insert medicine error", err);
@@ -137,14 +224,14 @@ export function initDB(dispatch) {
       ON MEDICINE.id = TIME.MEDICINE_id`,
       [],
       (tx, results) => {
-        let result = results.rows._array
+        let result = results.rows._array;
         let newArray = result.map((data) => {
-          return {...data, day: JSON.parse(data.day)}
-        })
+          return { ...data, day: JSON.parse(data.day) };
+        });
         console.log(newArray);
-        
+
         // dispatch(setTime(newArray))
-        dispatch(setTime(newArray))
+        dispatch(setTime(newArray));
       },
       (_, err) => {
         console.log("insert time error", err);
@@ -204,7 +291,6 @@ export function delDB() {
         console.log(error);
       }
     );
-
 
     tx.executeSql(
       "DROP TABLE HISTORY;",

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -14,6 +14,7 @@ import {
   Linking,
   Dimensions
 } from "react-native";
+import { useSelector, useDispatch } from "react-redux";
 import { LinearGradient } from "expo-linear-gradient";
 
 import { globalStyle } from "../stylesheet/globalStylesheet";
@@ -21,10 +22,33 @@ import { globalStyle } from "../stylesheet/globalStylesheet";
 //Components
 import NotificationCard from "../components/NotificationCard";
 
+import { addMedicine } from "../database/database-function";
+
 export default function AddMedicineScreen({ navigation }) {
   // console.disableYellowBox = true;
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
+  const timeList = useSelector((state) => state.medicine.stackTime);
+
+  const [confirmName, setConfirmName] = useState();
+  const [confirmNote, setConfirmNote] = useState();
+  const [confirmDescription, setConfirmDescription] = useState();
+  const [isSave, setIsSave] = useState(false);
+
+  const [check, setCheck] = useState(false);
+
+  let dispatch = useDispatch()
+  const save = (name, note, description) => {
+    if (name) {
+      addMedicine(name, note, description, timeList, dispatch)
+    }
+    console.log(name, note, description)
+  };
+
+  const confirm = () => {
+    setCheck(!check)
+    let payload = {};
+  };
 
   const renderItem = (itemData) => {
     return (
@@ -34,12 +58,26 @@ export default function AddMedicineScreen({ navigation }) {
     );
   };
 
-  const ContentThatGoesAboveTheFlatList = ({ item, index }) => {
+  const ContentThatGoesAboveTheFlatList = (save) => {
     const [name, setName] = useState();
     const [note, setNote] = useState();
     const [description, setDescription] = useState();
+
+    useEffect(() => {
+      let payload = {
+        name,
+        note,
+        description
+      }
+
+      save(name, note, description)
+
+      // console.log(note)
+      
+    }, [check]);
+
     return (
-      <View style={globalStyle.Addcontainer}>
+      <View style={[globalStyle.Addcontainer]}>
         <LinearGradient
           // Background Linear Gradient
           colors={["rgba(255,255,255,1)", "transparent"]}
@@ -100,7 +138,10 @@ export default function AddMedicineScreen({ navigation }) {
             <Text style={{ fontFamily: "Prompt-Light", fontSize: 16 }}>
               เวลาที่จะต้องทาน
             </Text>
-            <TouchableOpacity style={{ marginLeft: "58%" }} onPress={() => navigation.navigate("NotificationTime")} >
+            <TouchableOpacity
+              style={{ marginLeft: "58%" }}
+              onPress={() => navigation.navigate("NotificationTime")}
+            >
               <Image
                 source={require("../../assets/add.png")} //Change your icon image here
                 style={globalStyle.ImageStyle}
@@ -109,10 +150,10 @@ export default function AddMedicineScreen({ navigation }) {
           </View>
           <View style={globalStyle.showLine}></View>
         </View>
-        
+
         <SafeAreaView style={{ width: "100%", height: "100%" }}>
           <FlatList
-            data={[]}
+            data={timeList}
             keyExtractor={(item, index) => index.toString()}
             renderItem={renderItem}
             style={{ flex: 1, width: "100%" }}
@@ -122,17 +163,61 @@ export default function AddMedicineScreen({ navigation }) {
     );
   };
 
+
   return (
     <SafeAreaView style={{ flex: 1, height: "150%" }}>
       <FlatList
-      contentContainerStyle={{ flexGrow: 1 }}
+        style={{ flex: 1 }}
+        contentContainerStyle={{ flexGrow: 1 }}
         data={[]}
         // style={{height: '150%', flex: 1}}
-        ListHeaderComponent={ContentThatGoesAboveTheFlatList}
-        // ListHeaderComponent={test}
-
-        // ListFooterComponent={test}
+        ListHeaderComponent={ContentThatGoesAboveTheFlatList(save)}
       />
+
+      <View style={styles.section3}>
+        <View
+          style={{
+            flexDirection: "row",
+            width: "100%",
+            height: 60,
+            backgroundColor: "rgba(255,255,255,1)"
+          }}
+        >
+          <TouchableOpacity
+            style={styles.confirmBox}
+            onPress={() => navigation.goBack()}
+          >
+            <Text style={styles.confirmText}>ยกเลิก</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.confirmBox} onPress={() => confirm()}>
+            <Text style={styles.confirmText}>บันทึก</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
     </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  section3: {
+    flex: 1,
+    width: "100%",
+    position: "absolute",
+    justifyContent: "flex-end",
+    alignItems: "flex-end",
+    alignSelf: "flex-end",
+    // height: ,
+    bottom: 0
+  },
+  confirmBox: {
+    flex: 1,
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  confirmText: {
+    color: "rgba(0,0,0,1)",
+    fontSize: 24,
+    fontFamily: "Prompt-Light"
+  }
+});

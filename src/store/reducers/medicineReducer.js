@@ -1,10 +1,10 @@
-import { SELECT_MEDICINE, SET_MEDICINE, SET_TIME } from "../actions/medicineAction";
+import { SELECT_MEDICINE, SET_MEDICINE, SET_TIME, STACK_TIME } from "../actions/medicineAction";
 
 const initialState = {
     medicine: [],
     time: [],
-    selectMedicine: {}
-    
+    selectMedicine: {},
+    stackTime: []
   };
   const mealsReducer = (state = initialState, action) => {
     switch (action.type) {
@@ -16,6 +16,8 @@ const initialState = {
         const medicine = state.medicine.filter((data) => data.id == action.id)[0]
         console.log('id', action.id)
         return {...state,selectMedicine: medicine}
+      case STACK_TIME:
+        return {...state, stackTime: [...state.stackTime, action.time]}
       default:
         return state;
     }

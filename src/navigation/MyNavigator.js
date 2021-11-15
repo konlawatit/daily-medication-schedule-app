@@ -107,11 +107,11 @@ export default function MyNavigator() {
           headerShown: false,
         }}
       >
+        <Stack.Screen name="Login" component={Login} />
         <Stack.Screen
           name="NotificationTime"
           component={NotificationTimeScreen}
         />
-        <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Noti" component={NotiScreen} />
         <Stack.Screen
           name="Home"

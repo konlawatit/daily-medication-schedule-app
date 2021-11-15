@@ -17,7 +17,7 @@ import { LinearGradient } from "expo-linear-gradient";
 //Components
 
 export default function NotificationCard(props) {
-  const [isEnabled, setIsEnabled] = useState(false);
+  const [isEnabled, setIsEnabled] = useState(true);
   const [time, setTime] = useState(props.time);
   const [day, setDay] = useState(props.day);
   console.log(day);

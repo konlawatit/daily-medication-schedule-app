@@ -9,41 +9,62 @@ import {
   Text,
   Switch
 } from "react-native";
+import { useSelector } from "react-redux";
 import { EvilIcons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import DropDown from "react-native-dropdown-picker";
 import ScrollPicker from "react-native-wheel-scrollview-picker";
+import { useDispatch } from "react-redux";
 
 //Components
 import SetNotiCard from "../components/SetNotiCard";
 
-export default function NotificationTimeScreen({ navigation }) {
-  const [selectedItem, setSelectedItem] = useState(2);
-  const [itemList, setItemList] = useState([
-    "Item 1",
-    "Item 2",
-    "Item 3",
-    "Item 4",
-    "Item 5"
-  ]);
+import { stackTime } from "../store/actions/medicineAction";
 
-  const [isEnabled, setIsEnabled] = useState(false);
-  const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
-  const [hour, setHour] = useState();
-  const [min, setMin] = useState();
+export default function NotificationTimeScreen({ navigation }) {
+  const [hour, setHour] = useState("02");
+  console.log(111111111111111, hour);
+  const [min, setMin] = useState("02");
   const [hourIndex, setHourIndex] = useState(1);
   const [minIndex, setMinIndex] = useState(1);
-  const [data, setData] = useState([
-    { title: "เสียงการแจ้งเตือน", subTitle: "Homecoming" },
-    { title: "ระบบสั่น", subTitle: "Homecoming" },
-    { title: "ข้าม", subTitle: "5 นาที" },
-    { title: "แจ้งเตือนซ้ำ" }
+
+  const [day, setDay] = useState({
+    fr: 1,
+    mo: 1,
+    sa: 1,
+    su: 1,
+    th: 1,
+    tu: 1,
+    we: 1
+  });
+
+  const [options, setOptions] = useState([
+    { id: 1, title: "เสียงการแจ้งเตือน", subTitle: "Homecoming", value: false },
+    { id: 2, title: "ระบบสั่น", subTitle: "Homecoming", value: false },
+    { id: 3, title: "ข้าม", subTitle: "5 นาที", value: false },
+    { id: 4, title: "แจ้งเตือนซ้ำ", value: false }
   ]);
+
+  const dispatch = useDispatch();
+  const timeList = useSelector((state) => state.medicine.stackTime);
+  function confirm() {
+    let payload = {
+      time: hour+":"+min,
+      status: true,
+      day
+      // options
+    };
+    dispatch(stackTime(payload));
+  }
+
   const renderItem = (itemData) => {
     return (
       <SetNotiCard
+        id={itemData.item.id}
         title={itemData.item.title}
         subTitle={itemData.item.subTitle ? itemData.item.subTitle : false}
+        options={options}
+        setOptions={setOptions}
       />
     );
   };
@@ -52,89 +73,183 @@ export default function NotificationTimeScreen({ navigation }) {
     <View style={styles.container}>
       <View style={styles.section1}>
         <View style={[styles.time]}>
-          {/* <View
-            style={{
-              borderRadius: 10,
-              paddingLeft: 10,
-              paddingRight: 10,
-              justifyContent: "center",
-              alignItems: "center",
-              backgroundColor: "rgba(255,255,255,0.3)"
+          <ScrollPicker
+            wrapperColor="rgba(255,255,255,0)"
+            dataSource={["01", "02", "03", "04", "05", "06"]}
+            selectedIndex={1}
+            style={{ backgroundColor: "black" }}
+            renderItem={(data, index) => {
+              return (
+                <View>
+                  <Text
+                    style={[
+                      styles.timeChar,
+                      {
+                        color:
+                          index == hourIndex ? "white" : "rgba(255,255,255,0.5)"
+                      }
+                    ]}
+                  >
+                    {data}
+                  </Text>
+                </View>
+              );
             }}
-          > */}
-            <ScrollPicker
-            wrapperColor ="rgba(255,255,255,0)"
-              dataSource={["01", "02", "03", "04", "05", "06"]}
-              selectedIndex={1}
-              style={{ backgroundColor: "black" }}
-              renderItem={(data, index) => {
-                return (
-                  <View >
-                    <Text style={[styles.timeChar, {color: index == hourIndex ? 'white' : 'rgba(255,255,255,0.5)'}]}>{data}</Text>
-                  </View>
-                );
-              }}
-              onValueChange={(data, selectedIndex) => {
-                //
-                setHourIndex(selectedIndex);
-                setHour(data);
-                console.log(data, selectedIndex);
-              }}
-              wrapperHeight={180}
-              wrapperWidth={150}
-              itemHeight={65}
-              highlightColor="#C5C5C5"
-              highlightBorderWidth={2}
-            />
-          {/* </View> */}
-          {/* <View style={styles.timeBox}>
-            <Text style={styles.timeChar}>18</Text>
-          </View> */}
+            onValueChange={(data, selectedIndex) => {
+              //
+              setHourIndex(selectedIndex);
+              setHour(data);
+              console.log(data, selectedIndex);
+            }}
+            wrapperHeight={180}
+            wrapperWidth={150}
+            itemHeight={65}
+            highlightColor="#C5C5C5"
+            highlightBorderWidth={2}
+          />
           <View style={{ flex: 0, paddingBottom: 10 }}>
             <Text style={styles.timeChar}>:</Text>
           </View>
           <ScrollPicker
-          wrapperColor ="rgba(255,255,255,0)"
-              dataSource={["01", "02", "03", "04", "05", "06"]}
-              selectedIndex={1}
-              style={{ backgroundColor: "black" }}
-              renderItem={(data, index) => {
-                return (
-                  <View >
-                    <Text style={[styles.timeChar, {color: index == minIndex ? 'white' : 'rgba(255,255,255,0.5)'}]}>{data}</Text>
-                  </View>
-                );
-              }}
-              onValueChange={(data, selectedIndex) => {
-                //
-                setMinIndex(selectedIndex);
-                setMin(data);
-                console.log(data, selectedIndex);
-              }}
-              wrapperHeight={180}
-              wrapperWidth={150}
-              itemHeight={65}
-              highlightColor="#C5C5C5"
-              highlightBorderWidth={2}
-            />
-          {/* <View style={styles.timeBox}>
-            <Text style={styles.timeChar}>18</Text>
-          </View> */}
+            wrapperColor="rgba(255,255,255,0)"
+            dataSource={["01", "02", "03", "04", "05", "06"]}
+            selectedIndex={1}
+            style={{ backgroundColor: "black" }}
+            renderItem={(data, index) => {
+              return (
+                <View>
+                  <Text
+                    style={[
+                      styles.timeChar,
+                      {
+                        color:
+                          index == minIndex ? "white" : "rgba(255,255,255,0.5)"
+                      }
+                    ]}
+                  >
+                    {data}
+                  </Text>
+                </View>
+              );
+            }}
+            onValueChange={(data, selectedIndex) => {
+              //
+              setMinIndex(selectedIndex);
+              setMin(data);
+              console.log(data, selectedIndex);
+            }}
+            wrapperHeight={180}
+            wrapperWidth={150}
+            itemHeight={65}
+            highlightColor="#C5C5C5"
+            highlightBorderWidth={2}
+          />
         </View>
         <View style={styles.dayOfWeek}>
-          <Text style={styles.dayChar}>จ.</Text>
-          <Text style={styles.dayChar}>อ.</Text>
-          <Text style={styles.dayChar}>พ.</Text>
-          <Text style={styles.dayChar}>พฤ.</Text>
-          <Text style={styles.dayChar}>ศ.</Text>
-          <Text style={styles.dayChar}>ส.</Text>
-          <Text style={styles.dayChar}>อา.</Text>
+          <TouchableOpacity onPress={() => setDay({ ...day, mo: !day.mo })}>
+            <Text
+              style={[
+                styles.dayChar,
+                {
+                  color: day.mo
+                    ? "rgba(255,255,255,1)"
+                    : "rgba(255,255,255,0.5)"
+                }
+              ]}
+            >
+              จ.
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => setDay({ ...day, tu: !day.tu })}>
+            <Text
+              style={[
+                styles.dayChar,
+                {
+                  color: day.tu
+                    ? "rgba(255,255,255,1)"
+                    : "rgba(255,255,255,0.5)"
+                }
+              ]}
+            >
+              อ.
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => setDay({ ...day, we: !day.we })}>
+            <Text
+              style={[
+                styles.dayChar,
+                {
+                  color: day.we
+                    ? "rgba(255,255,255,1)"
+                    : "rgba(255,255,255,0.5)"
+                }
+              ]}
+            >
+              พ.
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => setDay({ ...day, th: !day.th })}>
+            <Text
+              style={[
+                styles.dayChar,
+                {
+                  color: day.th
+                    ? "rgba(255,255,255,1)"
+                    : "rgba(255,255,255,0.5)"
+                }
+              ]}
+            >
+              พฤ.
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => setDay({ ...day, fr: !day.fr })}>
+            <Text
+              style={[
+                styles.dayChar,
+                {
+                  color: day.fr
+                    ? "rgba(255,255,255,1)"
+                    : "rgba(255,255,255,0.5)"
+                }
+              ]}
+            >
+              ศ.
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => setDay({ ...day, sa: !day.sa })}>
+            <Text
+              style={[
+                styles.dayChar,
+                {
+                  color: day.sa
+                    ? "rgba(255,255,255,1)"
+                    : "rgba(255,255,255,0.5)"
+                }
+              ]}
+            >
+              ส.
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => setDay({ ...day, su: !day.su })}>
+            <Text
+              style={[
+                styles.dayChar,
+                {
+                  color: day.su
+                    ? "rgba(255,255,255,1)"
+                    : "rgba(255,255,255,0.5)"
+                }
+              ]}
+            >
+              อา.
+            </Text>
+          </TouchableOpacity>
         </View>
         <View style={styles.line}></View>
       </View>
       <View style={styles.section2}>
         <FlatList
-          data={data}
+          data={options}
           contentContainerStyle={{
             // height: "100%",
             justifyContent: "space-evenly"
@@ -159,7 +274,9 @@ export default function NotificationTimeScreen({ navigation }) {
             <Text style={styles.confirmText}>ยกเลิก</Text>
           </TouchableOpacity>
           <View style={styles.confirmBox}>
-            <Text style={styles.confirmText}>บันทึก</Text>
+            <TouchableOpacity onPress={() => confirm()}>
+              <Text style={styles.confirmText}>บันทึก</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </View>
