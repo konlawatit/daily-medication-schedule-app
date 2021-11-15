@@ -1,4 +1,4 @@
-import { SELECT_MEDICINE, SET_MEDICINE, SET_TIME, STACK_TIME } from "../actions/medicineAction";
+import { SELECT_MEDICINE, SET_MEDICINE, SET_TIME, STACK_TIME, CLEAR_STACK_TIME } from "../actions/medicineAction";
 
 const initialState = {
     medicine: [],
@@ -18,6 +18,8 @@ const initialState = {
         return {...state,selectMedicine: medicine}
       case STACK_TIME:
         return {...state, stackTime: [...state.stackTime, action.time]}
+      case CLEAR_STACK_TIME:
+        return {...state, stackTime: []}
       default:
         return state;
     }

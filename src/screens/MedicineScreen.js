@@ -50,7 +50,7 @@ export default function MedicineScreen({ navigation }) {
         <MedicineCard
           title={itemData.item.name}
           image="checkmark.png"
-          id={itemData.id}
+          id={itemData.item.id}
           subTitle={itemData.item.note}
           navigation={navigation}
         />

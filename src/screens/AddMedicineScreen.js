@@ -23,6 +23,7 @@ import { globalStyle } from "../stylesheet/globalStylesheet";
 import NotificationCard from "../components/NotificationCard";
 
 import { addMedicine } from "../database/database-function";
+import { clearStackTime } from "../store/actions/medicineAction";
 
 export default function AddMedicineScreen({ navigation }) {
   // console.disableYellowBox = true;
@@ -41,9 +42,16 @@ export default function AddMedicineScreen({ navigation }) {
   const save = (name, note, description) => {
     if (name) {
       addMedicine(name, note, description, timeList, dispatch)
+      dispatch(clearStackTime())
+      navigation.navigate("Medicine")
     }
     console.log(name, note, description)
   };
+
+  const cancle = () => {
+    navigation.goBack()
+    dispatch(clearStackTime())
+  }
 
   const confirm = () => {
     setCheck(!check)
@@ -151,7 +159,7 @@ export default function AddMedicineScreen({ navigation }) {
           <View style={globalStyle.showLine}></View>
         </View>
 
-        <SafeAreaView style={{ width: "100%", height: "100%" }}>
+        <SafeAreaView style={{ width: "100%", height: "100%", marginBottom: 50 }}>
           <FlatList
             data={timeList}
             keyExtractor={(item, index) => index.toString()}
@@ -185,7 +193,7 @@ export default function AddMedicineScreen({ navigation }) {
         >
           <TouchableOpacity
             style={styles.confirmBox}
-            onPress={() => navigation.goBack()}
+            onPress={() => cancle()}
           >
             <Text style={styles.confirmText}>ยกเลิก</Text>
           </TouchableOpacity>
@@ -207,7 +215,7 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
     alignSelf: "flex-end",
     // height: ,
-    bottom: 0
+    bottom: 0,
   },
   confirmBox: {
     flex: 1,

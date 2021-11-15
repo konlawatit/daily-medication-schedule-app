@@ -19,7 +19,7 @@ export default function DailyCard(props) {
   //   let image2 = require("../../assets/" + props.image)
   let title = props.title;
   let subTitle = props.subTitle;
-  const [verify, setVerify] = useState(props.verify ? props.verify : false);
+  const [verify, setVerify] = useState(props.verify == 1 ? true : false);
   let checkBox = props.checkBox ? props.checkBox : false;
   let id = props.id;
   const navigation = props.navigation;

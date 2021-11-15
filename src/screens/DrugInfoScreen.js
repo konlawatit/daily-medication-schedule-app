@@ -56,7 +56,7 @@ export default function DrugInfoScreen({ navigation, route }) {
 
   const ContentThatGoesAboveTheFlatList = () => {
     return (
-      <SafeAreaView style={globalStyle.Addcontainer}>
+      <SafeAreaView style={[globalStyle.Addcontainer]}>
         <LinearGradient
           // Background Linear Gradient
           colors={["rgba(255,255,255,1)", "transparent"]}
@@ -139,11 +139,12 @@ export default function DrugInfoScreen({ navigation, route }) {
           </View>
           <View style={globalStyle.showLine}></View>
         </View>
+        
         <FlatList
           data={selectTimeList}
           keyExtractor={(item, index) => index.toString()}
           renderItem={renderItem}
-          style={{ width: "100%" }}
+          style={{ flex: 1, width: "100%"}}
         />
       </SafeAreaView>
     );
@@ -152,6 +153,8 @@ export default function DrugInfoScreen({ navigation, route }) {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <FlatList
+      style={{ flex: 1 }}
+      contentContainerStyle={{ flexGrow: 1 }}
         data={[]}
         ListHeaderComponent={ContentThatGoesAboveTheFlatList}
         // ListFooterComponent={ContentThatGoesBelowTheFlatList}

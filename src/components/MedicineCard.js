@@ -7,7 +7,7 @@ import {
   TouchableOpacity
 } from "react-native";
 import { useDispatch } from "react-redux";
-import { getMedicine } from "../store/actions/medicineAction";
+import { selectMedicine } from "../store/actions/medicineAction";
 
 
 export default function MedicineCard(props) {
@@ -22,8 +22,9 @@ export default function MedicineCard(props) {
 
   return (
     <TouchableOpacity style={styles.card} onPress={() => {
-      dispatch(getMedicine(id))
-      navigation.navigate("DrugInfo")
+      console.log('--->',id)
+        dispatch(selectMedicine(id))
+        navigation.navigate("DrugInfo", { id });
       }} >
       <View style={{ flex: 0.7 }}>
         <Image

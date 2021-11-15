@@ -4,10 +4,10 @@ import { setMedicine, setTime } from "../store/actions/medicineAction";
 import { DatabaseConnection } from "../database/database-connection";
 const db = DatabaseConnection.getConnection();
 
-export async function updateVerify(isNoti, id) {
+export async function updateVerify(status, id) {
   db.transaction((tx) => {
     tx.executeSql(
-      `UPDATE MEDICINE SET isNoti = ${isNoti ? 1 : 0} WHERE id = ${id} `,
+      `UPDATE TIME SET status = 0 WHERE id = ${id} `,
       [],
       (tx, results) => {
         console.log("update success");
@@ -43,6 +43,8 @@ export async function addMedicine(name, note, description, timeList, dispatch) {
     let setId = timeList;
     let resultsSetId;
     let te 
+    note = note ? note : ""
+    description = description ? description : ""
     tx.executeSql(
       `INSERT INTO "MEDICINE" ("name","note","description","image") VALUES ('${name}','${note}','${description}',NULL)`,
       [],
@@ -54,15 +56,13 @@ export async function addMedicine(name, note, description, timeList, dispatch) {
         });
         te = results.insertId
 
-        console.log(121221255555, resultsSetId);
-
         let ls = []
         let countResult = 0
         let values = ""
         
         resultsSetId.forEach(data => {
           ls.push(data.time)
-          ls.push(data.status)
+          ls.push(0)
           if (data.day) {
             countResult += 1
             if (countResult !== 1) {
@@ -86,26 +86,32 @@ export async function addMedicine(name, note, description, timeList, dispatch) {
 
         tx.executeSql(
           `SELECT *
-          FROM TIME`,
+          FROM MEDICINE
+          INNER JOIN TIME
+          ON MEDICINE.id = TIME.MEDICINE_id`,
           [],
           (tx, results) => {
-            console.log("TIME", results.rows);
-            // dispatch(setMedicine(results.rows._array));
+            let result = results.rows._array;
+            let newArray = result.map((data) => {
+              return { ...data, day: JSON.parse(data.day) };
+            });
+            console.log(newArray);
+    
+            // dispatch(setTime(newArray))
+            dispatch(setTime(newArray));
           },
           (_, err) => {
-            console.log("insert TIME error", err);
+            console.log("insert time error", err);
             return true;
           }
         );
+
       },
       (_, err) => {
         console.log("insert medicine error", err);
         return true;
       }
       );
-
-
-    // console.log(111111111111111111111111111,resultsSetId)
 
     tx.executeSql(
       `SELECT *

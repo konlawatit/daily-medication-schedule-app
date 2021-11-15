@@ -50,11 +50,12 @@ export default function NotificationTimeScreen({ navigation }) {
   function confirm() {
     let payload = {
       time: hour+":"+min,
-      status: true,
+      status: false,
       day
       // options
     };
     dispatch(stackTime(payload));
+    navigation.navigate('addMedicine')
   }
 
   const renderItem = (itemData) => {
