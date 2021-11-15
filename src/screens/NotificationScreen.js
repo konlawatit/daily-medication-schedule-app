@@ -22,7 +22,7 @@ import DropDownPicker from "../components/DropDownPicker";
 //styles
 import { globalStyle } from "../stylesheet/globalStylesheet";
 
-export default function NotificationScreen({ navigation }) {
+export default function NotificationScreen({ navigation,route }) {
   const [data, setData] = useState(false);
 
   const [open, setOpen] = useState(false);
@@ -72,14 +72,14 @@ export default function NotificationScreen({ navigation }) {
         />
       </View>
         <Text style={{ fontFamily: "Prompt-Regular", fontSize: 70}}>
-          12:00
+          {route.params.data.name}
         </Text>
         <Text style={{ fontFamily: "Prompt-Light", fontSize: 36 }}>
-          ยาแก้อักเสบ
+          {route.params.data.time}
         </Text>
         <View style={styles.line} />
         <Text style={{ fontFamily: "Prompt-Light", fontSize: 24,marginBottom:"22%" }}>
-          ทานก่อนอาหาร
+          {route.params.data.note}
         </Text>
       <View style={styles.section3}>
         <View style={styles.sectionIconName}>
