@@ -12,9 +12,70 @@ Notifications.setNotificationHandler({
     }
   },
 })
+<<<<<<< Updated upstream
 
 export default function TestNoti({navigation}) {
   useEffect(() => {
+=======
+const timList = [{
+  "MEDICINE_id": 2,
+  "day":{
+    "fr": 1,
+    "mo": 1,
+    "sa": 1,
+    "su": 1,
+    "th": 1,
+    "tu": 1,
+    "we": 1,
+  },
+  "description": "กินนิดเดียว",
+  "id": 3,
+  "image": null,
+  "name": "ยานอนหลับ",
+  "note": "กิน1เม็ด",
+  "status": 0,
+  "time": "0:30",
+  },
+  {
+  "MEDICINE_id": 3,
+  "day":{
+    "fr": 1,
+    "mo": 1,
+    "sa": 1,
+    "su": 1,
+    "th": 1,
+    "tu": 1,
+    "we": 1,
+  },
+  "description": "กินนิดเดียว",
+  "id": 4,
+  "image": null,
+  "name": "ยาฟฟฟ",
+  "note": "กิน1เม็ด",
+  "status": 0,
+  "time": "13:00",
+},
+
+]
+
+export default function TestNoti({navigation}) {
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const date = new Date();
+      const checkDate = date.getHours().toString()+":"+date.getMinutes().toString()
+      console.log(checkDate+date.getSeconds().toString())
+      timList.forEach((item)=>{
+        if(checkDate == item.time){
+          triggerLocalNotificationHandler(item)
+        }
+      })
+      
+    }, 60000);
+    return () => clearInterval(interval);
+  }, []);
+  
+  useEffect(() => {
+>>>>>>> Stashed changes
     // Permission for iOS
     Permissions.getAsync(Permissions.NOTIFICATIONS)
       .then(statusObj => {
