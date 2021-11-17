@@ -24,27 +24,26 @@ import { globalStyle } from "../stylesheet/globalStylesheet";
 export default function EditDrugInfoScreen({ navigation, route }) {
   // console.disableYellowBox = true;
   const medicineInfo = useSelector((state) => state.medicine.selectMedicine);
-  console.log(medicineInfo);
-  // const [id, setId] = useState(route.params.id);
-  const [id, setId] = useState(1);
+  const [id, setId] = useState(route.params.id);
+  // const [id, setId] = useState(1);
   const selectTimeList = useSelector((state) => {
     const time = state.medicine.time;
     return time.filter((data) => data.MEDICINE_id == id);
   });
 
-  
   const renderItem = (itemData) => {
     return (
       <View style={{ alignItems: "center" }}>
         <NotificationCard
+          isEdit={true}
           navigation={navigation}
           time={itemData.item.time}
           day={itemData.item.day}
-          />
+        />
       </View>
     );
   };
-  
+
   const ContentThatGoesAboveTheFlatList = () => {
     const [name, setName] = useState(medicineInfo.name);
     const [note, setNote] = useState(medicineInfo.note);
@@ -57,6 +56,12 @@ export default function EditDrugInfoScreen({ navigation, route }) {
           colors={["rgba(255,255,255,1)", "transparent"]}
           style={globalStyle.background}
         />
+
+        <View style={{ marginTop: 30 }}>
+          <Text style={{ fontFamily: "Prompt-Light", fontSize: 30 }}>
+            แก้ไข
+          </Text>
+        </View>
 
         <View style={styles.infoContain}>
           <EvilIcons
@@ -100,7 +105,11 @@ export default function EditDrugInfoScreen({ navigation, route }) {
                 }}
               >
                 <TextInput
-                  style={{ fontFamily: "Prompt-Light", fontSize: 30, width: "100%" }}
+                  style={{
+                    fontFamily: "Prompt-Light",
+                    fontSize: 30,
+                    width: "100%"
+                  }}
                   value={name}
                   onChangeText={setName}
                 />
@@ -108,11 +117,15 @@ export default function EditDrugInfoScreen({ navigation, route }) {
               <View style={globalStyle.line}></View>
 
               <TextInput
-                  placeholder="หมายเหตุ"
-                  style={{ fontFamily: "Prompt-Light", fontSize: 18, width: "100%" }}
-                  value={note}
-                  onChangeText={setNote}
-                />
+                placeholder="หมายเหตุ"
+                style={{
+                  fontFamily: "Prompt-Light",
+                  fontSize: 18,
+                  width: "100%"
+                }}
+                value={note}
+                onChangeText={setNote}
+              />
             </View>
           </View>
 
@@ -126,12 +139,16 @@ export default function EditDrugInfoScreen({ navigation, route }) {
           >
             <Text style={globalStyle.textThai}>คำอธิบายตัวยา</Text>
             <TextInput
-            placeholder="กรอกคำอธิบายตัวยา"
-                  style={{ fontFamily: "Prompt-Light", fontSize: 18, width: "100%", }}
-                  value={description}
-                  onChangeText={setDescription}
-                  multiline
-                />
+              placeholder="กรอกคำอธิบายตัวยา"
+              style={{
+                fontFamily: "Prompt-Light",
+                fontSize: 18,
+                width: "100%"
+              }}
+              value={description}
+              onChangeText={setDescription}
+              multiline
+            />
           </View>
         </View>
         <View style={{ width: "90%", marginTop: 10 }}>
@@ -139,17 +156,23 @@ export default function EditDrugInfoScreen({ navigation, route }) {
             <Text style={{ fontFamily: "Prompt-Light", fontSize: 16 }}>
               เวลาที่จะต้องทาน
             </Text>
-            <TouchableOpacity
-              style={{ marginLeft: "58%" }}
-              onPress={() =>
-                navigation.navigate("NotificationTime", { id: medicineInfo.id })
-              }
-            >
-              <Image
-                source={require("../../assets/add.png")} //Change your icon image here
-                style={globalStyle.ImageStyle}
-              />
-            </TouchableOpacity>
+            {isEdit ? (
+              <view><Text>dfs</Text></view>
+            ) : (
+              <TouchableOpacity
+                style={{ marginLeft: "58%" }}
+                onPress={() =>
+                  navigation.navigate("NotificationTime", {
+                    id: medicineInfo.id
+                  })
+                }
+              >
+                <Image
+                  source={require("../../assets/add.png")} //Change your icon image here
+                  style={globalStyle.ImageStyle}
+                />
+              </TouchableOpacity>
+            )}
           </View>
           <View style={globalStyle.showLine}></View>
         </View>

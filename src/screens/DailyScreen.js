@@ -58,7 +58,7 @@ export default function DailyScreen({ navigation }) {
       <HeaderTitle title="ยาที่ต้องทานวันนี้" />
 
       <FlatList
-        keyExtractor={(item, index) => index.toString()}
+        keyExtractor={(item, index) => item.id.toString()}
         style={{ marginTop: 10, marginBottom: "0%" }}
         data={timeList}
         renderItem={renderItem}

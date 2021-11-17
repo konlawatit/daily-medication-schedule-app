@@ -1,28 +1,69 @@
-import { SELECT_MEDICINE, SET_MEDICINE, SET_TIME, STACK_TIME, CLEAR_STACK_TIME } from "../actions/medicineAction";
+import {
+  SELECT_MEDICINE,
+  SET_MEDICINE,
+  SET_TIME,
+  STACK_TIME,
+  CLEAR_STACK_TIME,
+  STACK_DELETE_TIME,
+  CLEAR_STACK_DELETE_TIME,
+  REDUCE_STACK_DELETE_TIME
+} from "../actions/medicineAction";
 
 const initialState = {
-    medicine: [],
-    time: [],
-    selectMedicine: {},
-    stackTime: []
-  };
-  const mealsReducer = (state = initialState, action) => {
-    switch (action.type) {
-      case SET_MEDICINE:
-        return {...state, medicine: action.getMedicine}
-      case SET_TIME:
-        return {...state, time: action.getTime}
-      case SELECT_MEDICINE:
-        const medicine = state.medicine.filter((data) => data.id == action.id)[0]
-        console.log('id', action.id)
-        return {...state,selectMedicine: medicine}
-      case STACK_TIME:
-        return {...state, stackTime: [...state.stackTime, action.time]}
-      case CLEAR_STACK_TIME:
-        return {...state, stackTime: []}
-      default:
-        return state;
-    }
-  };
-  
-  export default mealsReducer;
+  medicine: [],
+  time: [],
+  selectMedicine: {},
+  stackTime: [],
+  stackDeleteTime: []
+};
+const mealsReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case SET_MEDICINE:
+      return { ...state, medicine: action.getMedicine };
+    case SET_TIME:
+      return { ...state, time: action.getTime };
+    case SELECT_MEDICINE:
+      const medicine = state.medicine.filter((data) => data.id == action.id)[0];
+      console.log("id", action.id);
+      return { ...state, selectMedicine: medicine };
+    case STACK_TIME:
+      return { ...state, stackTime: [...state.stackTime, action.time] };
+    // case STACK_DELETE_TIME:
+    //   let stack = [...state.stackDeleteTime, action.id]
+    //   return { ...state, stackDeleteTime: stack.filter((item, pos) => stack.indexOf(item) == pos) };
+    case STACK_DELETE_TIME:
+      return {
+        ...state,
+        stackDeleteTime: state.time.filter(
+          (data) => data.MEDICINE_id == action.id
+        )
+      };
+    case REDUCE_STACK_DELETE_TIME:
+      console.log(
+        "action id",
+        action.id,
+        "condition",
+        state.stackDeleteTime.filter((data) => {
+          if (data.id !== action.id) {
+            console.log(true)
+            return data
+          }
+        })
+      );
+      // console.log(1111111, state.stackDeleteTime)
+      return {
+        ...state,
+        stackDeleteTime: state.stackDeleteTime.filter(
+          (data) => data.id !== action.id
+        )
+      };
+    case CLEAR_STACK_TIME:
+      return { ...state, stackTime: [] };
+    case CLEAR_STACK_DELETE_TIME:
+      return { ...state, stackDeleteTime: [] };
+    default:
+      return state;
+  }
+};
+
+export default mealsReducer;

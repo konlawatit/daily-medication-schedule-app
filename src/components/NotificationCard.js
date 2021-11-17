@@ -12,21 +12,32 @@ import {
   Switch,
   FlatList
 } from "react-native";
+import { useDispatch } from "react-redux";
 import { LinearGradient } from "expo-linear-gradient";
+import { MaterialIcons, AntDesign } from "@expo/vector-icons";
+
+//action
+import { stackDeleteTime, reduceStackDeleteTime } from "../store/actions/medicineAction";
+import { deleteNotificationCategoryAsync } from "expo-notifications";
 
 //Components
-
 export default function NotificationCard(props) {
+  const dispatch = useDispatch();
   const [isEnabled, setIsEnabled] = useState(true);
   const [time, setTime] = useState(props.time);
   const [day, setDay] = useState(props.day);
-  console.log(day);
-  // console.log(day)
+  const [id, setId] = useState(props.id)
+
+
   const toggleSwitch = () =>
     setIsEnabled(
       (previousState) => !previousState,
       console.log("" + isEnabled)
     );
+  
+    const delNoti = () => {
+      dispatch(reduceStackDeleteTime(id))
+    }
 
   const dayCheck = (d) => {
     return d == 1 ? "white" : "grey";
@@ -39,6 +50,7 @@ export default function NotificationCard(props) {
       style={styles.cardOn}
       onPress={() => props.navigation.navigate("NotificationTime")}
     >
+      {/* <AntDesign name="delete" size={24} color="red" /> */}
       <View style={styles.imagePart}>
         <Image
           style={{ width: "60%", height: "50%", marginTop: 10 }}
@@ -71,16 +83,38 @@ export default function NotificationCard(props) {
           </Text>
         </View>
       </View>
-      <View style={styles.switchPart}>
-        <Switch
-          style={{ transform: [{ scaleX: 1.5 }, { scaleY: 1.5 }] }}
-          trackColor={{ false: "#767577", true: "#04A438" }}
-          thumbColor={isEnabled ? "#f4f3f4" : "#f4f3f4"}
-          ios_backgroundColor="#3e3e3e"
-          onValueChange={toggleSwitch}
-          value={isEnabled}
-        />
+      <View style={[styles.switchPart]}>
+        {props.isEdit ? (
+          <></>
+        ) : (
+          <Switch
+            style={{ transform: [{ scaleX: 1.5 }, { scaleY: 1.5 }] }}
+            trackColor={{ false: "#767577", true: "#04A438" }}
+            thumbColor={isEnabled ? "#f4f3f4" : "#f4f3f4"}
+            ios_backgroundColor="#3e3e3e"
+            onValueChange={toggleSwitch}
+            value={isEnabled}
+          />
+        )}
       </View>
+      {props.isEdit ? (
+        <TouchableOpacity
+          style={{
+            position: "absolute",
+            alignSelf: "flex-start",
+            right: -10,
+            top: -10,
+            zIndex: 101
+          }}
+          onPress={() => {
+            delNoti()
+          }}
+        >
+          <MaterialIcons name="cancel" size={30} color="red" />
+        </TouchableOpacity>
+      ) : (
+        <></>
+      )}
     </TouchableOpacity>
     // </View>
   );
@@ -105,7 +139,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(85,194,255,8)",
     height: 100,
     padding: 10,
-    marginBottom: '5%',
+    marginBottom: "5%",
     borderRadius: 10,
     // marginTop: 15,
     shadowColor: "#000",

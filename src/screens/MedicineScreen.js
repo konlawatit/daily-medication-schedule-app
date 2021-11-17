@@ -64,7 +64,7 @@ export default function MedicineScreen({ navigation }) {
       </View>
 
       <FlatList
-        keyExtractor={(item, index) => index.toString()}
+        keyExtractor={(item, index) => item.id.toString()}
         style={{ marginTop: 10, marginBottom: "0%" }}
         data={medicineList}
         renderItem={renderItem}

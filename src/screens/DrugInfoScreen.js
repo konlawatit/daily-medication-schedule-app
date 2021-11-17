@@ -1,4 +1,4 @@
-import React, { useContext, useState, u } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -14,38 +14,115 @@ import {
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { EvilIcons } from "@expo/vector-icons";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 //Components
 import NotificationCard from "../components/NotificationCard";
 
 //gloabalStylesheet
 import { globalStyle } from "../stylesheet/globalStylesheet";
 
+//sqlite
+import {
+  updateMedicine,
+  deleteTime,
+  deleteMedicine
+} from "../database/database-function";
+
+//state
+import { stackTime, stackDeleteTime } from "../store/actions/medicineAction";
+
 export default function DrugInfoScreen({ navigation, route }) {
   // console.disableYellowBox = true;
+  const dispatch = useDispatch();
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
   const medicineInfo = useSelector((state) => state.medicine.selectMedicine);
   const [id, setId] = useState(route.params.id);
-  const selectTimeList = useSelector((state) => {
+  let selectTimeList = useSelector((state) => {
     const time = state.medicine.time;
     return time.filter((data) => data.MEDICINE_id == id);
   });
 
+  // const st = useSelector(state => state.medicine.stackTime)
 
-  const renderItem = (itemData) => {
-    return (
-      <View style={{ alignItems: "center" }}>
-        <NotificationCard
-          navigation={navigation}
-          time={itemData.item.time}
-          day={itemData.item.day}
-        />
-      </View>
-    );
+  const [isEdit, setIsEdit] = useState(false);
+  const [isConfirmEdit, setIsConfirmEdit] = useState(false);
+  const [isCancleEdit, setIsCancleEdit] = useState(false);
+
+  let delNoti = useSelector((state) => state.medicine.stackDeleteTime);
+
+  const confirmEdit = (name, note, description, image) => {
+    const payload = {
+      name,
+      note,
+      description,
+      image,
+      id
+    };
+    if (delNoti.length == 0 && !(delNoti.length == selectTimeList.length)) {
+      deleteTime(selectTimeList, dispatch);
+      selectTimeList = [];
+    } else {
+      let payload2 = [];
+      selectTimeList.forEach((data) => {
+        if (delNoti.indexOf(data) < 0) {
+          payload2.push(data);
+        }
+      });
+      deleteTime(payload2, dispatch);
+    }
+    updateMedicine(payload, dispatch);
+    setTimeout(function () {
+      setIsEdit(false);
+      setIsConfirmEdit(false);
+    }, 200);
   };
 
-  const ContentThatGoesAboveTheFlatList = () => {
+  const delMedicine = () => {
+    deleteMedicine(id, dispatch);
+  };
+
+  const cancleEdit = (setName, setNote, setDescription, setImage) => {
+    setName(medicineInfo.name);
+    setNote(medicineInfo.note);
+    setDescription(medicineInfo.description);
+    setImage(medicineInfo.image);
+    setIsCancleEdit(false);
+  };
+
+  useEffect(() => {}, []);
+
+  const ContentThatGoesAboveTheFlatList = (confirmEdit) => {
+    const [name, setName] = useState(medicineInfo.name);
+    const [note, setNote] = useState(medicineInfo.note);
+    const [description, setDescription] = useState(medicineInfo.description);
+    const [image, setImage] = useState(medicineInfo.image);
+    const renderItem = (itemData) => {
+      return (
+        <View style={{ alignItems: "center" }}>
+          <NotificationCard
+            navigation={navigation}
+            time={itemData.item.time}
+            day={itemData.item.day}
+            isEdit={isEdit}
+            id={itemData.item.id}
+          />
+        </View>
+      );
+    };
+
+    // console.log(selectTimeList)
+
+    useEffect(() => {
+      if (isConfirmEdit === true) {
+        confirmEdit(name, note, description, image);
+      }
+
+      if (isCancleEdit === true) {
+        cancleEdit(setName, setNote, setDescription, setImage);
+      }
+    }, [isConfirmEdit, isCancleEdit]);
+
     return (
       <SafeAreaView style={[globalStyle.Addcontainer]}>
         <LinearGradient
@@ -55,7 +132,7 @@ export default function DrugInfoScreen({ navigation, route }) {
         />
 
         <View style={styles.infoContain}>
-          <EvilIcons
+          {/* <EvilIcons
             style={{
               position: "absolute",
               alignSelf: "flex-end",
@@ -64,19 +141,21 @@ export default function DrugInfoScreen({ navigation, route }) {
             name="pencil"
             size={54}
             color="black"
-            onPress={() => navigation.navigate("EditDrugInfo", {id})}
-          />
+            onPress={() => navigation.navigate("EditDrugInfo", { id })}
+          /> */}
           <View style={{ flexDirection: "row", flex: 1 }}>
             <View style={{ flex: 0.7 }}>
-              {
-                medicineInfo.image ? (<Image
+              {medicineInfo.image ? (
+                <Image
                   style={{ width: "90%", height: "90%" }}
-                  source={{uri: medicineInfo.image}}
-                />) : (<Image
+                  source={{ uri: medicineInfo.image }}
+                />
+              ) : (
+                <Image
                   style={{ width: "90%", height: "90%" }}
                   source={require("../../assets/test.jpg")}
-                />)
-              }
+                />
+              )}
             </View>
             <View
               style={{
@@ -94,15 +173,49 @@ export default function DrugInfoScreen({ navigation, route }) {
                   marginTop: 10
                 }}
               >
-                <Text style={{ fontFamily: "Prompt-Light", fontSize: 30 }}>
-                  {medicineInfo.name}
-                </Text>
+                {isEdit ? (
+                  <TextInput
+                    style={{
+                      fontFamily: "Prompt-Light",
+                      fontSize: 30,
+                      width: "100%"
+                    }}
+                    value={name}
+                    onChangeText={setName}
+                  />
+                ) : (
+                  <Text style={{ fontFamily: "Prompt-Light", fontSize: 30 }}>
+                    {medicineInfo.name}
+                  </Text>
+                )}
               </View>
               <View style={globalStyle.line}></View>
 
-              <Text style={{ fontFamily: "Prompt-Light", fontSize: 18 }}>
-                {medicineInfo.note}
-              </Text>
+              {isEdit ? (
+                <TextInput
+                  placeholder="หมายเหตุ"
+                  style={{
+                    fontFamily: "Prompt-Light",
+                    fontSize: 18,
+                    width: "100%",
+                    height: 65
+                  }}
+                  value={note}
+                  onChangeText={setNote}
+                  multiline
+                />
+              ) : (
+                <ScrollView style={{ height: 65 }}>
+                  <Text
+                    style={{
+                      fontFamily: "Prompt-Light",
+                      fontSize: 18
+                    }}
+                  >
+                    {medicineInfo.note}
+                  </Text>
+                </ScrollView>
+              )}
             </View>
           </View>
 
@@ -114,12 +227,28 @@ export default function DrugInfoScreen({ navigation, route }) {
               flex: 1
             }}
           >
-            <Text style={globalStyle.textThai}>คำอธิบายตัวยา</Text>
-            <ScrollView>
-              <Text style={{ fontFamily: "Prompt-Light", fontSize: 18 }}>
-                {medicineInfo.description}
-              </Text>
-            </ScrollView>
+            <Text style={[globalStyle.textThai, { fontSize: 18 }]}>
+              คำอธิบายตัวยา
+            </Text>
+            {isEdit ? (
+              <TextInput
+                placeholder="กรอกคำอธิบายตัวยา"
+                style={{
+                  fontFamily: "Prompt-Light",
+                  fontSize: 18,
+                  width: "100%"
+                }}
+                value={description}
+                onChangeText={setDescription}
+                multiline
+              />
+            ) : (
+              <ScrollView>
+                <Text style={{ fontFamily: "Prompt-Light", fontSize: 18 }}>
+                  {medicineInfo.description}
+                </Text>
+              </ScrollView>
+            )}
           </View>
         </View>
         <View style={{ width: "90%", marginTop: 10 }}>
@@ -127,21 +256,32 @@ export default function DrugInfoScreen({ navigation, route }) {
             <Text style={{ fontFamily: "Prompt-Light", fontSize: 16 }}>
               เวลาที่จะต้องทาน
             </Text>
-            <TouchableOpacity style={{ marginLeft: "58%" }} onPress={() => navigation.navigate("NotificationTime", {id: medicineInfo.id})}>
-              <Image
-                source={require("../../assets/add.png")} //Change your icon image here
-                style={globalStyle.ImageStyle}
-              />
-            </TouchableOpacity>
+            {isEdit ? (
+              <></>
+            ) : (
+              <TouchableOpacity
+                style={{ marginLeft: "58%" }}
+                onPress={() =>
+                  navigation.navigate("NotificationTime", {
+                    id: medicineInfo.id
+                  })
+                }
+              >
+                <Image
+                  source={require("../../assets/add.png")} //Change your icon image here
+                  style={globalStyle.ImageStyle}
+                />
+              </TouchableOpacity>
+            )}
           </View>
           <View style={globalStyle.showLine}></View>
         </View>
 
         <FlatList
-          data={selectTimeList}
-          keyExtractor={(item, index) => index.toString()}
+          data={isEdit ? delNoti : selectTimeList}
+          keyExtractor={(item, index) => item.id.toString()}
           renderItem={renderItem}
-          style={{ flex: 1, width: "100%" }}
+          style={{ flex: 1, width: "100%", marginBottom: 50 }}
         />
       </SafeAreaView>
     );
@@ -153,9 +293,75 @@ export default function DrugInfoScreen({ navigation, route }) {
         style={{ flex: 1 }}
         contentContainerStyle={{ flexGrow: 1 }}
         data={[]}
-        ListHeaderComponent={ContentThatGoesAboveTheFlatList}
+        ListHeaderComponent={ContentThatGoesAboveTheFlatList(
+          confirmEdit,
+          cancleEdit
+        )}
         // ListFooterComponent={ContentThatGoesBelowTheFlatList}
       />
+
+      <View style={styles.section3}>
+        {isEdit ? (
+          <View
+            style={{
+              flexDirection: "row",
+              width: "100%",
+              height: 60,
+              backgroundColor: "rgba(255,255,255,1)"
+            }}
+          >
+            <TouchableOpacity
+              style={styles.confirmBox}
+              onPress={() => {
+                setIsEdit(!isEdit);
+                // navigation.navigate("EditDrugInfo", { id });
+              }}
+            >
+              <Text style={styles.confirmText}>ยกเลิก</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.confirmBox}
+              onPress={() => {
+                setIsConfirmEdit(!isConfirmEdit);
+              }}
+            >
+              <Text style={styles.confirmText}>ยืนยัน</Text>
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <View
+            style={{
+              flexDirection: "row",
+              width: "100%",
+              height: 60,
+              backgroundColor: "rgba(255,255,255,1)"
+            }}
+          >
+            <TouchableOpacity
+              style={styles.confirmBox}
+              onPress={() => {
+                dispatch(stackDeleteTime(id));
+                console.log(delNoti);
+                setIsEdit(!isEdit);
+
+                // navigation.navigate("EditDrugInfo", { id });
+              }}
+            >
+              <Text style={styles.confirmText}>แก้ไข</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.confirmBox}
+              onPress={() => {
+  
+                delMedicine();
+                navigation.navigate("Medicine")
+              }}
+            >
+              <Text style={styles.confirmText}>ลบ</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+      </View>
     </SafeAreaView>
   );
 }
@@ -170,5 +376,26 @@ const styles = StyleSheet.create({
     shadowColor: "#000",
     elevation: 5,
     marginTop: 20
+  },
+  section3: {
+    flex: 1,
+    width: "100%",
+    position: "absolute",
+    justifyContent: "flex-end",
+    alignItems: "flex-end",
+    alignSelf: "flex-end",
+    // height: ,
+    bottom: 0
+  },
+  confirmBox: {
+    flex: 1,
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  confirmText: {
+    color: "rgba(0,0,0,1)",
+    fontSize: 24,
+    fontFamily: "Prompt-Light"
   }
 });

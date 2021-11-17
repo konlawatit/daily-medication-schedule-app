@@ -1,4 +1,9 @@
-import { setMedicine, setTime } from "../store/actions/medicineAction";
+import {
+  setMedicine,
+  setTime,
+  selectMedicine,
+  stackDeleteTime
+} from "../store/actions/medicineAction";
 
 //sqlite
 import { DatabaseConnection } from "../database/database-connection";
@@ -160,7 +165,7 @@ export function addTime(payload, dispatch) {
   db.transaction(
     (tx) => {
       console.log(11111111, payload);
-      let day = `{"fr": ${payload.day.fr},"mo": ${payload.day.mo},"sa": ${payload.day.sa},"su": ${payload.day.su},"th": ${payload.day.th},"tu": ${payload.day.tu},"we": ${payload.day.we}}`
+      let day = `{"fr": ${payload.day.fr},"mo": ${payload.day.mo},"sa": ${payload.day.sa},"su": ${payload.day.su},"th": ${payload.day.th},"tu": ${payload.day.tu},"we": ${payload.day.we}}`;
       tx.executeSql(
         `INSERT INTO "TIME" ("time","status","day","MEDICINE_id") VALUES (?, ?, ?, ?)`,
         [payload.time, payload.status, day, payload.id],
@@ -177,7 +182,7 @@ export function addTime(payload, dispatch) {
               let newArray = result.map((data) => {
                 return { ...data, day: JSON.parse(data.day) };
               });
-      
+
               // dispatch(setTime(newArray))
               dispatch(setTime(newArray));
             },
@@ -189,6 +194,162 @@ export function addTime(payload, dispatch) {
         },
         (_, err) => {
           console.log("insert medicine error", err);
+          return true;
+        }
+      );
+    },
+    (err) => console.log(err)
+  );
+}
+
+export function updateMedicine(payload, dispatch) {
+  db.transaction(
+    (tx) => {
+      tx.executeSql(
+        `UPDATE MEDICINE SET name=?, note=?, description=?, image=? WHERE id=? `,
+        [
+          payload.name,
+          payload.note,
+          payload.description,
+          payload.image,
+          payload.id
+        ],
+        (tx, results) => {
+          console.log("update medicine success");
+        },
+        (_, err) => {
+          console.log("update medicine error", err);
+          return true;
+        }
+      );
+
+      tx.executeSql(
+        `SELECT *
+        FROM MEDICINE`,
+        [],
+        (tx, results) => {
+          // console.log(results.rows);
+          console.log("select medicne success");
+          dispatch(setMedicine(results.rows._array));
+          dispatch(selectMedicine(payload.id));
+        },
+        (_, err) => {
+          console.log("select medicine error", err);
+          return true;
+        }
+      );
+    },
+    (err) => console.log(err)
+  );
+}
+
+export function deleteMedicine(id, dispatch) {
+  db.transaction(
+    (tx) => {
+      tx.executeSql(
+        `DELETE FROM MEDICINE where id=${id}`,
+        [],
+        (tx, results) => {
+          console.log("delete MEDICINE success");
+        },
+        (_, err) => {
+          console.log("delete MEDICINE error", err);
+          return true;
+        }
+      );
+
+      tx.executeSql(
+        `DELETE FROM TIME where MEDICINE_id=${id}`,
+        [],
+        (tx, results) => {
+          console.log("delete time success");
+        },
+        (_, err) => {
+          console.log("delete time error", err);
+          return true;
+        }
+      );
+
+      tx.executeSql(
+        `SELECT *
+        FROM MEDICINE`,
+        [],
+        (tx, results) => {
+          // console.log(results.rows);
+          dispatch(setMedicine(results.rows._array));
+        },
+        (_, err) => {
+          console.log("select medicine error", err);
+          return true;
+        }
+      );
+
+      tx.executeSql(
+        `SELECT *
+        FROM MEDICINE
+        INNER JOIN TIME
+        ON MEDICINE.id = TIME.MEDICINE_id`,
+        [],
+        (tx, results) => {
+          let result = results.rows._array;
+          let newArray = result.map((data) => {
+            return { ...data, day: JSON.parse(data.day) };
+          });
+
+          // dispatch(setTime(newArray))
+          dispatch(setTime(newArray));
+        },
+        (_, err) => {
+          console.log("select time error", err);
+          return true;
+        }
+      );
+    },
+    (err) => console.log(err)
+  );
+}
+
+export function deleteTime(payload, dispatch) {
+  let text = "";
+  payload.forEach((data) => {
+    if (payload[0].id == data.id) {
+      text += `${data.id}`;
+    } else {
+      text += `,${data.id}`;
+    }
+  });
+
+  db.transaction(
+    (tx) => {
+      tx.executeSql(
+        `DELETE FROM TIME where id in (${text})`,
+        [],
+        (tx, results) => {
+          console.log("delete time success");
+        },
+        (_, err) => {
+          console.log("delete time error", err);
+          return true;
+        }
+      );
+
+      tx.executeSql(
+        `SELECT *
+        FROM MEDICINE
+        INNER JOIN TIME
+        ON MEDICINE.id = TIME.MEDICINE_id`,
+        [],
+        (tx, results) => {
+          let result = results.rows._array;
+          let newArray = result.map((data) => {
+            return { ...data, day: JSON.parse(data.day) };
+          });
+
+          // dispatch(setTime(newArray))
+          dispatch(setTime(newArray));
+        },
+        (_, err) => {
+          console.log("insert time error", err);
           return true;
         }
       );
