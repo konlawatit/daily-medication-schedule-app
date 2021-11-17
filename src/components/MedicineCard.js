@@ -14,6 +14,7 @@ export default function MedicineCard(props) {
   //   let image2 = require("../../assets/" + props.image)
   const dispatch = useDispatch();
   const [id, setId] = useState(props.id)
+  const [image, setImage] = useState(props.image)
   let title = props.title
   let subTitle = props.subTitle
   const navigation = props.navigation
@@ -27,10 +28,14 @@ export default function MedicineCard(props) {
         navigation.navigate("DrugInfo", { id });
       }} >
       <View style={{ flex: 0.7 }}>
-        <Image
+        {image? (<Image
+          style={{ width: "100%", height: 150 }}
+          source={{uri: image}}
+        />) : (<Image
           style={{ width: "100%", height: 150 }}
           source={require("../../assets/test.jpg")}
-        />
+        />) }
+        
       </View>
       <View style={{ flex: 1, padding: 15 }}>
         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>

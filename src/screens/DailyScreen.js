@@ -40,7 +40,7 @@ export default function DailyScreen({ navigation }) {
             checkBox={true}
             id={itemData.item.MEDICINE_id}
             navigation={navigation}
-            image="checkmark.png"
+            image={itemData.item.image}
           />
       </View>
     );

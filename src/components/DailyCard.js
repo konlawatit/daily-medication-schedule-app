@@ -22,12 +22,13 @@ export default function DailyCard(props) {
   const [verify, setVerify] = useState(props.verify == 1 ? true : false);
   let checkBox = props.checkBox ? props.checkBox : false;
   let id = props.id;
+  let image = props.image;
   const navigation = props.navigation;
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const toggleVerify = () => {
-    updateVerify(!verify, id)
+    updateVerify(!verify, id);
     setVerify(!verify);
   };
 
@@ -35,15 +36,22 @@ export default function DailyCard(props) {
     <TouchableOpacity
       style={styles.card}
       onPress={() => {
-        dispatch(selectMedicine(id))
+        dispatch(selectMedicine(id));
         navigation.navigate("DrugInfo", { id });
       }}
     >
       <View style={{ flex: 0.7 }}>
-        <Image
-          style={{ width: "100%", height: 150 }}
-          source={require("../../assets/test.jpg")}
-        />
+        {image ? (
+          <Image
+            source={{ uri: image }}
+            style={{ width: "100%", height: 150 }}
+          />
+        ) : (
+          <Image
+            style={{ width: "100%", height: 150 }}
+            source={require("../../assets/test.jpg")}
+          />
+        )}
       </View>
       <View style={{ flex: 1, padding: 15 }}>
         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>

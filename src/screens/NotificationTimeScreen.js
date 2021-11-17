@@ -21,12 +21,15 @@ import SetNotiCard from "../components/SetNotiCard";
 
 import { stackTime } from "../store/actions/medicineAction";
 
-export default function NotificationTimeScreen({ navigation }) {
+import { addTime } from "../database/database-function";
+
+export default function NotificationTimeScreen({ navigation, route }) {
   const [hour, setHour] = useState("02");
-  console.log(111111111111111, hour);
   const [min, setMin] = useState("02");
   const [hourIndex, setHourIndex] = useState(1);
   const [minIndex, setMinIndex] = useState(1);
+  const [id, setId] = useState(route.params ? route.params.id : null )
+
 
   const [day, setDay] = useState({
     fr: 1,
@@ -54,8 +57,14 @@ export default function NotificationTimeScreen({ navigation }) {
       day
       // options
     };
-    dispatch(stackTime(payload));
-    navigation.navigate('addMedicine')
+
+    if (id) {
+      addTime({...payload, id}, dispatch)
+      navigation.navigate('DrugInfo', {id})
+    } else {
+      dispatch(stackTime(payload));
+      navigation.navigate('addMedicine')
+    }
   }
 
   const renderItem = (itemData) => {

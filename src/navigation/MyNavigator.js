@@ -18,6 +18,7 @@ import MedicineScreen from "../screens/MedicineScreen";
 import HistoryScreen from "../screens/HistoryScreen";
 import AddMedicineScreen from "../screens/AddMedicineScreen";
 import DrugInfoScreen from "../screens/DrugInfoScreen";
+import EditDrugInfoScreen from "../screens/EditDrugInfoScreen";
 import NotiScreen from "../screens/NotificationScreen";
 import NotificationTimeScreen from "../screens/NotificationTimeScreen";
 import TestNoti from "../screens/TestNoti";
@@ -108,6 +109,7 @@ export default function MyNavigator() {
         }}
       >
         <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen name="EditDrugInfo" component={EditDrugInfoScreen} />
         <Stack.Screen
           name="NotificationTime"
           component={NotificationTimeScreen}

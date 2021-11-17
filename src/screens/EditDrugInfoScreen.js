@@ -21,18 +21,18 @@ import NotificationCard from "../components/NotificationCard";
 //gloabalStylesheet
 import { globalStyle } from "../stylesheet/globalStylesheet";
 
-export default function DrugInfoScreen({ navigation, route }) {
+export default function EditDrugInfoScreen({ navigation, route }) {
   // console.disableYellowBox = true;
-  const [isEnabled, setIsEnabled] = useState(false);
-  const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
   const medicineInfo = useSelector((state) => state.medicine.selectMedicine);
-  const [id, setId] = useState(route.params.id);
+  console.log(medicineInfo);
+  // const [id, setId] = useState(route.params.id);
+  const [id, setId] = useState(1);
   const selectTimeList = useSelector((state) => {
     const time = state.medicine.time;
     return time.filter((data) => data.MEDICINE_id == id);
   });
 
-
+  
   const renderItem = (itemData) => {
     return (
       <View style={{ alignItems: "center" }}>
@@ -40,12 +40,16 @@ export default function DrugInfoScreen({ navigation, route }) {
           navigation={navigation}
           time={itemData.item.time}
           day={itemData.item.day}
-        />
+          />
       </View>
     );
   };
-
+  
   const ContentThatGoesAboveTheFlatList = () => {
+    const [name, setName] = useState(medicineInfo.name);
+    const [note, setNote] = useState(medicineInfo.note);
+    const [description, setDescription] = useState(medicineInfo.description);
+    const [image, setImage] = useState(medicineInfo.image);
     return (
       <SafeAreaView style={[globalStyle.Addcontainer]}>
         <LinearGradient
@@ -64,19 +68,20 @@ export default function DrugInfoScreen({ navigation, route }) {
             name="pencil"
             size={54}
             color="black"
-            onPress={() => navigation.navigate("EditDrugInfo", {id})}
           />
           <View style={{ flexDirection: "row", flex: 1 }}>
             <View style={{ flex: 0.7 }}>
-              {
-                medicineInfo.image ? (<Image
+              {medicineInfo.image ? (
+                <Image
                   style={{ width: "90%", height: "90%" }}
-                  source={{uri: medicineInfo.image}}
-                />) : (<Image
+                  source={{ uri: image }}
+                />
+              ) : (
+                <Image
                   style={{ width: "90%", height: "90%" }}
                   source={require("../../assets/test.jpg")}
-                />)
-              }
+                />
+              )}
             </View>
             <View
               style={{
@@ -94,15 +99,20 @@ export default function DrugInfoScreen({ navigation, route }) {
                   marginTop: 10
                 }}
               >
-                <Text style={{ fontFamily: "Prompt-Light", fontSize: 30 }}>
-                  {medicineInfo.name}
-                </Text>
+                <TextInput
+                  style={{ fontFamily: "Prompt-Light", fontSize: 30, width: "100%" }}
+                  value={name}
+                  onChangeText={setName}
+                />
               </View>
               <View style={globalStyle.line}></View>
 
-              <Text style={{ fontFamily: "Prompt-Light", fontSize: 18 }}>
-                {medicineInfo.note}
-              </Text>
+              <TextInput
+                  placeholder="หมายเหตุ"
+                  style={{ fontFamily: "Prompt-Light", fontSize: 18, width: "100%" }}
+                  value={note}
+                  onChangeText={setNote}
+                />
             </View>
           </View>
 
@@ -115,11 +125,13 @@ export default function DrugInfoScreen({ navigation, route }) {
             }}
           >
             <Text style={globalStyle.textThai}>คำอธิบายตัวยา</Text>
-            <ScrollView>
-              <Text style={{ fontFamily: "Prompt-Light", fontSize: 18 }}>
-                {medicineInfo.description}
-              </Text>
-            </ScrollView>
+            <TextInput
+            placeholder="กรอกคำอธิบายตัวยา"
+                  style={{ fontFamily: "Prompt-Light", fontSize: 18, width: "100%", }}
+                  value={description}
+                  onChangeText={setDescription}
+                  multiline
+                />
           </View>
         </View>
         <View style={{ width: "90%", marginTop: 10 }}>
@@ -127,7 +139,12 @@ export default function DrugInfoScreen({ navigation, route }) {
             <Text style={{ fontFamily: "Prompt-Light", fontSize: 16 }}>
               เวลาที่จะต้องทาน
             </Text>
-            <TouchableOpacity style={{ marginLeft: "58%" }} onPress={() => navigation.navigate("NotificationTime", {id: medicineInfo.id})}>
+            <TouchableOpacity
+              style={{ marginLeft: "58%" }}
+              onPress={() =>
+                navigation.navigate("NotificationTime", { id: medicineInfo.id })
+              }
+            >
               <Image
                 source={require("../../assets/add.png")} //Change your icon image here
                 style={globalStyle.ImageStyle}

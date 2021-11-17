@@ -11,14 +11,11 @@ import {
   SafeAreaView,
   Switch,
   FlatList,
-
   Linking,
   Dimensions,
-
   Alert,
   Modal,
-  Pressable,
-
+  Pressable
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { LinearGradient } from "expo-linear-gradient";
@@ -28,15 +25,12 @@ import { globalStyle } from "../stylesheet/globalStylesheet";
 //Components
 import NotificationCard from "../components/NotificationCard";
 
-
 import { addMedicine } from "../database/database-function";
 import { clearStackTime } from "../store/actions/medicineAction";
 
-
-import { EvilIcons } from '@expo/vector-icons'; 
+import { EvilIcons } from "@expo/vector-icons";
 
 import * as ImagePicker from "expo-image-picker";
-
 
 export default function AddMedicineScreen({ navigation }) {
   // console.disableYellowBox = true;
@@ -49,27 +43,27 @@ export default function AddMedicineScreen({ navigation }) {
   const [confirmNote, setConfirmNote] = useState();
   const [confirmDescription, setConfirmDescription] = useState();
   const [isSave, setIsSave] = useState(false);
-  const [modalVisible, setModalVisible] = useState(false)
+  const [modalVisible, setModalVisible] = useState(false);
 
   const [check, setCheck] = useState(false);
 
-  let dispatch = useDispatch()
-  const save = (name, note, description) => {
+  let dispatch = useDispatch();
+  const save = (name, note, description, image) => {
     if (name) {
-      addMedicine(name, note, description, timeList, dispatch)
-      dispatch(clearStackTime())
-      navigation.navigate("Medicine")
+      addMedicine(name, note, description, timeList, image, dispatch);
+      dispatch(clearStackTime());
+      navigation.navigate("Medicine");
     }
-    console.log(name, note, description)
+    console.log(name, note, description);
   };
 
   const cancle = () => {
-    navigation.goBack()
-    dispatch(clearStackTime())
-  }
+    navigation.goBack();
+    dispatch(clearStackTime());
+  };
 
   const confirm = () => {
-    setCheck(!check)
+    setCheck(!check);
     let payload = {};
   };
 
@@ -85,8 +79,6 @@ export default function AddMedicineScreen({ navigation }) {
     }
   ]);
 
-
-
   const renderItem = (itemData) => {
     return (
       <View style={{ alignItems: "center" }}>
@@ -95,28 +87,25 @@ export default function AddMedicineScreen({ navigation }) {
     );
   };
 
-
-
   const ContentThatGoesAboveTheFlatList = (save) => {
     const [name, setName] = useState();
     const [note, setNote] = useState();
     const [description, setDescription] = useState();
+    const [pickedImagePath, setPickedImagePath] = useState("");
 
     useEffect(() => {
       let payload = {
         name,
         note,
         description
-      }
+      };
 
-      save(name, note, description)
+      save(name, note, description, pickedImagePath);
 
       // console.log(note)
-      
     }, [check]);
 
     // The path of the picked image
-    const [pickedImagePath, setPickedImagePath] = useState("");
 
     // This function is triggered when the "Select an image" button pressed
     const showImagePicker = async () => {
@@ -128,7 +117,7 @@ export default function AddMedicineScreen({ navigation }) {
         alert("You've refused to allow this appp to access your photos!");
         return;
       }
-      setModalVisible(false)
+      setModalVisible(false);
       const result = await ImagePicker.launchImageLibraryAsync();
 
       // Explore the result
@@ -150,7 +139,7 @@ export default function AddMedicineScreen({ navigation }) {
         alert("You've refused to allow this appp to access your camera!");
         return;
       }
-      setModalVisible(false)
+      setModalVisible(false);
       const result = await ImagePicker.launchCameraAsync();
 
       // Explore the result
@@ -175,8 +164,13 @@ export default function AddMedicineScreen({ navigation }) {
           onPress={() => setModalVisible(true)}
         >
           <View style={globalStyle.imageBox}>
-            {pickedImagePath !== "" && (
+            {pickedImagePath !== "" ? (
               <Image source={{ uri: pickedImagePath }} style={styles.image} />
+            ) : (
+              <Image
+                source={require("../../assets/test.jpg")}
+                style={styles.image}
+              />
             )}
           </View>
           <Image
@@ -237,7 +231,7 @@ export default function AddMedicineScreen({ navigation }) {
               style={{
                 borderRadius: 5,
                 backgroundColor: "white",
-                padding: 5,
+                padding: 5
               }}
               value={description}
               onChangeText={setDescription}
@@ -266,7 +260,9 @@ export default function AddMedicineScreen({ navigation }) {
           <View style={globalStyle.showLine}></View>
         </View>
 
-        <SafeAreaView style={{ width: "100%", height: "100%", marginBottom: 50 }}>
+        <SafeAreaView
+          style={{ width: "100%", height: "100%", marginBottom: 50 }}
+        >
           <FlatList
             data={timeList}
             keyExtractor={(item, index) => index.toString()}
@@ -278,7 +274,6 @@ export default function AddMedicineScreen({ navigation }) {
     );
   };
 
-
   return (
     <SafeAreaView style={{ flex: 1, height: "150%" }}>
       <FlatList
@@ -289,7 +284,6 @@ export default function AddMedicineScreen({ navigation }) {
         ListHeaderComponent={ContentThatGoesAboveTheFlatList(save)}
       />
 
-
       <View style={styles.section3}>
         <View
           style={{
@@ -299,10 +293,7 @@ export default function AddMedicineScreen({ navigation }) {
             backgroundColor: "rgba(255,255,255,1)"
           }}
         >
-          <TouchableOpacity
-            style={styles.confirmBox}
-            onPress={() => cancle()}
-          >
+          <TouchableOpacity style={styles.confirmBox} onPress={() => cancle()}>
             <Text style={styles.confirmText}>ยกเลิก</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.confirmBox} onPress={() => confirm()}>
@@ -312,9 +303,7 @@ export default function AddMedicineScreen({ navigation }) {
       </View>
     </SafeAreaView>
   );
-}    
-  
-
+}
 
 const styles = StyleSheet.create({
   section3: {
@@ -325,7 +314,7 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
     alignSelf: "flex-end",
     // height: ,
-    bottom: 0,
+    bottom: 0
   },
   confirmBox: {
     flex: 1,
@@ -336,16 +325,16 @@ const styles = StyleSheet.create({
   confirmText: {
     color: "rgba(0,0,0,1)",
     fontSize: 24,
-    fontFamily: "Prompt-Light",
+    fontFamily: "Prompt-Light"
   },
   image: {
     width: "100%",
-    height: "100%",
+    height: "100%"
   },
   buttonContainer: {
     width: 400,
     flexDirection: "row",
-    justifyContent: "space-around",
+    justifyContent: "space-around"
   },
   modalView: {
     width: "80%",
@@ -357,36 +346,36 @@ const styles = StyleSheet.create({
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 2
     },
     shadowOpacity: 0.25,
     shadowRadius: 4,
-    elevation: 5,
+    elevation: 5
   },
   button: {
     borderRadius: 20,
     padding: 10,
-    elevation: 2,
+    elevation: 2
   },
   buttonOpen: {
-    backgroundColor: "#F194FF",
+    backgroundColor: "#F194FF"
   },
   textStyle: {
     color: "white",
     fontWeight: "bold",
     textAlign: "center",
-    fontFamily: "Prompt-Light",
+    fontFamily: "Prompt-Light"
   },
   modalText: {
     marginBottom: 28,
     textAlign: "center",
     fontFamily: "Prompt-Light",
-    fontSize: 18,
+    fontSize: 18
   },
   centeredView: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 22,
-  },
+    marginTop: 22
+  }
 });

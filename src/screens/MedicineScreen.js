@@ -21,27 +21,6 @@ import DropDownPicker from "../components/DropDownPicker";
 import { globalStyle } from "../stylesheet/globalStylesheet";
 
 export default function MedicineScreen({ navigation }) {
-  const [data, setData] = useState(false);
-
-  const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(null);
-  const [items, setItems] = useState([
-    { label: "Apple", value: 0 },
-    { label: "Banana", value: 1 }
-  ]);
-
-  const listData = [
-    {
-      time: "12:00",
-      title: "ยาแก้ปวด",
-      verify: true,
-      note: "ทานหลังอาหาร2เม็ด"
-    },
-    { time: "12:00", title: "ยาแก้ปวด", verify: true },
-    { time: "12:00", title: "ยาแก้ปวด", verify: true },
-    {time :"12:00", title:"ยาแก้ปวด", verify: true},
-    {time :"12:00", title:"ยาแก้ปวด", verify: true}
-  ];
 
   const medicineList = useSelector(state => state.medicine.medicine)
   const renderItem = (itemData) => {
@@ -49,7 +28,7 @@ export default function MedicineScreen({ navigation }) {
       <View style={globalStyle.screen}>
         <MedicineCard
           title={itemData.item.name}
-          image="checkmark.png"
+          image={itemData.item.image}
           id={itemData.item.id}
           subTitle={itemData.item.note}
           navigation={navigation}

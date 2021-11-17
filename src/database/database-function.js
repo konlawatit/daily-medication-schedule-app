@@ -38,15 +38,43 @@ export async function getDailyMedicine() {
   });
 }
 
-export async function addMedicine(name, note, description, timeList, dispatch) {
+function convertTimeList() {
+  let ls = [];
+  let countResult = 0;
+  let values = "";
+
+  resultsSetId.forEach((data) => {
+    ls.push(data.time);
+    ls.push(0);
+    if (data.day) {
+      countResult += 1;
+      if (countResult !== 1) {
+        values += ",(?, ?, ?, ?)";
+      }
+      ls.push(
+        `{"fr": ${data.day.fr},"mo": ${data.day.mo},"sa": ${data.day.sa},"su": ${data.day.su},"th": ${data.day.th},"tu": ${data.day.tu},"we": ${data.day.we}}`
+      );
+    }
+    ls.push(data.MEDICINE_id);
+  });
+}
+
+export async function addMedicine(
+  name,
+  note,
+  description,
+  timeList,
+  image,
+  dispatch
+) {
   await db.transaction(async (tx) => {
     let setId = timeList;
     let resultsSetId;
-    let te 
-    note = note ? note : ""
-    description = description ? description : ""
+    let te;
+    note = note ? note : "";
+    description = description ? description : "";
     tx.executeSql(
-      `INSERT INTO "MEDICINE" ("name","note","description","image") VALUES ('${name}','${note}','${description}',NULL)`,
+      `INSERT INTO "MEDICINE" ("name","note","description","image") VALUES ('${name}','${note}','${description}','${image}')`,
       [],
       (tx, results) => {
         console.log("Insert medicine", results.insertId);
@@ -54,24 +82,26 @@ export async function addMedicine(name, note, description, timeList, dispatch) {
         resultsSetId = setId.map((data) => {
           return { ...data, MEDICINE_id: results.insertId };
         });
-        te = results.insertId
+        te = results.insertId;
 
-        let ls = []
-        let countResult = 0
-        let values = ""
-        
-        resultsSetId.forEach(data => {
-          ls.push(data.time)
-          ls.push(0)
+        let ls = [];
+        let countResult = 0;
+        let values = "";
+
+        resultsSetId.forEach((data) => {
+          ls.push(data.time);
+          ls.push(0);
           if (data.day) {
-            countResult += 1
+            countResult += 1;
             if (countResult !== 1) {
-              values += ",(?, ?, ?, ?)"
+              values += ",(?, ?, ?, ?)";
             }
-            ls.push(`{"fr": ${data.day.fr},"mo": ${data.day.mo},"sa": ${data.day.sa},"su": ${data.day.su},"th": ${data.day.th},"tu": ${data.day.tu},"we": ${data.day.we}}`)
+            ls.push(
+              `{"fr": ${data.day.fr},"mo": ${data.day.mo},"sa": ${data.day.sa},"su": ${data.day.su},"th": ${data.day.th},"tu": ${data.day.tu},"we": ${data.day.we}}`
+            );
           }
-          ls.push(data.MEDICINE_id)
-        })
+          ls.push(data.MEDICINE_id);
+        });
 
         tx.executeSql(
           `INSERT INTO "TIME" ("time","status","day","MEDICINE_id") VALUES (?, ?, ?, ?)${values}`,
@@ -95,8 +125,7 @@ export async function addMedicine(name, note, description, timeList, dispatch) {
             let newArray = result.map((data) => {
               return { ...data, day: JSON.parse(data.day) };
             });
-            console.log(newArray);
-    
+
             // dispatch(setTime(newArray))
             dispatch(setTime(newArray));
           },
@@ -105,20 +134,18 @@ export async function addMedicine(name, note, description, timeList, dispatch) {
             return true;
           }
         );
-
       },
       (_, err) => {
         console.log("insert medicine error", err);
         return true;
       }
-      );
+    );
 
     tx.executeSql(
       `SELECT *
       FROM MEDICINE`,
       [],
       (tx, results) => {
-        console.log(results.rows);
         dispatch(setMedicine(results.rows._array));
       },
       (_, err) => {
@@ -129,7 +156,46 @@ export async function addMedicine(name, note, description, timeList, dispatch) {
   });
 }
 
-export function addTime(payload) {}
+export function addTime(payload, dispatch) {
+  db.transaction(
+    (tx) => {
+      console.log(11111111, payload);
+      let day = `{"fr": ${payload.day.fr},"mo": ${payload.day.mo},"sa": ${payload.day.sa},"su": ${payload.day.su},"th": ${payload.day.th},"tu": ${payload.day.tu},"we": ${payload.day.we}}`
+      tx.executeSql(
+        `INSERT INTO "TIME" ("time","status","day","MEDICINE_id") VALUES (?, ?, ?, ?)`,
+        [payload.time, payload.status, day, payload.id],
+        (tx, results) => {
+          console.log("Insert TIME success");
+          tx.executeSql(
+            `SELECT *
+            FROM MEDICINE
+            INNER JOIN TIME
+            ON MEDICINE.id = TIME.MEDICINE_id`,
+            [],
+            (tx, results) => {
+              let result = results.rows._array;
+              let newArray = result.map((data) => {
+                return { ...data, day: JSON.parse(data.day) };
+              });
+      
+              // dispatch(setTime(newArray))
+              dispatch(setTime(newArray));
+            },
+            (_, err) => {
+              console.log("insert time error", err);
+              return true;
+            }
+          );
+        },
+        (_, err) => {
+          console.log("insert medicine error", err);
+          return true;
+        }
+      );
+    },
+    (err) => console.log(err)
+  );
+}
 
 export function initDB(dispatch) {
   db.transaction((tx) => {
@@ -234,7 +300,6 @@ export function initDB(dispatch) {
         let newArray = result.map((data) => {
           return { ...data, day: JSON.parse(data.day) };
         });
-        console.log(newArray);
 
         // dispatch(setTime(newArray))
         dispatch(setTime(newArray));
@@ -269,7 +334,6 @@ export function delDB() {
         if (results && results.rows && results.rows._array) {
           /* do something with the items */
           // results.rows._array holds all the results.
-          console.log(JSON.stringify(results.rows._array));
           console.log("TIME table dropped");
         } else {
           console.log("no results");
@@ -287,7 +351,6 @@ export function delDB() {
         if (results && results.rows && results.rows._array) {
           /* do something with the items */
           // results.rows._array holds all the results.
-          console.log(JSON.stringify(results.rows._array));
           console.log("MEDICINE table dropped");
         } else {
           console.log("no results");
@@ -305,7 +368,6 @@ export function delDB() {
         if (results && results.rows && results.rows._array) {
           /* do something with the items */
           // results.rows._array holds all the results.
-          console.log(JSON.stringify(results.rows._array));
           console.log("HISTORY table dropped");
         } else {
           console.log("no results");
