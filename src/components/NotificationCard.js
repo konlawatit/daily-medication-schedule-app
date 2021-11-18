@@ -23,6 +23,9 @@ import { deleteNotificationCategoryAsync } from "expo-notifications";
 //sqlite
 import { updateIsNoti } from "../database/database-function";
 
+//store
+import { selectTime } from "../store/actions/medicineAction";
+
 //Components
 export default function NotificationCard(props) {
   const dispatch = useDispatch();
@@ -56,7 +59,10 @@ export default function NotificationCard(props) {
 
     <TouchableOpacity
       style={styles.cardOn}
-      onPress={() => props.navigation.navigate("NotificationTime")}
+      onPress={() => {
+        props.navigation.navigate("EditNotificationTime", {id})
+        dispatch(selectTime(id))
+      }}
     >
       {/* <AntDesign name="delete" size={24} color="red" /> */}
       <View style={styles.imagePart}>

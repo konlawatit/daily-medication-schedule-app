@@ -21,6 +21,7 @@ import DrugInfoScreen from "../screens/DrugInfoScreen";
 import EditDrugInfoScreen from "../screens/EditDrugInfoScreen";
 import NotiScreen from "../screens/NotificationScreen";
 import NotificationTimeScreen from "../screens/NotificationTimeScreen";
+import EditNotificationTimeScreen from "../screens/EditNotificationTimeScreen";
 import TestNoti from "../screens/TestNoti";
 
 const MyTheme = {
@@ -114,6 +115,7 @@ export default function MyNavigator() {
           name="NotificationTime"
           component={NotificationTimeScreen}
         />
+        <Stack.Screen name="EditNotificationTime" component={EditNotificationTimeScreen} />
         <Stack.Screen name="Noti" component={NotiScreen} />
         <Stack.Screen
           name="Home"

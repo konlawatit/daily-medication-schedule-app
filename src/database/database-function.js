@@ -27,7 +27,7 @@ export async function updateVerify(status, id) {
 export function updateIsNoti(status, id, dispatch) {
   db.transaction((tx) => {
     tx.executeSql(
-      `UPDATE TIME SET isNoti = ${status === true ? 1 : 0 } WHERE id = ${id} `,
+      `UPDATE TIME SET isNoti = ${status === true ? 1 : 0} WHERE id = ${id} `,
       [],
       (tx, results) => {
         console.log("update isNoti success");
@@ -40,11 +40,15 @@ export function updateIsNoti(status, id, dispatch) {
           (tx, results) => {
             let result = results.rows._array;
             let newArray = result.map((data) => {
-              return { ...data, day: JSON.parse(data.day), isNoti: data.isNoti === 1 ? true : false };
+              return {
+                ...data,
+                day: JSON.parse(data.day),
+                isNoti: data.isNoti === 1 ? true : false
+              };
             });
 
             // dispatch(setTime(newArray))
-            console.log('select time', results.rows._array)
+            console.log("select time", results.rows._array);
             dispatch(setTime(newArray));
           },
           (_, err) => {
@@ -58,6 +62,65 @@ export function updateIsNoti(status, id, dispatch) {
       }
     );
   });
+}
+
+export function updateTime(payload, dispatch) {
+  db.transaction(
+    (tx) => {
+      console.log(11111111, payload);
+      let day = `{"fr": ${payload.day.fr},"mo": ${payload.day.mo},"sa": ${payload.day.sa},"su": ${payload.day.su},"th": ${payload.day.th},"tu": ${payload.day.tu},"we": ${payload.day.we}}`;
+
+      tx.executeSql(
+        `DELETE FROM TIME where id=${payload.timeId}`,
+        [
+        ],
+        (tx, results) => {
+          console.log("del medicine success->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        },
+        (_, err) => {
+          console.log("del medicine error", err);
+          return true;
+        }
+      );
+
+      tx.executeSql(
+        `INSERT INTO "TIME" ("time","status", "isNoti","day","MEDICINE_id") VALUES (?,?, ?, ?, ?)`,
+        [payload.time, payload.status, payload.isNoti, day, payload.id],
+        (tx, results) => {
+          console.log("Insert TIME success");
+          tx.executeSql(
+            `SELECT *
+            FROM MEDICINE
+            INNER JOIN TIME
+            ON MEDICINE.id = TIME.MEDICINE_id`,
+            [],
+            (tx, results) => {
+              let result = results.rows._array;
+              let newArray = result.map((data) => {
+                return {
+                  ...data,
+                  day: JSON.parse(data.day),
+                  isNoti: data.isNoti === 1 ? true : false
+                };
+              });
+
+              // dispatch(setTime(newArray))
+              dispatch(setTime(newArray));
+            },
+            (_, err) => {
+              console.log("insert time error", err);
+              return true;
+            }
+          );
+        },
+        (_, err) => {
+          console.log("insert medicine error", err);
+          return true;
+        }
+      );
+    },
+    (err) => console.log(err)
+  );
 }
 
 export async function getDailyMedicine() {
@@ -165,11 +228,15 @@ export async function addMedicine(
           (tx, results) => {
             let result = results.rows._array;
             let newArray = result.map((data) => {
-              return { ...data, day: JSON.parse(data.day), isNoti: data.isNoti === 1 ? true : false };
+              return {
+                ...data,
+                day: JSON.parse(data.day),
+                isNoti: data.isNoti === 1 ? true : false
+              };
             });
 
             // dispatch(setTime(newArray))
-            console.log('select time', results.rows._array)
+            console.log("select time", results.rows._array);
             dispatch(setTime(newArray));
           },
           (_, err) => {
@@ -204,9 +271,11 @@ export function addTime(payload, dispatch) {
     (tx) => {
       console.log(11111111, payload);
       let day = `{"fr": ${payload.day.fr},"mo": ${payload.day.mo},"sa": ${payload.day.sa},"su": ${payload.day.su},"th": ${payload.day.th},"tu": ${payload.day.tu},"we": ${payload.day.we}}`;
+
+
       tx.executeSql(
-        `INSERT INTO "TIME" ("time","status","day","MEDICINE_id") VALUES (?, ?, ?, ?)`,
-        [payload.time, payload.status, day, payload.id],
+        `INSERT INTO "TIME" ("time","status", "isNoti","day","MEDICINE_id") VALUES (?,?, ?, ?, ?)`,
+        [payload.time, payload.status, payload.isNoti, day, payload.id],
         (tx, results) => {
           console.log("Insert TIME success");
           tx.executeSql(
@@ -218,7 +287,11 @@ export function addTime(payload, dispatch) {
             (tx, results) => {
               let result = results.rows._array;
               let newArray = result.map((data) => {
-                return { ...data, day: JSON.parse(data.day), isNoti: data.isNoti === 1 ? true : false };
+                return {
+                  ...data,
+                  day: JSON.parse(data.day),
+                  isNoti: data.isNoti === 1 ? true : false
+                };
               });
 
               // dispatch(setTime(newArray))
@@ -331,7 +404,11 @@ export function deleteMedicine(id, dispatch) {
         (tx, results) => {
           let result = results.rows._array;
           let newArray = result.map((data) => {
-            return { ...data, day: JSON.parse(data.day), isNoti: data.isNoti === 1 ? true : false };
+            return {
+              ...data,
+              day: JSON.parse(data.day),
+              isNoti: data.isNoti === 1 ? true : false
+            };
           });
 
           // dispatch(setTime(newArray))
@@ -380,7 +457,11 @@ export function deleteTime(payload, dispatch) {
         (tx, results) => {
           let result = results.rows._array;
           let newArray = result.map((data) => {
-            return { ...data, day: JSON.parse(data.day), isNoti: data.isNoti === 1 ? true : false };
+            return {
+              ...data,
+              day: JSON.parse(data.day),
+              isNoti: data.isNoti === 1 ? true : false
+            };
           });
 
           // dispatch(setTime(newArray))
