@@ -24,6 +24,42 @@ export async function updateVerify(status, id) {
   });
 }
 
+export function updateIsNoti(status, id, dispatch) {
+  db.transaction((tx) => {
+    tx.executeSql(
+      `UPDATE TIME SET isNoti = ${status === true ? 1 : 0 } WHERE id = ${id} `,
+      [],
+      (tx, results) => {
+        console.log("update isNoti success");
+        tx.executeSql(
+          `SELECT *
+          FROM MEDICINE
+          INNER JOIN TIME
+          ON MEDICINE.id = TIME.MEDICINE_id`,
+          [],
+          (tx, results) => {
+            let result = results.rows._array;
+            let newArray = result.map((data) => {
+              return { ...data, day: JSON.parse(data.day), isNoti: data.isNoti === 1 ? true : false };
+            });
+
+            // dispatch(setTime(newArray))
+            console.log('select time', results.rows._array)
+            dispatch(setTime(newArray));
+          },
+          (_, err) => {
+            console.log("insert time error", err);
+            return true;
+          }
+        );
+      },
+      (tx, err) => {
+        console.log("update isNoti error", err);
+      }
+    );
+  });
+}
+
 export async function getDailyMedicine() {
   let result;
   db.transaction((tx) => {
@@ -96,10 +132,11 @@ export async function addMedicine(
         resultsSetId.forEach((data) => {
           ls.push(data.time);
           ls.push(0);
+          ls.push(1);
           if (data.day) {
             countResult += 1;
             if (countResult !== 1) {
-              values += ",(?, ?, ?, ?)";
+              values += ",(?, ?, ?, ?, ?)";
             }
             ls.push(
               `{"fr": ${data.day.fr},"mo": ${data.day.mo},"sa": ${data.day.sa},"su": ${data.day.su},"th": ${data.day.th},"tu": ${data.day.tu},"we": ${data.day.we}}`
@@ -109,7 +146,7 @@ export async function addMedicine(
         });
 
         tx.executeSql(
-          `INSERT INTO "TIME" ("time","status","day","MEDICINE_id") VALUES (?, ?, ?, ?)${values}`,
+          `INSERT INTO "TIME" ("time","status","isNoti","day","MEDICINE_id") VALUES (?, ?, ?, ?, ?)${values}`,
           ls,
           (tx, results) => {
             console.log("Insert Time---------------------------");
@@ -128,10 +165,11 @@ export async function addMedicine(
           (tx, results) => {
             let result = results.rows._array;
             let newArray = result.map((data) => {
-              return { ...data, day: JSON.parse(data.day) };
+              return { ...data, day: JSON.parse(data.day), isNoti: data.isNoti === 1 ? true : false };
             });
 
             // dispatch(setTime(newArray))
+            console.log('select time', results.rows._array)
             dispatch(setTime(newArray));
           },
           (_, err) => {
@@ -180,7 +218,7 @@ export function addTime(payload, dispatch) {
             (tx, results) => {
               let result = results.rows._array;
               let newArray = result.map((data) => {
-                return { ...data, day: JSON.parse(data.day) };
+                return { ...data, day: JSON.parse(data.day), isNoti: data.isNoti === 1 ? true : false };
               });
 
               // dispatch(setTime(newArray))
@@ -293,7 +331,7 @@ export function deleteMedicine(id, dispatch) {
         (tx, results) => {
           let result = results.rows._array;
           let newArray = result.map((data) => {
-            return { ...data, day: JSON.parse(data.day) };
+            return { ...data, day: JSON.parse(data.day), isNoti: data.isNoti === 1 ? true : false };
           });
 
           // dispatch(setTime(newArray))
@@ -342,7 +380,7 @@ export function deleteTime(payload, dispatch) {
         (tx, results) => {
           let result = results.rows._array;
           let newArray = result.map((data) => {
-            return { ...data, day: JSON.parse(data.day) };
+            return { ...data, day: JSON.parse(data.day), isNoti: data.isNoti === 1 ? true : false };
           });
 
           // dispatch(setTime(newArray))
@@ -383,6 +421,7 @@ export function initDB(dispatch) {
         "time"	TEXT NOT NULL,
         "status"	INTEGER NOT NULL,
         "day"	TEXT NOT NULL,
+        "isNoti" INTEGER NOT NULL,
         "MEDICINE_id"	INTEGER,
         FOREIGN KEY("MEDICINE_id") REFERENCES "medicine"("id"),
         PRIMARY KEY("id" AUTOINCREMENT)
@@ -423,9 +462,9 @@ export function initDB(dispatch) {
     );
 
     tx.executeSql(
-      `INSERT INTO TIME ("time","status","day","MEDICINE_id") VALUES ('12:00',0,'{"mo": 0,"tu": 1,"we": 0,"th":1,"fr":0,"sa":1,"su":0}',1),
-      ('13:00',0,'{"mo": 1,"tu": 1,"we": 1,"th":1,"fr":1,"sa":1,"su":1}',1),
-      ('13:00',0,'{"mo": 1,"tu": 1,"we": 1,"th":1,"fr":1,"sa":1,"su":1}',2)`,
+      `INSERT INTO TIME ("time","status", "isNoti","day","MEDICINE_id") VALUES ('12:00',0,1,'{"mo": 0,"tu": 1,"we": 0,"th":1,"fr":0,"sa":1,"su":0}',1),
+      ('13:00',0,1,'{"mo": 1,"tu": 1,"we": 1,"th":1,"fr":1,"sa":1,"su":1}',1),
+      ('13:00',0,1,'{"mo": 1,"tu": 1,"we": 1,"th":1,"fr":1,"sa":1,"su":1}',2)`,
       [],
       (tx, results) => {
         console.log("Insert TIME");

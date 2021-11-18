@@ -67,22 +67,12 @@ export default function AddMedicineScreen({ navigation }) {
     let payload = {};
   };
 
-  const [data, setData] = useState([
-    {
-      time: "12:00"
-    },
-    {
-      time: "12:00"
-    },
-    {
-      time: "12:00"
-    }
-  ]);
 
   const renderItem = (itemData) => {
+    console.log('----> check', itemData.item)
     return (
       <View style={{ alignItems: "center" }}>
-        <NotificationCard time={itemData.item.time} day={itemData.item.day} />
+        <NotificationCard time={itemData.item.time} day={itemData.item.day} id={itemData.item.id} isNoti={itemData.item.isNoti} />
       </View>
     );
   };

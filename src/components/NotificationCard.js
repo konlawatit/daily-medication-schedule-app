@@ -20,20 +20,28 @@ import { MaterialIcons, AntDesign } from "@expo/vector-icons";
 import { stackDeleteTime, reduceStackDeleteTime } from "../store/actions/medicineAction";
 import { deleteNotificationCategoryAsync } from "expo-notifications";
 
+//sqlite
+import { updateIsNoti } from "../database/database-function";
+
 //Components
 export default function NotificationCard(props) {
   const dispatch = useDispatch();
-  const [isEnabled, setIsEnabled] = useState(true);
+  const [isEnabled, setIsEnabled] = useState(props.isNoti);
   const [time, setTime] = useState(props.time);
   const [day, setDay] = useState(props.day);
   const [id, setId] = useState(props.id)
+  // console.log('is noy',props.isNoti)
 
 
-  const toggleSwitch = () =>
+  const toggleSwitch = () =>{
+    console.log(11111111111111,isEnabled)
     setIsEnabled(
-      (previousState) => !previousState,
-      console.log("" + isEnabled)
+      (previousState) => {
+        updateIsNoti(!isEnabled, id, dispatch)
+        return !previousState
+      }
     );
+  }
   
     const delNoti = () => {
       dispatch(reduceStackDeleteTime(id))

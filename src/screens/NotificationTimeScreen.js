@@ -54,6 +54,7 @@ export default function NotificationTimeScreen({ navigation, route }) {
     let payload = {
       time: hour+":"+min,
       status: false,
+      isNoti: true,
       day
       // options
     };

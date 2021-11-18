@@ -105,6 +105,7 @@ export default function DrugInfoScreen({ navigation, route }) {
             time={itemData.item.time}
             day={itemData.item.day}
             isEdit={isEdit}
+            isNoti={itemData.item.isNoti}
             id={itemData.item.id}
           />
         </View>
