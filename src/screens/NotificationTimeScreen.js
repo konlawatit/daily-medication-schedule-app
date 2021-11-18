@@ -270,14 +270,6 @@ export default function NotificationTimeScreen({ navigation, route }) {
         />
       </View>
       <View style={styles.section3}>
-        <View
-          style={{
-            flexDirection: "row",
-            width: "100%",
-            height: 60,
-            backgroundColor: "rgba(42,42,42,1)"
-          }}
-        >
           <TouchableOpacity
             style={styles.confirmBox}
             onPress={() => navigation.goBack()}
@@ -288,7 +280,6 @@ export default function NotificationTimeScreen({ navigation, route }) {
             <TouchableOpacity onPress={() => confirm()}>
               <Text style={styles.confirmText}>บันทึก</Text>
             </TouchableOpacity>
-          </View>
         </View>
       </View>
     </View>
@@ -325,8 +316,10 @@ const styles = StyleSheet.create({
     // borderWidth: 1,
   },
   section3: {
-    flex: 0.2,
-
+    flexDirection: "row",
+    paddingTop:"3%",
+    paddingBottom:"3%",
+    backgroundColor: "rgba(42,42,42,1)",
     // borderWidth: 1,
     width: "100%",
     justifyContent: "flex-end",
