@@ -8,6 +8,7 @@ export const globalStyle = StyleSheet.create({
   },
   textThai: {
     fontFamily: "Prompt-Light",
+    fontSize:14
   },
   //container ของ AddMedicineScreens
   Addcontainer: {
@@ -56,13 +57,14 @@ export const globalStyle = StyleSheet.create({
   //เส้นคั้นใต้เวลาที่ต้องทาน
   showLine: {
     marginTop: 8,
-    width: "95%",
-    borderWidth: 1.5,
+    width: "100%",
+    borderWidth: 1,
     borderRadius: 5,
     borderColor: "grey",
     // backgroundColor:'grey',
     opacity: 0.25,
     alignSelf: "center",
+    marginBottom:8
   },
   //เส้นใต้ยาที่ต้องทานวันนี้
   line: {
@@ -70,6 +72,7 @@ export const globalStyle = StyleSheet.create({
     borderRadius: 5,
     borderColor: "grey",
     opacity: 0.25,
+    
   },
   infoContain: {
     width: "90%",
@@ -115,5 +118,19 @@ export const globalStyle = StyleSheet.create({
     alignItems: "center",
     height: 25,
     margin: 2,
+    marginBottom:0
+  },
+  bottomTabs: {
+    flex: 1,
+    flexDirection:"row",
+    width: "100%",
+    position: "absolute",
+    justifyContent: "flex-end",
+    alignItems: "flex-end",
+    alignSelf: "flex-end",
+    backgroundColor:"white",
+    paddingTop:"1%",
+    paddingBottom:"1%",
+    bottom: 0,
   },
 });

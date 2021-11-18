@@ -15,7 +15,7 @@ import {
   Dimensions,
   Alert,
   Modal,
-  Pressable
+  Pressable,
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { LinearGradient } from "expo-linear-gradient";
@@ -28,7 +28,7 @@ import NotificationCard from "../components/NotificationCard";
 import { addMedicine } from "../database/database-function";
 import { clearStackTime } from "../store/actions/medicineAction";
 
-import { EvilIcons } from "@expo/vector-icons";
+import { Ionicons, EvilIcons, Entypo, AntDesign } from "@expo/vector-icons";
 
 import * as ImagePicker from "expo-image-picker";
 
@@ -43,13 +43,15 @@ export default function AddMedicineScreen({ navigation }) {
   const [confirmNote, setConfirmNote] = useState();
   const [confirmDescription, setConfirmDescription] = useState();
   const [isSave, setIsSave] = useState(false);
-  const [modalVisible, setModalVisible] = useState(false);
+  const [imageModal, setImageModal] = useState(false);
+  const [confirmModal, setConfirmModal] = useState(false);
 
   const [check, setCheck] = useState(false);
 
   let dispatch = useDispatch();
+
   const save = (name, note, description, image) => {
-    if (name) {
+    if (name&&note&&image) {
       addMedicine(name, note, description, timeList, image, dispatch);
       dispatch(clearStackTime());
       navigation.navigate("Medicine");
@@ -57,7 +59,7 @@ export default function AddMedicineScreen({ navigation }) {
     console.log(name, note, description);
   };
 
-  const cancle = () => {
+  const cancel = () => {
     navigation.goBack();
     dispatch(clearStackTime());
   };
@@ -69,14 +71,14 @@ export default function AddMedicineScreen({ navigation }) {
 
   const [data, setData] = useState([
     {
-      time: "12:00"
+      time: "12:00",
     },
     {
-      time: "12:00"
+      time: "12:00",
     },
     {
-      time: "12:00"
-    }
+      time: "12:00",
+    },
   ]);
 
   const renderItem = (itemData) => {
@@ -97,12 +99,12 @@ export default function AddMedicineScreen({ navigation }) {
       let payload = {
         name,
         note,
-        description
+        description,
       };
 
       save(name, note, description, pickedImagePath);
 
-      // console.log(note)
+      console.log(note);
     }, [check]);
 
     // The path of the picked image
@@ -117,7 +119,7 @@ export default function AddMedicineScreen({ navigation }) {
         alert("You've refused to allow this appp to access your photos!");
         return;
       }
-      setModalVisible(false);
+      setImageModal(false);
       const result = await ImagePicker.launchImageLibraryAsync();
 
       // Explore the result
@@ -139,7 +141,7 @@ export default function AddMedicineScreen({ navigation }) {
         alert("You've refused to allow this appp to access your camera!");
         return;
       }
-      setModalVisible(false);
+      setImageModal(false);
       const result = await ImagePicker.launchCameraAsync();
 
       // Explore the result
@@ -161,7 +163,7 @@ export default function AddMedicineScreen({ navigation }) {
 
         <TouchableOpacity
           style={{ width: 150, justifyContent: "flex-end" }}
-          onPress={() => setModalVisible(true)}
+          onPress={() => setImageModal(true)}
         >
           <View style={globalStyle.imageBox}>
             {pickedImagePath !== "" ? (
@@ -181,17 +183,17 @@ export default function AddMedicineScreen({ navigation }) {
         <Modal
           animationType="slide"
           transparent={true}
-          visible={modalVisible}
+          visible={imageModal}
           onRequestClose={() => {
             Alert.alert("Modal has been closed.");
-            setModalVisible(!modalVisible);
+            setImageModal(!imageModal);
           }}
         >
-          <View style={styles.centeredView}>
+          <View style={[styles.centeredView, { height: "10%" }]}>
             <View style={[styles.modalView]}>
               <TouchableOpacity
                 style={{ marginLeft: "91%" }}
-                onPress={() => setModalVisible(!modalVisible)}
+                onPress={() => setImageModal(!imageModal)}
               >
                 <EvilIcons name="close" size={24} color="black" />
               </TouchableOpacity>
@@ -202,6 +204,54 @@ export default function AddMedicineScreen({ navigation }) {
               <TouchableOpacity onPress={openCamera}>
                 <Text style={styles.modalText}>ถ่ายจากกล้อง</Text>
               </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
+
+        <Modal animationType="slide" transparent={true} visible={confirmModal}>
+          <View style={styles.centeredView}>
+            <View style={[styles.modalView]}>
+              <TouchableOpacity
+                style={{ marginLeft: "91%" }}
+                onPress={() => setConfirmModal(!confirmModal)}
+              >
+                <EvilIcons name="close" size={24} color="black" />
+              </TouchableOpacity>
+              <Entypo name="cross" size={42} color="black" />
+              <Text
+                style={[
+                  styles.modalText,
+                  { fontSize: 25, marginTop: 10, padding: 0, marginBottom: 10 },
+                ]}
+              >
+                คุณแน่ใจนะ?
+              </Text>
+              <Text
+                style={[
+                  styles.modalText,
+                  { textAlign: "left", margin: 0, padding: 0 },
+                ]}
+              >
+                ข้อมูลยาที่คุณกรอกจะหายไปทั้งหมด
+              </Text>
+              <View style={{ flexDirection: "row" }}>
+                <TouchableOpacity
+                  style={[styles.bottomTabs, { borderRightWidth: 0.5 }]}
+                  onPress={() => setConfirmModal(!confirmModal)}
+                >
+                  <Text style={[styles.modalText, { color: "#0080fe" }]}>
+                    ยกเลิก
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[styles.bottomTabs]}
+                  onPress={() => cancel()}
+                >
+                  <Text style={[styles.modalText, { color: "#0080fe" }]}>
+                    ตกลง
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
         </Modal>
@@ -231,7 +281,7 @@ export default function AddMedicineScreen({ navigation }) {
               style={{
                 borderRadius: 5,
                 backgroundColor: "white",
-                padding: 5
+                padding: 5,
               }}
               value={description}
               onChangeText={setDescription}
@@ -242,7 +292,7 @@ export default function AddMedicineScreen({ navigation }) {
           </View>
         </View>
 
-        <View style={{ width: "90%", marginTop: 10 }}>
+        <View style={{ width: "90%", marginTop: 10, marginBottom: 0 }}>
           <View style={globalStyle.SectionStyle}>
             <Text style={{ fontFamily: "Prompt-Light", fontSize: 16 }}>
               เวลาที่จะต้องทาน
@@ -284,98 +334,75 @@ export default function AddMedicineScreen({ navigation }) {
         ListHeaderComponent={ContentThatGoesAboveTheFlatList(save)}
       />
 
-      <View style={styles.section3}>
-        <View
-          style={{
-            flexDirection: "row",
-            width: "100%",
-            height: 60,
-            backgroundColor: "rgba(255,255,255,1)"
-          }}
+      <View style={globalStyle.bottomTabs}>
+        <TouchableOpacity
+          style={[styles.confirmBox]}
+          onPress={() => setConfirmModal(true)}
         >
-          <TouchableOpacity style={styles.confirmBox} onPress={() => cancle()}>
-            <Text style={styles.confirmText}>ยกเลิก</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.confirmBox} onPress={() => confirm()}>
-            <Text style={styles.confirmText}>บันทึก</Text>
-          </TouchableOpacity>
-        </View>
+          <Entypo name="cross" size={20} color="black" />
+          <Text style={styles.confirmText}>ยกเลิก</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.confirmBox} onPress={() => confirm()}>
+          <AntDesign name="check" size={20} color="black" />
+          <Text style={styles.confirmText}>บันทึก</Text>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  section3: {
-    flex: 1,
-    width: "100%",
-    position: "absolute",
-    justifyContent: "flex-end",
+  bottomTabs: {
+    flexDirection: "row",
+    marginTop: "6%",
+    width: "50%",
+    justifyContent: "center",
     alignItems: "flex-end",
     alignSelf: "flex-end",
     // height: ,
-    bottom: 0
+    bottom: 0,
+    borderWidth: 0.5,
+    borderLeftWidth: 0,
+    borderRightWidth: 0,
+    borderColor: "grey",
+    padding: "5%",
   },
   confirmBox: {
     flex: 1,
     width: "100%",
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   },
   confirmText: {
     color: "rgba(0,0,0,1)",
-    fontSize: 24,
-    fontFamily: "Prompt-Light"
+    fontSize: 18,
+    fontFamily: "Prompt-Light",
   },
   image: {
     width: "100%",
-    height: "100%"
-  },
-  buttonContainer: {
-    width: 400,
-    flexDirection: "row",
-    justifyContent: "space-around"
+    height: "100%",
   },
   modalView: {
     width: "80%",
-    height: "50%",
+    height: "35%",
     margin: 20,
     backgroundColor: "white",
-    padding: 28,
+    borderRadius: 15,
     alignItems: "center",
     shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5
-  },
-  button: {
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2
-  },
-  buttonOpen: {
-    backgroundColor: "#F194FF"
-  },
-  textStyle: {
-    color: "white",
-    fontWeight: "bold",
-    textAlign: "center",
-    fontFamily: "Prompt-Light"
+    shadowOpacity: 1,
+    elevation: 15,
   },
   modalText: {
-    marginBottom: 28,
+    color: "rgba(0,0,0,1)",
     textAlign: "center",
     fontFamily: "Prompt-Light",
-    fontSize: 18
+    fontSize: 18,
   },
   centeredView: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 22
-  }
+    marginTop: 22,
+  },
 });
