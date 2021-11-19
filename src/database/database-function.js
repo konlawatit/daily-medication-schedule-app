@@ -163,6 +163,47 @@ function convertTimeList() {
   });
 }
 
+export function addFirebase(payload) {
+  db.transaction(tx => {
+    tx.executeSql(
+      `SELECT *
+      FROM FIREBASE`,
+      [],
+      (tx, results) => {
+        console.log(results.rows)
+        if (results.rows.length < 1) {
+          tx.executeSql(
+            `INSERT INTO "FIREBASE" ("uid", "email", "provider") VALUES ('${payload.uid}', '${payload.email}', '${payload.provider}')`,
+            [],
+            (tx, results) => {
+              console.log('insert firebase success')
+            },
+            (tx, err) => {
+              console.log("insert firebase error", err);
+            }
+          );
+        } else {
+          tx.executeSql(
+            `UPDATE FIREBASE SET uid='${payload.uid}', email='${payload.email}', provider='${payload.provider}' WHERE id=1 `,
+            [],
+            (tx, results) => {
+              console.log('update firebase success')
+            },
+            (tx, err) => {
+              console.log("update firebase error", err);
+            }
+          );
+        }
+      },
+      (_, err) => {
+        console.log("select firebase error", err);
+        return true;
+      }
+    );
+  },
+  (err) => console.log(err))
+}
+
 export async function addMedicine(
   name,
   note,
@@ -480,6 +521,23 @@ export function deleteTime(payload, dispatch) {
 export function initDB(dispatch) {
   db.transaction((tx) => {
     // tx.executeSql("DROP TABLE USERS", []);
+
+    tx.executeSql(
+      `CREATE TABLE IF NOT EXISTS "FIREBASE" (
+        "id" INTEGER NOT NULL,
+        "uid"	TEXT,
+        "email"	TEXT,
+        "provider" TEXT,
+        PRIMARY KEY("id" AUTOINCREMENT)
+      );`,
+      [],
+      (tx, results) => {
+        console.log("create FIREBASE table successfully");
+      },
+      (error) => console.log("craete FIREBASE table error", error)
+    );
+
+
     tx.executeSql(
       `CREATE TABLE IF NOT EXISTS "MEDICINE" (
         "id"	INTEGER NOT NULL,
@@ -608,6 +666,24 @@ export function initDB(dispatch) {
 
 export function delDB() {
   db.transaction((tx) => {
+
+    tx.executeSql(
+      "DROP TABLE FIREBASE;",
+      [],
+      (tx, results) => {
+        if (results && results.rows && results.rows._array) {
+          /* do something with the items */
+          // results.rows._array holds all the results.
+          console.log("FIREBASE table dropped");
+        } else {
+          console.log("no results");
+        }
+      },
+      (tx, error) => {
+        console.log(error);
+      }
+    );
+
     tx.executeSql(
       "DROP TABLE TIME;",
       [],

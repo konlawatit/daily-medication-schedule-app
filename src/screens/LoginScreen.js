@@ -33,7 +33,7 @@ export default function LoginScreen({navigation}) {
       <View style={styles.line} />
 
       <TouchableOpacity style={styles.submitGoogle} underlayColor="grey" onPress={() => {
-          signInWithGoogleAsync();
+          signInWithGoogleAsync(navigation);
         }} >
           <View style={styles.insideSubmit} >
               <View>

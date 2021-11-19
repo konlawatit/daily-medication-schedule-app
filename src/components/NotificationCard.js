@@ -29,7 +29,7 @@ import { selectTime } from "../store/actions/medicineAction";
 //Components
 export default function NotificationCard(props) {
   const dispatch = useDispatch();
-  const [isEnabled, setIsEnabled] = useState(props.isNoti);
+  const [isEnabled, setIsEnabled] = useState(props.isNoti == 1 ? true : false);
   const [time, setTime] = useState(props.time);
   const [day, setDay] = useState(props.day);
   const [id, setId] = useState(props.id)
@@ -37,7 +37,6 @@ export default function NotificationCard(props) {
 
 
   const toggleSwitch = () =>{
-    console.log(11111111111111,isEnabled)
     setIsEnabled(
       (previousState) => {
         updateIsNoti(!isEnabled, id, dispatch)
