@@ -145,7 +145,7 @@ export default function AddMedicineScreen({ navigation }) {
     };
 
     return (
-      <View style={[globalStyle.Addcontainer]}>
+      <View style={[globalStyle.Addcontainer,{marginTop:10}]}>
         <LinearGradient
           // Background Linear Gradient
           colors={["rgba(255,255,255,1)", "transparent"]}
@@ -343,20 +343,30 @@ export default function AddMedicineScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+  modalView: {
+    width: "80%",
+    height: 220,
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 15,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOpacity: 1,
+    elevation: 15,
+  },
   bottomTabs: {
     flexDirection: "row",
-    marginTop: "6%",
+    marginTop: 27,
     width: "50%",
     justifyContent: "center",
     alignItems: "flex-end",
     alignSelf: "flex-end",
     // height: ,
     bottom: 0,
-    borderWidth: 0.5,
-    borderLeftWidth: 0,
-    borderRightWidth: 0,
-    borderColor: "grey",
-    padding: "5%",
+    borderTopWidth: 0.5,
+    borderColor: "#DADADA",
+    padding: 12,
+    bottom:0
   },
   confirmBox: {
     flex: 1,
@@ -372,17 +382,6 @@ const styles = StyleSheet.create({
   image: {
     width: "100%",
     height: "100%",
-  },
-  modalView: {
-    width: "80%",
-    height: "35%",
-    margin: 20,
-    backgroundColor: "white",
-    borderRadius: 15,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOpacity: 1,
-    elevation: 15,
   },
   modalText: {
     color: "rgba(0,0,0,1)",
