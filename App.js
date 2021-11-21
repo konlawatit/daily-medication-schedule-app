@@ -22,7 +22,7 @@ const store = createStore(rootReducer);
 
 //sqlite
 import { DatabaseConnection } from "./src/database/database-connection";
-import { initDB, delDB } from "./src/database/database-function";
+import { initDB, dropDB } from "./src/database/database-function";
 const db = DatabaseConnection.getConnection();
 
 //Screens
@@ -54,7 +54,7 @@ export default function App() {
   
 
   useEffect(() => {
-    // delDB();
+    // dropDB();
     // initDB(dispatch);
   }, [])
 

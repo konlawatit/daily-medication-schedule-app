@@ -5,6 +5,7 @@ import * as Google from "expo-google-app-auth";
 import * as Facebook from "expo-facebook";
 import firebaseConfig from "./firebaseConfig.json";
 
+
 if (!fb.apps.length) {
   console.log("Connected with firebase");
   fb.initializeApp(firebaseConfig);
@@ -14,7 +15,9 @@ console.ignoredYellowBox = ["Setting a timer"];
 const GoogleProvider = new fb.auth.GoogleAuthProvider();
 
 //sqlite
-import { addFirebase } from "./src/database/database-function";
+import { loginFirebase } from "./src/database/database-firebase";
+import { changeMedicineState } from "./src/database/database-function";
+import { getNextTriggerDateAsync } from "expo-notifications";
 
 export const firebase = !fb.apps.length
   ? fb.initializeApp(firebaseConfig)
@@ -48,7 +51,7 @@ export async function signInAnonymous(username, password) {
   }
 }
 
-export async function signInWithGoogleAsync(navigation) {
+export async function signInWithGoogleAsync(navigation, dispatch) {
   try {
     const result = await Google.logInAsync({
       androidClientId:
@@ -58,8 +61,8 @@ export async function signInWithGoogleAsync(navigation) {
     });
 
     if (result.type === "success") {
-      onSignIn(result, navigation);
-      navigation.navigate("Home");
+      onSignIn(result, dispatch, navigation)
+      // navigation.navigate("Home");
       return result.accessToken;
     } else {
       return { cancelled: true };
@@ -86,7 +89,8 @@ function isUserEqual(googleUser, firebaseUser) {
   return false;
 }
 
-function onSignIn(googleUser) {
+function onSignIn(googleUser, dispatch, navigation) {
+  // const dispatch = useDispatch()
   //   console.log("Google Auth Response", googleUser);
   // We need to register an Observer on Firebase Auth to make sure auth is initialized.
   var unsubscribe = fb.auth().onAuthStateChanged(async (firebaseUser) => {
@@ -118,7 +122,7 @@ function onSignIn(googleUser) {
             email: results.user.email,
             provider: "google"
           };
-          addFirebase(payload);
+          loginFirebase(payload);
         })
         .catch((error) => {
           // Handle Errors here.
@@ -135,18 +139,20 @@ function onSignIn(googleUser) {
       const firestore = fb.firestore();
       const usersRef = firestore.collection("users").doc(uid);
       const snapshot = await usersRef.get();
-      const payload = {
+      const payloadUser = {
         uid: firebaseUser.uid,
         email: firebaseUser.email,
         provider: "google"
       };
-      addFirebase(payload);
+      const payloadData = await getAllData(payloadUser.uid)
+      // console.log(payloadData)
+      loginFirebase(payloadUser, payloadData, dispatch, navigation)
+      
 
       console.log(
         "User already signed-in Firebase.",
         firebaseUser.uid,
-        firebaseUser.email,
-        snapshot.data()
+        firebaseUser.email
       );
     }
   });
@@ -181,7 +187,7 @@ export async function logInFacebook() {
             email: re.user.email,
             provider: "facebook"
           };
-          addFirebase(payload);
+          loginFirebase(payload);
           // console.log(re);
           console.log("sync facebook with firebase");
         })
@@ -194,5 +200,20 @@ export async function logInFacebook() {
     }
   } catch ({ message }) {
     alert(`Facebook Login Error: ${message}`);
+  }
+}
+
+
+export async function getAllData(uid) {
+  try {
+    const firestore = firebase.firestore();
+        const userRef = firestore.collection('users').doc(uid)
+        let result
+        await userRef.get().then(data => {
+          result = data.data()
+        })
+        return result
+  } catch (err) {
+    console.log('get all data error', err)
   }
 }

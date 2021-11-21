@@ -9,6 +9,64 @@ import {
 import { DatabaseConnection } from "../database/database-connection";
 const db = DatabaseConnection.getConnection();
 
+export async function changeMedicineState(dispatch) {
+  try {
+    db.transaction(tx => {
+      tx.executeSql(
+        `SELECT *
+        FROM MEDICINE`,
+        [],
+        (tx, results) => {
+          console.log("select medicine success");
+          dispatch(setMedicine(results.rows._array));
+          
+        },
+        (_, err) => {
+          console.log("insert medicine error", err);
+          return true;
+        }
+      );
+    }, err => console.log('transaction change medicin state' ,err),
+    () => {
+
+    })
+  } catch(err) {
+    console.log('change medicn state', err)
+  }
+}
+
+export function changeTimeState(dispatch) {
+  db.transaction(tx => {
+    tx.executeSql(
+      `SELECT *
+      FROM MEDICINE
+      INNER JOIN TIME
+      ON MEDICINE.id = TIME.MEDICINE_id`,
+      [],
+      (tx, results) => {
+        let result = results.rows._array;
+        let newArray = result.map((data) => {
+          return {
+            ...data,
+            day: JSON.parse(data.day),
+            isNoti: data.isNoti === 1 ? true : false
+          };
+        });
+  
+        // dispatch(setTime(newArray))
+        console.log("select time", results.rows._array);
+        dispatch(setTime(newArray));
+      },
+      (_, err) => {
+        console.log("insert time error", err);
+        return true;
+      }
+    );
+  }, err => console.log('transaction change time state' ,err),
+  () => {
+  })
+}
+
 export async function updateVerify(status, id) {
   db.transaction((tx) => {
     tx.executeSql(
@@ -163,46 +221,6 @@ function convertTimeList() {
   });
 }
 
-export function addFirebase(payload) {
-  db.transaction(tx => {
-    tx.executeSql(
-      `SELECT *
-      FROM FIREBASE`,
-      [],
-      (tx, results) => {
-        console.log(results.rows)
-        if (results.rows.length < 1) {
-          tx.executeSql(
-            `INSERT INTO "FIREBASE" ("uid", "email", "provider") VALUES ('${payload.uid}', '${payload.email}', '${payload.provider}')`,
-            [],
-            (tx, results) => {
-              console.log('insert firebase success')
-            },
-            (tx, err) => {
-              console.log("insert firebase error", err);
-            }
-          );
-        } else {
-          tx.executeSql(
-            `UPDATE FIREBASE SET uid='${payload.uid}', email='${payload.email}', provider='${payload.provider}' WHERE id=1 `,
-            [],
-            (tx, results) => {
-              console.log('update firebase success')
-            },
-            (tx, err) => {
-              console.log("update firebase error", err);
-            }
-          );
-        }
-      },
-      (_, err) => {
-        console.log("select firebase error", err);
-        return true;
-      }
-    );
-  },
-  (err) => console.log(err))
-}
 
 export async function addMedicine(
   name,
@@ -664,7 +682,7 @@ export function initDB(dispatch) {
   });
 }
 
-export function delDB() {
+export function dropDB() {
   db.transaction((tx) => {
 
     tx.executeSql(
@@ -735,4 +753,46 @@ export function delDB() {
       }
     );
   });
+}
+
+export async function delDB() {
+  try {
+    db.transaction((tx) => {
+      tx.executeSql(
+        "DELETE FROM MEDICINE",
+        [],
+        (tx, results) => {
+          console.log('delete medicine')
+        },
+        (tx, error) => {
+          console.log('delete medicien', error);
+        }
+      );
+  
+      tx.executeSql(
+        "DELETE FROM TIME",
+        [],
+        (tx, results) => {
+          console.log('delete time')
+        },
+        (tx, error) => {
+          console.log('delete time', error);
+        }
+      );
+  
+      tx.executeSql(
+        "DELETE FROM HISTORY",
+        [],
+        (tx, results) => {
+          console.log('delete history')
+        },
+        (tx, error) => {
+          console.log('delete history', error);
+        }
+      );
+    },
+    (err) => console.log(err));
+  } catch (err) {
+    console.log('del db err', err)
+  }
 }
