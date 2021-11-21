@@ -31,7 +31,7 @@ import { globalStyle } from "../stylesheet/globalStylesheet";
 export default function HistoryScreen({ navigation }) {
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [isDatePickerVisible1, setDatePickerVisibility1] = useState(false);
-  var historyList = useSelector((state) => state.medicine.history);
+  let historyList = useSelector((state) => state.medicine.history);
 
   const [date, setDate] = useState(new Date());
   const [startDate,setStartDate] = useState("วันที่เริ่มต้น")
@@ -248,10 +248,10 @@ export default function HistoryScreen({ navigation }) {
             style={{ color: "black",flexDirection:"row",flex:1 }}
             onPress={() => showDatePicker1()}
           >
-            <View style={{flex:1,justifyContent:'center',alignItems:'start'}}>
+            <View style={{flex:1,justifyContent:'center',alignItems: 'flex-start'}}>
               <Text style={{fontSize:16 ,fontFamily:"Prompt-Light",fontWeight:"bold"}}>{endDate}</Text>
             </View>
-            <View style={{flex:1,alignItems:"start"}}>
+            <View style={{flex:1,alignItems:"flex-start"}}>
             <MaterialIcons name="date-range" size={40} color="black" />
             </View>
             <DateTimePickerModal
