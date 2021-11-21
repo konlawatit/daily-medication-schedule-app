@@ -4,13 +4,14 @@ import { getFirestore, setDoc, doc } from "firebase/firestore";
 import * as Google from "expo-google-app-auth";
 import * as Facebook from "expo-facebook";
 import firebaseConfig from "./firebaseConfig.json";
+import { LogBox } from 'react-native';
 
 
 if (!fb.apps.length) {
   console.log("Connected with firebase");
   fb.initializeApp(firebaseConfig);
 }
-console.ignoredYellowBox = ["Setting a timer"];
+LogBox.ignoreLogs(['Setting a timer for a long period of time'])
 
 const GoogleProvider = new fb.auth.GoogleAuthProvider();
 
@@ -21,7 +22,7 @@ import { getNextTriggerDateAsync } from "expo-notifications";
 
 export const firebase = !fb.apps.length
   ? fb.initializeApp(firebaseConfig)
-  : fb.app();
+  : fb;
 
 export async function signInAnonymous(username, password) {
   const firestore = fb.firestore();

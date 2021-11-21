@@ -233,11 +233,11 @@ export default function HistoryScreen({ navigation }) {
                 shadowColor: "#fff",
                 shadowRadius: 0,
                 shadowOpacity: 1,
-                shadowOffset: { height: 0, width: 0 }
+                shadowOffset: { height: 0, width: 0 },
               }}
               isVisible={isDatePickerVisible}
               mode="date"
-              display="spinner"
+              display="calendar"
               isDarkModeEnabled={false}
               onConfirm={handleConfirm}
               onCancel={hideDatePicker}
