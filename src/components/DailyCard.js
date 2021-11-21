@@ -8,6 +8,9 @@ import {
   Image,
   CheckBox,
   Dimensions,
+  Pressable,
+  Alert,
+  Modal,
   TouchableOpacity
 } from "react-native";
 import { useDispatch } from "react-redux";
@@ -16,28 +19,32 @@ import { selectMedicine } from "../store/actions/medicineAction";
 import { updateVerify } from "../database/database-function";
 
 export default function DailyCard(props) {
+  const [modalVisible, setModalVisible] = useState(false);
   //   let image2 = require("../../assets/" + props.image)
   let title = props.title;
   let subTitle = props.subTitle;
   const [verify, setVerify] = useState(props.verify == 1 ? true : false);
   let checkBox = props.checkBox ? props.checkBox : false;
   let id = props.id;
+  let idMed = props.idMed
   let image = props.image;
   const navigation = props.navigation;
 
   const dispatch = useDispatch();
 
+
   const toggleVerify = () => {
-    updateVerify(!verify, id);
+    updateVerify(!verify, id,dispatch);
     setVerify(!verify);
+    setModalVisible(!modalVisible)
   };
 
   return (
     <TouchableOpacity
       style={styles.card}
       onPress={() => {
-        dispatch(selectMedicine(id));
-        navigation.navigate("DrugInfo", { id });
+        dispatch(selectMedicine(idMed));
+        navigation.navigate("DrugInfo", { idMed });
       }}
     >
       <View style={{ flex: 0.7 }}>
@@ -62,7 +69,7 @@ export default function DailyCard(props) {
           {checkBox ? (
             <TouchableOpacity
               style={styles.circle}
-              onPress={() => toggleVerify()}
+              onPress={()=>setModalVisible(true)}
             >
               {verify ? (
                 <Image
@@ -84,7 +91,38 @@ export default function DailyCard(props) {
           {subTitle}
         </Text>
       </View>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          Alert.alert('Modal has been closed.');
+          setModalVisible(!modalVisible);
+        }}>
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>คุณแน่ใจหรือไม่ว่าได้รับประทาน</Text>
+            <Text style={styles.modalText}>"{subTitle}" เมื่อเวลา {title} น.</Text>
+            <View style={{flexDirection:'row'}}>
+            <Pressable
+              style={[styles.button, styles.buttonCancel]}
+              onPress={() => setModalVisible(!modalVisible)}>
+              <Text style={styles.textStyle}>Cancel</Text>
+            </Pressable>
+            <View style={{flex:0.2}}></View>
+            <Pressable
+              style={[styles.button, styles.buttonClose]}
+              onPress={toggleVerify}>
+              <Text style={styles.textStyle}>Confirm</Text>
+            </Pressable>
+
+            </View>
+          </View>
+        </View>
+      </Modal>
+
     </TouchableOpacity>
+
   );
 }
 
@@ -141,5 +179,49 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     justifyContent: "center",
     alignItems: "center"
-  }
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor:'rgba(0,0,0,0.5)'
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+    flex:1
+  },
+  buttonClose: {
+    backgroundColor: '#2196F3',
+  },
+  buttonCancel: {
+    backgroundColor: '#eb3148',
+  },
+  textStyle: {
+    color: 'white',
+    fontFamily: "Prompt-Light",
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },  modalText: {
+    marginBottom: 15,
+    fontSize:18,
+    fontFamily: "Prompt-Light",
+    textAlign: 'center',
+  },
 });

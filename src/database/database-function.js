@@ -9,13 +9,38 @@ import {
 import { DatabaseConnection } from "../database/database-connection";
 const db = DatabaseConnection.getConnection();
 
-export async function updateVerify(status, id) {
+export async function updateVerify(status, id, dispatch) {
   db.transaction((tx) => {
     tx.executeSql(
-      `UPDATE TIME SET status = 0 WHERE id = ${id} `,
+      `UPDATE TIME SET status = ${status?1:0} WHERE id = ${id} `,
       [],
       (tx, results) => {
         console.log("update success");
+        tx.executeSql(
+          `SELECT *
+          FROM MEDICINE
+          INNER JOIN TIME
+          ON MEDICINE.id = TIME.MEDICINE_id`,
+          [],
+          (tx, results) => {
+            let result = results.rows._array;
+            let newArray = result.map((data) => {
+              return {
+                ...data,
+                day: JSON.parse(data.day),
+                isNoti: data.isNoti === 1 ? true : false
+              };
+            });
+
+            // dispatch(setTime(newArray))
+            console.log("select time", results.rows._array);
+            dispatch(setTime(newArray));
+          },
+          (_, err) => {
+            console.log("insert time error", err);
+            return true;
+          }
+        );
       },
       (tx, err) => {
         console.log("update verify error", err);

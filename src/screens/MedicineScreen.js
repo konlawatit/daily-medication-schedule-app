@@ -48,7 +48,7 @@ export default function MedicineScreen({ navigation }) {
 
       
       {Platform.OS == "ios" ? (
-       <TouchableOpacity style={{zIndex: 100,position:'absolute', alignSelf:'flex-end'}} onPress={() => navigation.navigate("addMedicine")} >
+       <TouchableOpacity style={{position:'absolute',zIndex:100,bottom:0,right:0}} onPress={() => navigation.navigate("addMedicine")} >
           <Image source={require('../../assets/add.png')} />
         </TouchableOpacity> 
         
