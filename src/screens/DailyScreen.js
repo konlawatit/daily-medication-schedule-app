@@ -29,7 +29,6 @@ import DailyCard from "../components/DailyCard";
 export default function DailyScreen({ navigation }) {
   var days = ['su','mo','tu','we','th','fr','sa'];
   var timeList = useSelector((state) => state.medicine.time);
-  console.log('original timelist ---> ', timeList)
   timeList = timeList.sort(function(a, b) {
     var keyA = a.time,
       keyB = b.time;

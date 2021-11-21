@@ -3,34 +3,10 @@ import { DatabaseConnection } from "../database/database-connection";
 const db = DatabaseConnection.getConnection();
 import { delDB } from "./database-function";
 
-import { changeMedicineState, changeTimeState } from "./database-function";
-import { firebase } from "../../firebase";
-
-export function upLocalToFirebase(payload) {
-    const firestore = firebase.firestore();
-  db.transaction(
-    (tx) => {
-      tx.executeSql(
-        `SELECT *
-            FROM MEDICINE`,
-        [],
-        (tx, results) => {
-          const medicine = results.rows._array
-          medicine.forEach(data => {
-            console.log('local to firebase --->', data)
-          })
-        },
-        (_, err) => {
-          console.log("up local to firebase", err);
-        }
-      );
-    },
-    (err) => console.log("treacsactionn up local to firebase", err),
-    () => {}
-  );
-}
+import { changeMedicineState, changeTimeState, changeHistoryState } from "./database-function";
 
 export async function setDataToLocal(payload, navigation, dispatch) {
+  console.log('seeeeeeeeeeeeeeeeeeeeeeeeeeee', payload)
   try {
     db.transaction(
       (tx) => {
@@ -64,14 +40,38 @@ export async function setDataToLocal(payload, navigation, dispatch) {
                   }
                 );
               });
+
+              data.history.forEach((history) => {
+                console.log('history ------------>', history)
+                tx.executeSql(
+                  `INSERT INTO "HISTORY" ("date","time","MEDICINE_id") VALUES (?, ?, ?)`,
+                  [
+                    history.date,
+                    history.time,
+                    results.insertId
+                  ],
+                  (tx, results) => {
+                    console.log(
+                      "Insert HISTORY------> firebase id",
+                      results.insertId
+                    );
+                  },
+                  (tx, err) => {
+                    console.log("err HISTORY firebase", err);
+                  }
+                );
+              });
             },
             (tx, err) => {
               console.log("err medicine firebase", err);
             }
           );
         });
+        // history.forEach()
         changeMedicineState(dispatch, navigation);
         changeTimeState(dispatch, navigation);
+        changeHistoryState(dispatch, navigation)
+        
       },
       (err) => console.log("treacsactionn setDataToLocal", err),
       () => {
@@ -124,6 +124,7 @@ export async function loginFirebase(
               }
 
               let medicine = payloadData.medicine;
+              let history = payloadData.history;
 
               setDataToLocal(medicine, navigation, dispatch);
               // changeMedicineState(dispatch, navigation)

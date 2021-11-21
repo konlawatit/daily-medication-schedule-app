@@ -16,7 +16,8 @@ import {
 import { useDispatch } from "react-redux";
 import { selectMedicine } from "../store/actions/medicineAction";
 
-import { updateVerify } from "../database/database-function";
+import { updateVerify} from "../database/database-function";
+import { upLocalToFirebase } from "../database/database-firestore"
 
 export default function DailyCard(props) {
   const [modalVisible, setModalVisible] = useState(false);
@@ -43,6 +44,7 @@ export default function DailyCard(props) {
     <TouchableOpacity
       style={styles.card}
       onPress={() => {
+        // upLocalToFirebase()
         dispatch(selectMedicine(idMed));
         navigation.navigate("DrugInfo", { idMed });
       }}

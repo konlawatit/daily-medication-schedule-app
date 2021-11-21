@@ -10,6 +10,7 @@ import { LogBox } from 'react-native';
 if (!fb.apps.length) {
   console.log("Connected with firebase");
   fb.initializeApp(firebaseConfig);
+  fb.firestore().settings({ experimentalForceLongPolling: true });
 }
 LogBox.ignoreLogs(['Setting a timer for a long period of time'])
 
@@ -17,7 +18,7 @@ const GoogleProvider = new fb.auth.GoogleAuthProvider();
 
 //sqlite
 import { loginFirebase } from "./src/database/database-firebase";
-import { changeMedicineState } from "./src/database/database-function";
+// import { changeMedicineState } from "./src/database/database-function";
 import { getNextTriggerDateAsync } from "expo-notifications";
 
 export const firebase = !fb.apps.length
@@ -147,13 +148,16 @@ function onSignIn(googleUser, dispatch, navigation) {
       };
       const payloadData = await getAllData(payloadUser.uid)
       // console.log(payloadData)
+      console.log('payload data', payloadData)
       loginFirebase(payloadUser, payloadData, dispatch, navigation)
+
       
 
       console.log(
         "User already signed-in Firebase.",
         firebaseUser.uid,
-        firebaseUser.email
+        firebaseUser.email,
+        payloadData
       );
     }
   });
@@ -212,6 +216,41 @@ export async function getAllData(uid) {
         let result
         await userRef.get().then(data => {
           result = data.data()
+        })
+        return result
+  } catch (err) {
+    console.log('get all data error', err)
+  }
+}
+
+export async function setData() {
+  try {
+    const firestore = firebase.firestore();
+        const userRef = firestore.collection('users').doc("Mx4dra711kadIj2C9oIfUl3wKEC3")
+        await userRef.set({
+          history: [],
+          medicine: [
+            {
+              name: 'ยาแก้ปวด',
+              note: 'no',
+              description: 'test',
+              image: '',
+              time: [
+                {
+                  time: '13:00',
+                  isNoti: true,
+                  status: false,
+                  day: '{"mo": 1,"tu": 1,"we": 1,"th":1,"fr":1,"sa":1,"su":1}'
+                }
+              ],
+              history: [
+                {
+                  date: '21/11/2021',
+                  time: '13:00',
+                } 
+              ]
+          }
+          ]
         })
         return result
   } catch (err) {

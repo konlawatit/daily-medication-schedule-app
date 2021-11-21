@@ -62,7 +62,7 @@ export default function DrugInfoScreen({ navigation, route }) {
   
   
   const [testTime, setTestTime] = useState()
-  console.log('select time list medicitn', selectTimeList)
+  // console.log('select time list medicitn', selectTimeList)
   
   useEffect(() => {
     console.log('helo worlddddddddddddddddddddddddddddddddddd')

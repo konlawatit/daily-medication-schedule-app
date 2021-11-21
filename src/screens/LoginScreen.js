@@ -2,8 +2,10 @@ import React, { useContext, useState } from "react";
 import { StyleSheet, Text, View, Button, TextInput, Image, TouchableHighlight, TouchableOpacity } from "react-native";
 import { LinearGradient } from 'expo-linear-gradient';
 import { useDispatch } from "react-redux";
+import NetInfo from '@react-native-community/netinfo';
 
-import { signInWithGoogleAsync, logInFacebook } from '../../firebase'
+import { signInWithGoogleAsync, logInFacebook, setData } from '../../firebase'
+import { upLocalToFirebase } from "../database/database-firestore";
 
 export default function LoginScreen({navigation}) {
   const dispatch = useDispatch()
@@ -35,6 +37,14 @@ export default function LoginScreen({navigation}) {
       <View style={styles.line} />
 
       <TouchableOpacity style={styles.submitGoogle} underlayColor="grey" onPress={() => {
+        // setData()
+        const unsubscribe = NetInfo.addEventListener(state => {
+          console.log('Connection type', state.type);
+          console.log('Is connected?', state.isConnected);
+          if (state.isConnected) {
+            // upLocalToFirebase()
+          }
+        });
           signInWithGoogleAsync(navigation, dispatch);
         }} >
           <View style={styles.insideSubmit} >

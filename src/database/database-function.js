@@ -3,12 +3,109 @@ import {
   setTime,
   selectMedicine,
   stackDeleteTime,
-  setHistory
+  setHistory,
 } from "../store/actions/medicineAction";
+// import { firebase } from "../../firebase";
 
 //sqlite
 import { DatabaseConnection } from "../database/database-connection";
 const db = DatabaseConnection.getConnection();
+
+// export function upLocalToFirebase() {
+//   const firestore = firebase.firestore();
+//   db.transaction(
+//     (tx) => {
+//       tx.executeSql(
+//         `SELECT *
+//             FROM FIREBASE`,
+//         [],
+//         (tx, results) => {
+//             const row2 = results.rows._array;
+//             console.log('111111111111',row2[0].uid)
+//           tx.executeSql(
+//             `SELECT *
+//                 FROM MEDICINE`,
+//             [],
+//             (tx, results) => {
+//               const medicine = results.rows._array;
+//               let payload = {
+//                 history: [],
+//                 medicine: []
+//               };
+
+//               medicine.forEach((data) => {
+//                 let medList = {
+//                   name: data.name,
+//                   note: data.note,
+//                   description: data.description,
+//                   iamge: data.image,
+//                   time: []
+//                 };
+//                 console.log("local to firebase --->", data);
+
+//                 tx.executeSql(
+//                   `SELECT *
+//                         FROM TIME WHERE MEDICINE_id = ${data.id}`,
+//                   [],
+//                   (tx, results) => {
+//                     let timeList = results.rows._array;
+//                     timeList.forEach((time) => {
+//                       medList.time.push({
+//                         time: time.time,
+//                         isNoti: time.isNoti,
+//                         status: time.status,
+//                         day: time.day
+//                       });
+//                     });
+//                     // push firebase
+//                     // let userRef = firestore.collection('users').doc()
+//                     payload.medicine.push(medList);
+//                     console.log('medicine 1 -->', payload)
+//                   },
+//                   (_, err) => {
+//                     console.log("up local to firebase", err);
+//                   }
+//                 );
+//               });
+
+//               console.log('payload -->', payload);
+//             },
+//             (_, err) => {
+//               console.log("up local to firebase", err);
+//             }
+//           );
+//         },
+//         (_, err) => {
+//           console.log("up local to firebase", err);
+//         }
+//       );
+//     },
+//     (err) => console.log("treacsactionn up local to firebase", err),
+//     () => {}
+//   );
+// }
+
+export function changeHistoryState(dispatch) {
+  db.transaction(tx => {
+    tx.executeSql(
+      `SELECT * FROM HISTORY INNER JOIN MEDICINE ON MEDICINE.id = HISTORY.MEDICINE_id`,
+      [],
+      (tx, results) => {
+        let result = results.rows._array;
+        
+        // dispatch(setTime(newArray))
+        console.log("select history", result);
+        dispatch(setHistory(result));
+      },
+      (_, err) => {
+        console.log("insert history error", err);
+        return true;
+      }
+    );
+  }, err => console.log('transaction change history state' ,err),
+  () => {
+  })
+}
 
 export async function changeMedicineState(dispatch) {
   try {
