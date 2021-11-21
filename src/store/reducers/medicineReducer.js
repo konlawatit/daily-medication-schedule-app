@@ -1,6 +1,7 @@
 import {
   SELECT_MEDICINE,
   SET_MEDICINE,
+  SET_HISTORY,
   SET_TIME,
   STACK_TIME,
   CLEAR_STACK_TIME,
@@ -18,10 +19,13 @@ const initialState = {
   selectMedicine: {},
   selectTime: {},
   stackTime: [],
-  stackDeleteTime: []
+  stackDeleteTime: [],
+  history:[]
 };
 const mealsReducer = (state = initialState, action) => {
   switch (action.type) {
+    case SET_HISTORY:
+      return { ...state, history:action.getHistory}
     case SET_MEDICINE:
       return { ...state, medicine: action.getMedicine };
     case SET_TIME:

@@ -2,7 +2,8 @@ import {
   setMedicine,
   setTime,
   selectMedicine,
-  stackDeleteTime
+  stackDeleteTime,
+  setHistory
 } from "../store/actions/medicineAction";
 
 //sqlite
@@ -67,20 +68,80 @@ export function changeTimeState(dispatch) {
   })
 }
 
-export async function updateVerify(status, id) {
+export async function updateVerify(status, id, dispatch,idMed) {
+  var fulldate = new Date()
+  var date = fulldate.getDate().toString()+"/"+(fulldate.getMonth()+1).toString()+"/"+fulldate.getFullYear().toString()
+  var time = fulldate.getHours().toString()+"."+fulldate.getMinutes().toString()
+  console.log(fulldate)
   db.transaction((tx) => {
     tx.executeSql(
-      `UPDATE TIME SET status = 0 WHERE id = ${id} `,
+      `INSERT INTO "HISTORY"("date","time","MEDICINE_id") VALUES (?,?, ?)`,
+      [date,time,idMed],
+      (tx, results) => {    
+        tx.executeSql(
+          `SELECT *
+          FROM HISTORY
+          INNER JOIN MEDICINE
+          ON MEDICINE.id = HISTORY.MEDICINE_id`,
+          [],
+          (tx, results) => {
+            let result = results.rows._array;
+            let newArray = result.map((data) => {
+              return {
+                ...data,
+              };
+            });
+            dispatch(setHistory(newArray));
+          },
+          (_, err) => {
+            return true;
+          }
+        );
+      },
+      (tx, err) => {
+      },
+    );
+    tx.executeSql(
+      `UPDATE TIME SET status = ${status?1:0} WHERE id = ${id} `,
       [],
       (tx, results) => {
         console.log("update success");
+        
+        tx.executeSql(
+          `SELECT *
+          FROM MEDICINE
+          INNER JOIN TIME
+          ON MEDICINE.id = TIME.MEDICINE_id`,
+          [],
+          (tx, results) => {
+            let result = results.rows._array;
+            let newArray = result.map((data) => {
+              return {
+                ...data,
+                day: JSON.parse(data.day),
+                isNoti: data.isNoti === 1 ? true : false
+              };
+            });
+
+            // dispatch(setTime(newArray))
+            console.log("select time", results.rows._array);
+            dispatch(setTime(newArray));
+          },
+          (_, err) => {
+            console.log("insert time error", err);
+            return true;
+          }
+        );
+        
       },
       (tx, err) => {
         console.log("update verify error", err);
-      }
+      },
     );
+
   });
 }
+
 
 export function updateIsNoti(status, id, dispatch) {
   db.transaction((tx) => {
@@ -121,6 +182,7 @@ export function updateIsNoti(status, id, dispatch) {
     );
   });
 }
+
 
 export function updateTime(payload, dispatch) {
   db.transaction(
@@ -593,9 +655,10 @@ export function initDB(dispatch) {
     tx.executeSql(
       `CREATE TABLE IF NOT EXISTS "HISTORY" (
         "id"	INTEGER,
-        "name"	TEXT NOT NULL,
         "date"	TEXT NOT NULL,
         "time"	TEXT NOT NULL,
+        "MEDICINE_id"	INTEGER,
+        FOREIGN KEY("MEDICINE_id") REFERENCES "medicine"("id"),
         PRIMARY KEY("id" AUTOINCREMENT)
       )`,
       [],
@@ -614,6 +677,20 @@ export function initDB(dispatch) {
       },
       (_, err) => {
         console.log("insert medicine error", err);
+        return true;
+      }
+    );
+
+    
+    tx.executeSql(
+      `INSERT INTO "HISTORY" ("date","time","MEDICINE_id") VALUES ('21/11/2021','13:00',1),
+      ('21/11/2021','14:00',2)`,
+      [],
+      (tx, results) => {
+        console.log("Insert History");
+      },
+      (_, err) => {
+        console.log("insert History error", err);
         return true;
       }
     );
@@ -642,6 +719,21 @@ export function initDB(dispatch) {
       },
       (_, err) => {
         console.log("insert medicine error", err);
+        return true;
+      }
+    );
+
+    tx.executeSql(
+      `SELECT *
+      FROM HISTORY       INNER JOIN MEDICINE
+      ON MEDICINE.id = HISTORY.MEDICINE_id`,
+      [],
+      (tx, results) => {
+        console.log(results.rows);
+        dispatch(setHistory(results.rows._array));
+      },
+      (_, err) => {
+        console.log("select history error", err);
         return true;
       }
     );

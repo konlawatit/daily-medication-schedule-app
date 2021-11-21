@@ -1,5 +1,6 @@
 export const SET_MEDICINE = "SET_MEDICINE";
 export const SET_TIME = "SET_TIME"
+export const SET_HISTORY = "SET_HISTORY"
 export const CLEAR_TIME = "CLEAR_TIME";
 
 export const SELECT_MEDICINE = "GET_MEDICINE";
@@ -10,6 +11,11 @@ export const STACK_DELETE_TIME = "STACK_DELETE_TIME"
 export const REDUCE_STACK_DELETE_TIME = "REDUCE_STACK_DELETE_TIME" 
 export const CLEAR_STACK_DELETE_TIME = "CLEAR_STACK_DELETE_TIME"
 export const UPDATE_TINE_IN_TINE = "UPDATE_TINE_IN_TINE"
+
+
+export const setHistory = (historyList) => {
+  return { type: SET_HISTORY, getHistory: historyList };
+};
 
 export const setMedicine = (medicineList) => {
   return { type: SET_MEDICINE, getMedicine: medicineList };
