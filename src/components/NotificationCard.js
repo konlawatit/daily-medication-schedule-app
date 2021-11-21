@@ -20,20 +20,30 @@ import { MaterialIcons, AntDesign } from "@expo/vector-icons";
 import { stackDeleteTime, reduceStackDeleteTime } from "../store/actions/medicineAction";
 import { deleteNotificationCategoryAsync } from "expo-notifications";
 
+//sqlite
+import { updateIsNoti } from "../database/database-function";
+
+//store
+import { selectTime } from "../store/actions/medicineAction";
+
 //Components
 export default function NotificationCard(props) {
   const dispatch = useDispatch();
-  const [isEnabled, setIsEnabled] = useState(true);
+  const [isEnabled, setIsEnabled] = useState(props.isNoti == 1 ? true : false);
   const [time, setTime] = useState(props.time);
   const [day, setDay] = useState(props.day);
   const [id, setId] = useState(props.id)
+  // console.log('is noy',props.isNoti)
 
 
-  const toggleSwitch = () =>
+  const toggleSwitch = () =>{
     setIsEnabled(
-      (previousState) => !previousState,
-      console.log("" + isEnabled)
+      (previousState) => {
+        updateIsNoti(!isEnabled, id, dispatch)
+        return !previousState
+      }
     );
+  }
   
     const delNoti = () => {
       dispatch(reduceStackDeleteTime(id))
@@ -48,7 +58,10 @@ export default function NotificationCard(props) {
 
     <TouchableOpacity
       style={styles.cardOn}
-      onPress={() => props.navigation.navigate("NotificationTime")}
+      onPress={() => {
+        props.navigation.navigate("EditNotificationTime", {id})
+        dispatch(selectTime(id))
+      }}
     >
       {/* <AntDesign name="delete" size={24} color="red" /> */}
       <View style={styles.imagePart}>

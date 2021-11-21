@@ -50,7 +50,7 @@ export default function AddMedicineScreen({ navigation }) {
   let dispatch = useDispatch();
 
   const save = (name, note, description, image) => {
-    if (name&&note&&image) {
+    if (name) {
       addMedicine(name, note, description, timeList, image, dispatch);
       dispatch(clearStackTime());
       navigation.navigate("Medicine");
@@ -146,7 +146,7 @@ export default function AddMedicineScreen({ navigation }) {
     };
 
     return (
-      <View style={[globalStyle.Addcontainer]}>
+      <View style={[globalStyle.Addcontainer,{marginTop:10}]}>
         <LinearGradient
           // Background Linear Gradient
           colors={["rgba(255,255,255,1)", "transparent"]}
@@ -357,6 +357,17 @@ export default function AddMedicineScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+  modalView: {
+    width: "80%",
+    height: 220,
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 15,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOpacity: 1,
+    elevation: 15,
+  },
   bottomTabs: {
     flexDirection: "row",
     marginTop: 20,
@@ -383,17 +394,6 @@ const styles = StyleSheet.create({
   image: {
     width: "100%",
     height: "100%",
-  },
-  modalView: {
-    width: "80%",
-    height: "35%",
-    margin: 20,
-    backgroundColor: "white",
-    borderRadius: 15,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOpacity: 1,
-    elevation: 15,
   },
   modalText: {
     color: "rgba(0,0,0,1)",

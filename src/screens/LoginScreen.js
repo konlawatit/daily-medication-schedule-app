@@ -1,10 +1,12 @@
 import React, { useContext, useState } from "react";
 import { StyleSheet, Text, View, Button, TextInput, Image, TouchableHighlight, TouchableOpacity } from "react-native";
 import { LinearGradient } from 'expo-linear-gradient';
+import { useDispatch } from "react-redux";
 
 import { signInWithGoogleAsync, logInFacebook } from '../../firebase'
 
 export default function LoginScreen({navigation}) {
+  const dispatch = useDispatch()
 
   return (
     <View style={styles.container}>
@@ -33,7 +35,7 @@ export default function LoginScreen({navigation}) {
       <View style={styles.line} />
 
       <TouchableOpacity style={styles.submitGoogle} underlayColor="grey" onPress={() => {
-          signInWithGoogleAsync();
+          signInWithGoogleAsync(navigation, dispatch);
         }} >
           <View style={styles.insideSubmit} >
               <View>

@@ -1,9 +1,9 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import { Button, Dimensions, Text, View, StyleSheet } from "react-native";
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { useDispatch } from "react-redux"
+import { useDispatch } from "react-redux";
 
 import { FontAwesome5, FontAwesome, Fontisto } from "@expo/vector-icons";
 
@@ -21,6 +21,7 @@ import DrugInfoScreen from "../screens/DrugInfoScreen";
 import EditDrugInfoScreen from "../screens/EditDrugInfoScreen";
 import NotiScreen from "../screens/NotificationScreen";
 import NotificationTimeScreen from "../screens/NotificationTimeScreen";
+import EditNotificationTimeScreen from "../screens/EditNotificationTimeScreen";
 import TestNoti from "../screens/TestNoti";
 
 const MyTheme = {
@@ -32,7 +33,6 @@ const MyTheme = {
 };
 
 function HomeNavigator() {
-  
   return (
     <Tab.Navigator
       screenOptions={{
@@ -85,16 +85,15 @@ function HomeNavigator() {
 }
 
 // สร้าง Navigator หลัก
-import { initDB, delDB } from "../database/database-function";
+import { initDB, dropDB } from "../database/database-function";
 import NotificationScreen from "../screens/NotificationScreen";
 export default function MyNavigator() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    delDB()
-    initDB(dispatch)
-  }, [])
-
+    dropDB();
+    initDB(dispatch);
+  }, []);
 
   return (
     <NavigationContainer
@@ -113,6 +112,10 @@ export default function MyNavigator() {
         <Stack.Screen
           name="NotificationTime"
           component={NotificationTimeScreen}
+        />
+        <Stack.Screen
+          name="EditNotificationTime"
+          component={EditNotificationTimeScreen}
         />
         <Stack.Screen name="Noti" component={NotiScreen} />
         <Stack.Screen
@@ -149,20 +152,19 @@ export default function MyNavigator() {
             },
           }}
         />
-        
+
         <Stack.Screen
           name="addMedicine"
           component={AddMedicineScreen}
           options={{
             title: "เพิ่มข้อมูลยา",
-            headerShown: true,
+            headerShown: false,
             headerTitleStyle: {
               fontFamily: "Prompt-Light",
               color: "#0080fe",
             },
           }}
         />
-
       </Stack.Navigator>
     </NavigationContainer>
   );

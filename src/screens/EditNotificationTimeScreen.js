@@ -19,27 +19,33 @@ import { useDispatch } from "react-redux";
 //Components
 import SetNotiCard from "../components/SetNotiCard";
 
-import { stackTime } from "../store/actions/medicineAction";
+import { stackTime, updateTimeInTime, selectMedicine, clearTime } from "../store/actions/medicineAction";
 
-import { addTime } from "../database/database-function";
+import { updateTime } from "../database/database-function";
 
-export default function NotificationTimeScreen({ navigation, route }) {
-  const [hour, setHour] = useState("02");
-  const [min, setMin] = useState("02");
-  const [hourIndex, setHourIndex] = useState(1);
-  const [minIndex, setMinIndex] = useState(1);
-  const [id, setId] = useState(route.params ? route.params.id : null )
+export default function EditNotificationTimeScreen({ navigation, route }) {
+  const dispatch = useDispatch();
+  const selectTime = useSelector((state) => state.medicine.selectTime);
+  
+  const [hour, setHour] = useState();
+  const [min, setMin] = useState();
+  const [hourArr, setHourArr] = useState(["00","01", "02", "03", "04", "05", "06","07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24"])
+  const [minArr, setMinArr] = useState(["00","01", "02", "03", "04", "05", "06", "07", "08", "09", "10","11", "12", "13", "14", "15", "16", "17", "18", "19", "20","21", "22", "23", "24", "25", "26", "27", "28", "29", "30","41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59", "60"])
+  const [hourIndex, setHourIndex] = useState(hourArr.indexOf(selectTime.time.split(":")[0]));
+  const [minIndex, setMinIndex] = useState(minArr.indexOf(selectTime.time.split(":")[1]));
+  const [id, setId] = useState(route.params.id)
 
 
-  const [day, setDay] = useState({
-    fr: 1,
-    mo: 1,
-    sa: 1,
-    su: 1,
-    th: 1,
-    tu: 1,
-    we: 1
-  });
+  // const [day, setDay] = useState({
+  //   fr: 1,
+  //   mo: 1,
+  //   sa: 1,
+  //   su: 1,
+  //   th: 1,
+  //   tu: 1,
+  //   we: 1
+  // });
+  const [day, setDay] = useState(selectTime.day)
 
   const [options, setOptions] = useState([
     { id: 1, title: "เสียงการแจ้งเตือน", subTitle: "Homecoming", value: false },
@@ -48,24 +54,31 @@ export default function NotificationTimeScreen({ navigation, route }) {
     { id: 4, title: "แจ้งเตือนซ้ำ", value: false }
   ]);
 
-  const dispatch = useDispatch();
-  const timeList = useSelector((state) => state.medicine.stackTime);
   function confirm() {
+    // let payload = {
+      // time: hourArr[hourIndex]+":"+minArr[minIndex],
+    //   id: selectTime.MEDICINE_id,
+    //   day
+    //   // options
+    // };
+
     let payload = {
-      time: hour+":"+min,
+      time: hourArr[hourIndex]+":"+minArr[minIndex],
       status: false,
       isNoti: true,
       day
       // options
     };
 
-    if (id) {
-      addTime({...payload, id}, dispatch)
-      navigation.navigate('DrugInfo', {id})
-    } else {
-      dispatch(stackTime(payload));
-      navigation.navigate('addMedicine')
-    }
+    updateTime({...payload, id: selectTime.MEDICINE_id, timeId: id}, dispatch)
+    navigation.navigate('DrugInfo', {id: selectTime.MEDICINE_id})
+
+    // updateTime(payload, dispatch)
+    // clearTime(id)
+    // navigation.goBack();
+    // dispatch(selectMedicine(selectTime.MEDICINE_id));
+    // dispatch(updateTimeInTime(id, payload.time, payload.day))
+    // navigation.navigate("DrugInfo", { id: selectTime.MEDICINE_id });
   }
 
   const renderItem = (itemData) => {
@@ -86,8 +99,8 @@ export default function NotificationTimeScreen({ navigation, route }) {
         <View style={[styles.time]}>
           <ScrollPicker
             wrapperColor="rgba(255,255,255,0)"
-            dataSource={["01", "02", "03", "04", "05", "06"]}
-            selectedIndex={1}
+            dataSource={hourArr}
+            selectedIndex={hourIndex}
             style={{ backgroundColor: "black" }}
             renderItem={(data, index) => {
               return (
@@ -123,8 +136,8 @@ export default function NotificationTimeScreen({ navigation, route }) {
           </View>
           <ScrollPicker
             wrapperColor="rgba(255,255,255,0)"
-            dataSource={["01", "02", "03", "04", "05", "06"]}
-            selectedIndex={1}
+            dataSource={minArr}
+            selectedIndex={minIndex}
             style={{ backgroundColor: "black" }}
             renderItem={(data, index) => {
               return (
@@ -266,10 +279,18 @@ export default function NotificationTimeScreen({ navigation, route }) {
             justifyContent: "space-evenly"
           }}
           renderItem={renderItem}
-          keyExtractor={(item, index) => index.toString()}
+          keyExtractor={(item, index) => item.id.toString()}
         />
       </View>
       <View style={styles.section3}>
+        <View
+          style={{
+            flexDirection: "row",
+            width: "100%",
+            height: 60,
+            backgroundColor: "rgba(42,42,42,1)"
+          }}
+        >
           <TouchableOpacity
             style={styles.confirmBox}
             onPress={() => navigation.goBack()}
@@ -280,6 +301,7 @@ export default function NotificationTimeScreen({ navigation, route }) {
             <TouchableOpacity onPress={() => confirm()}>
               <Text style={styles.confirmText}>บันทึก</Text>
             </TouchableOpacity>
+          </View>
         </View>
       </View>
     </View>
@@ -316,10 +338,8 @@ const styles = StyleSheet.create({
     // borderWidth: 1,
   },
   section3: {
-    flexDirection: "row",
-    paddingTop:"3%",
-    paddingBottom:"3%",
-    backgroundColor: "rgba(42,42,42,1)",
+    flex: 0.2,
+
     // borderWidth: 1,
     width: "100%",
     justifyContent: "flex-end",

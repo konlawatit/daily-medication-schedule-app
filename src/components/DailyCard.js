@@ -11,7 +11,7 @@ import {
   Pressable,
   Alert,
   Modal,
-  TouchableOpacity,
+  TouchableOpacity
 } from "react-native";
 import { useDispatch } from "react-redux";
 import { selectMedicine } from "../store/actions/medicineAction";
@@ -21,6 +21,7 @@ import { globalStyle } from "../stylesheet/globalStylesheet";
 import { Ionicons, EvilIcons, Entypo, AntDesign } from "@expo/vector-icons";
 
 export default function DailyCard(props) {
+  const [modalVisible, setModalVisible] = useState(false);
   //   let image2 = require("../../assets/" + props.image)
   let title = props.title;
   let subTitle = props.subTitle;
@@ -28,24 +29,25 @@ export default function DailyCard(props) {
   const [modalVisible, setModalVisible] = useState(props.verify == 1 ? true : false);
   let checkBox = props.checkBox ? props.checkBox : false;
   let id = props.id;
-  let idMed = props.idMed;
+  let idMed = props.idMed
   let image = props.image;
   const navigation = props.navigation;
 
   const dispatch = useDispatch();
 
+
   const toggleVerify = () => {
-    updateVerify(!verify, id, dispatch, idMed);
+    updateVerify(!verify, id,dispatch,idMed);
     setVerify(!verify);
-    setModalVisible(!modalVisible);
+    setModalVisible(!modalVisible)
   };
 
   return (
     <TouchableOpacity
       style={styles.card}
       onPress={() => {
-        dispatch(selectMedicine(id));
-        navigation.navigate("DrugInfo", { id });
+        dispatch(selectMedicine(idMed));
+        navigation.navigate("DrugInfo", { idMed });
       }}
     >
       <View style={{ flex: 0.7 }}>
@@ -70,7 +72,7 @@ export default function DailyCard(props) {
           {checkBox ? (
             <TouchableOpacity
               style={styles.circle}
-              onPress={() => setModalVisible(true)}
+              onPress={()=>setModalVisible(true)}
             >
               {verify ? (
                 <Image
@@ -92,7 +94,6 @@ export default function DailyCard(props) {
           {subTitle}
         </Text>
       </View>
-      
       <Modal
         animationType="fade"
         transparent={true}
@@ -134,6 +135,7 @@ export default function DailyCard(props) {
         </View>
       </Modal>
     </TouchableOpacity>
+
   );
 }
 

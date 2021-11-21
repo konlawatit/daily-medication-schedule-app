@@ -1,4 +1,5 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import { AccordionList } from "accordion-collapse-react-native";
 import {
   StyleSheet,
@@ -17,6 +18,7 @@ import DropDown from "react-native-dropdown-picker";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import Icon from "react-native-vector-icons/FontAwesome";
+import SelectDropdown from 'react-native-select-dropdown'
 
 //Components
 import HeaderTitle from "../components/HeaderTitle";
@@ -28,59 +30,89 @@ import { globalStyle } from "../stylesheet/globalStylesheet";
 
 export default function HistoryScreen({ navigation }) {
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const [isDatePickerVisible1, setDatePickerVisibility1] = useState(false);
+  let historyList = useSelector((state) => state.medicine.history);
 
   const [date, setDate] = useState(new Date());
-  const [open, setOpen] = useState(false);
-  const [data, setData] = useState();
+  const [startDate,setStartDate] = useState("วันที่เริ่มต้น")
+  const [endDate,setEndDate] = useState("วันที่สิ้นสุด")
+  const [option,setOption] = useState("ดูทั้งหมด");
+  function getUnique(array){
+    let i = 0
+    var uniqueArray = [];
+    
+    // Loop through array values
+    for(i=0; i < array.length; i++){
+        if(uniqueArray.indexOf(array[i]) === -1) {
+            uniqueArray.push(array[i]);
+        }
+    }
+    return uniqueArray;
+  }
+  function isBetween(date){
+    var d1 = startDate.split("/");
+    var d2 = endDate.split("/");
+    var c = date.date.split("/");
+
+    var from = new Date(d1[2], parseInt(d1[1])-1, d1[0]);  // -1 because months are from 0 to 11
+    var to   = new Date(d2[2], parseInt(d2[1])-1, d2[0]);
+    var check = new Date(c[2], parseInt(c[1])-1, c[0]);
+
+    return check >= from && check <= to
+  }
+
+  var dropDownOption = historyList.map(x=>x.name)
+  dropDownOption = getUnique(dropDownOption)
+  dropDownOption.splice(0,0,"ดูทั้งหมด")
+
+  if(option != "ดูทั้งหมด"){
+  historyList = historyList.filter(x=>x.name == option)
+  }
+  if((startDate != "วันที่เริ่มต้น") && (endDate != "วันที่สิ้นสุด")){
+    historyList = historyList.filter(isBetween)
+  }
+
+
+
 
   const showDatePicker = () => {
     setDatePickerVisibility(true);
   };
+  const showDatePicker1 = () => {
+    setDatePickerVisibility1(true);
+  };
 
   const hideDatePicker = () => {
     setDatePickerVisibility(false);
+    setDatePickerVisibility1(false);
   };
 
   const handleConfirm = (date) => {
-    console.log("A date has been picked: ", date);
+    let temp = date.getDate().toString()+"/"+(date.getMonth()+1).toString()+"/"+date.getFullYear()
+    setStartDate(temp)
     hideDatePicker();
   };
 
-  const tableHead = [];
-  const listData = [
-    {
-      time: "12:00",
-      title: "ยาแก้ปวด",
-      verify: true,
-      note: "ทานหลังอาหาร2เม็ด",
-      date: "13/10/2021"
-    },
-    {
-      time: "12:00",
-      title: "ยาแก้ปวด",
-      verify: true,
-      note: "ทานหลังอาหาร2เม็ด",
-      date: "12/10/2021"
-    },
-    {
-      time: "12:00",
-      title: "ยาแก้ปวด",
-      verify: true,
-      note: "ทานหลังอาหาร2เม็ด",
-      date: "12/10/2021"
-    }
-  ];
+  const handleConfirm1 = (date) => {
+    let temp = date.getDate().toString()+"/"+(date.getMonth()+1).toString()+"/"+date.getFullYear()
+    setEndDate(temp)
+    hideDatePicker();
+  };
 
-  let listDataSort = listData.sort((a, b) => {
-    if (a.date < b.date) {
-      return 1;
-    }
-    if (a.date > b.date) {
-      return -1;
-    }
-    // a must be equal to b
-    return 0;
-  });
+
+
+  
+
+  // let listDataSort = historyList.sort((a, b) => {
+  //   if (a.date < b.date) {
+  //     return 1;
+  //   }
+  //   if (a.date > b.date) {
+  //     return -1;
+  //   }
+  //   // a must be equal to b
+  //   return 0;
+  // });
 
   let stackDate = 0;
 
@@ -106,7 +138,7 @@ export default function HistoryScreen({ navigation }) {
         </DataTable.Cell>
         <DataTable.Cell style={{ justifyContent: "center" }}>
           <Text style={{ fontSize: 16, fontFamily: "Prompt-Light" }}>
-            {itemData.title}
+            {itemData.name}
           </Text>
         </DataTable.Cell>
         <DataTable.Cell style={{ justifyContent: "center" }}>
@@ -127,12 +159,15 @@ export default function HistoryScreen({ navigation }) {
             padding: (0, 0, 10, 10)
           }}
         >
-          <Image
+          {itemData.image == null ?           (<Image
             style={styles.tinyLogo}
-            source={{
-              uri: "https://reactnative.dev/img/tiny_logo.png"
-            }}
-          />
+            source={require('../../assets/test.jpg')}
+            
+          />):(<Image
+          style={styles.tinyLogo}
+          source={{uri:itemData.image}}
+          
+        />)}
         </View>
         <View
           style={{
@@ -158,18 +193,41 @@ export default function HistoryScreen({ navigation }) {
       />
 
       <HeaderTitle title="ประวัติการทานยา" />
-      <Button title="Open" onPress={() => setOpen(true)} />
-
       <View style={styles.sectionFilter}>
-        <View style={styles.sectionDropDown}>
-          <DropDownPicker />
+      <View style={styles.sectionDropDown}>
+              <SelectDropdown
+              defaultButtonText="ดูทั้งหมด"
+            buttonTextStyle={{fontSize:16 ,fontFamily:"Prompt-Light",fontWeight:"bold"}}
+            rowTextStyle={{fontSize:16 ,fontFamily:"Prompt-Light",fontWeight:"bold"}}
+          buttonStyle={{borderRadius:10,width:'100%'}}
+          dropdownStyle={{borderRadius:10}}
+          data={dropDownOption}
+          onSelect={(selectedItem, index) => {
+            setOption(selectedItem)
+          }}
+          buttonTextAfterSelection={(selectedItem, index) => {
+            return selectedItem
+          }}
+          rowTextForSelection={(item, index) => {
+            return item
+          }}
+        />
         </View>
+      </View>
+      <View style={styles.sectionFilter}>
+        
         <View style={styles.sectionDate}>
+          <View style={{flexDirection:"row"}}>
           <TouchableOpacity
-            style={{ colro: "black" }}
+            style={{ color: "black",flexDirection:"row",flex:1}}
             onPress={() => showDatePicker()}
           >
+            <View style={{flex:1,justifyContent:'center',alignItems:'flex-end'}}>
+              <Text style={{fontSize:16 ,fontFamily:"Prompt-Light",fontWeight:"bold"}}>{startDate}</Text>
+            </View>
+            <View style={{flex:1,alignItems:"center"}}>
             <MaterialIcons name="date-range" size={40} color="black" />
+            </View>
             <DateTimePickerModal
               style={{
                 shadowColor: "#fff",
@@ -178,14 +236,42 @@ export default function HistoryScreen({ navigation }) {
                 shadowOffset: { height: 0, width: 0 }
               }}
               isVisible={isDatePickerVisible}
-              mode="time"
+              mode="date"
               display="spinner"
-              isDarkModeEnabled={true}
+              isDarkModeEnabled={false}
               onConfirm={handleConfirm}
               onCancel={hideDatePicker}
               locale="th_TH"
             />
+            </TouchableOpacity>
+            <TouchableOpacity
+            style={{ color: "black",flexDirection:"row",flex:1 }}
+            onPress={() => showDatePicker1()}
+          >
+            <View style={{flex:1,justifyContent:'center',alignItems: 'flex-start'}}>
+              <Text style={{fontSize:16 ,fontFamily:"Prompt-Light",fontWeight:"bold"}}>{endDate}</Text>
+            </View>
+            <View style={{flex:1,alignItems:"flex-start"}}>
+            <MaterialIcons name="date-range" size={40} color="black" />
+            </View>
+            <DateTimePickerModal
+              style={{
+                shadowColor: "#fff",
+                shadowRadius: 0,
+                shadowOpacity: 1,
+                shadowOffset: { height: 0, width: 0 }
+              }}
+              isVisible={isDatePickerVisible1}
+              mode="date"
+              display="spinner"
+              isDarkModeEnabled={false}
+              onConfirm={handleConfirm1}
+              onCancel={hideDatePicker}
+              locale="th_TH"
+            />
           </TouchableOpacity>
+
+          </View>
         </View>
       </View>
 
@@ -208,7 +294,7 @@ export default function HistoryScreen({ navigation }) {
         </DataTable.Header>
       </DataTable>
       <AccordionList
-        list={listData}
+        list={historyList}
         header={renderItem}
         body={collapseItem}
         keyExtractor={(item, index) => index.toString()}
@@ -235,7 +321,7 @@ const styles = StyleSheet.create({
     flex: 1
   },
   sectionDropDown: {
-    flex: 1,
+    flex: 0.4,
     justifyContent: "center",
     alignItems: "center",
     marginLeft: 10,
@@ -243,10 +329,10 @@ const styles = StyleSheet.create({
   },
   sectionDate: {
     // flexDirection: "row",
-    flex: 0.8,
-    paddingRight: "10%",
-    alignItems: "flex-end",
-    justifyContent: "center"
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection:"row"
   },
   sectionFilter: {
     flexDirection: "row",
@@ -266,6 +352,7 @@ const styles = StyleSheet.create({
     flex: 0.5
   },
   tinyLogo: {
+    borderRadius:5,
     width: 80,
     height: 80
   }
