@@ -1,5 +1,5 @@
 import { StyleSheet, Dimensions } from "react-native";
-
+import { Ionicons, EvilIcons, Entypo, AntDesign } from "@expo/vector-icons";
 //AddMedicineScreens , Dailyscreens
 export const globalStyle = StyleSheet.create({
   screen: {
@@ -15,6 +15,7 @@ export const globalStyle = StyleSheet.create({
     backgroundColor: "rgba(85,194,255,0.8)",
     alignItems: "center",
     height: '100%',
+    paddingTop: 60
   },
   container: {
     backgroundColor: "rgba(85,194,255,0.8)",
@@ -132,5 +133,51 @@ export const globalStyle = StyleSheet.create({
     paddingTop:"1%",
     paddingBottom:"1%",
     bottom: 0,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor:'rgba(0,0,0,0.5)'
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 20,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+    flex:1,
+    margin:5
+  },
+  buttonClose: {
+    backgroundColor: '#2196F3',
+  },
+  buttonCancel: {
+    backgroundColor: '#eb3148',
+  },
+  textStyle: {
+    color: 'white',
+    fontFamily: "Prompt-Light",
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },  
+  modalText: {
+    marginBottom: 15,
+    fontSize:18,
+    fontFamily: "Prompt-Light",
+    textAlign: 'center',
   },
 });

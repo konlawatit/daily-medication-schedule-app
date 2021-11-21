@@ -8,12 +8,17 @@ import {
   Image,
   CheckBox,
   Dimensions,
-  TouchableOpacity
+  Pressable,
+  Alert,
+  Modal,
+  TouchableOpacity,
 } from "react-native";
 import { useDispatch } from "react-redux";
 import { selectMedicine } from "../store/actions/medicineAction";
 
 import { updateVerify } from "../database/database-function";
+import { globalStyle } from "../stylesheet/globalStylesheet";
+import { Ionicons, EvilIcons, Entypo, AntDesign } from "@expo/vector-icons";
 
 export default function DailyCard(props) {
   //   let image2 = require("../../assets/" + props.image)
@@ -22,14 +27,16 @@ export default function DailyCard(props) {
   const [verify, setVerify] = useState(props.verify == 1 ? true : false);
   let checkBox = props.checkBox ? props.checkBox : false;
   let id = props.id;
+  let idMed = props.idMed;
   let image = props.image;
   const navigation = props.navigation;
 
   const dispatch = useDispatch();
 
   const toggleVerify = () => {
-    updateVerify(!verify, id);
+    updateVerify(!verify, id, dispatch, idMed);
     setVerify(!verify);
+    setModalVisible(!modalVisible);
   };
 
   return (
@@ -62,7 +69,7 @@ export default function DailyCard(props) {
           {checkBox ? (
             <TouchableOpacity
               style={styles.circle}
-              onPress={() => toggleVerify()}
+              onPress={() => setModalVisible(true)}
             >
               {verify ? (
                 <Image
@@ -84,6 +91,47 @@ export default function DailyCard(props) {
           {subTitle}
         </Text>
       </View>
+      
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          Alert.alert("Modal has been closed.");
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <View style={globalStyle.centeredView}>
+          <View style={globalStyle.modalView}>
+            <TouchableOpacity
+              style={{ marginLeft: "91%" }}
+              onPress={() => setModalVisible(!modalVisible)}
+            >
+              <EvilIcons name="close" size={24} color="black" />
+            </TouchableOpacity>
+            <Text style={globalStyle.modalText}>
+              คุณแน่ใจหรือไม่ว่าได้รับประทาน?
+            </Text>
+            <Text style={globalStyle.modalText}>
+              "{subTitle}" เมื่อเวลา {title} น.
+            </Text>
+            <View style={{ flexDirection: "row" }}>
+              <TouchableOpacity
+                style={[globalStyle.button, globalStyle.buttonCancel]}
+                onPress={() => setModalVisible(!modalVisible)}
+              >
+                <Text style={[globalStyle.textStyle]}>ยกเลิก</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[globalStyle.button, globalStyle.buttonClose]}
+                onPress={toggleVerify}
+              >
+                <Text style={[globalStyle.textStyle]}>ตกลง</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </TouchableOpacity>
   );
 }
@@ -95,7 +143,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderColor: "grey",
     // backgroundColor:'grey',
-    opacity: 0.25
+    opacity: 0.25,
   },
   card: {
     width: "90%",
@@ -108,12 +156,12 @@ const styles = StyleSheet.create({
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 3
+      height: 3,
     },
     shadowOpacity: 0.27,
     shadowRadius: 4.65,
     elevation: 6,
-    marginBottom: 0
+    marginBottom: 0,
   },
   card2: {
     width: "90%",
@@ -126,12 +174,12 @@ const styles = StyleSheet.create({
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 3
+      height: 3,
     },
     shadowOpacity: 0.27,
     shadowRadius: 4.65,
     elevation: 6,
-    marginBottom: 10
+    marginBottom: 10,
   },
   circle: {
     borderColor: "green",
@@ -140,6 +188,6 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     borderWidth: 1,
     justifyContent: "center",
-    alignItems: "center"
-  }
+    alignItems: "center",
+  },
 });

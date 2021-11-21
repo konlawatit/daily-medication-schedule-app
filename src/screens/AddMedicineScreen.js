@@ -27,7 +27,6 @@ import NotificationCard from "../components/NotificationCard";
 
 import { addMedicine } from "../database/database-function";
 import { clearStackTime } from "../store/actions/medicineAction";
-
 import { Ionicons, EvilIcons, Entypo, AntDesign } from "@expo/vector-icons";
 
 import * as ImagePicker from "expo-image-picker";
@@ -66,25 +65,18 @@ export default function AddMedicineScreen({ navigation }) {
 
   const confirm = () => {
     setCheck(!check);
-    let payload = {};
   };
 
-  const [data, setData] = useState([
-    {
-      time: "12:00",
-    },
-    {
-      time: "12:00",
-    },
-    {
-      time: "12:00",
-    },
-  ]);
-
   const renderItem = (itemData) => {
+    console.log("----> check", itemData.item);
     return (
       <View style={{ alignItems: "center" }}>
-        <NotificationCard time={itemData.item.time} day={itemData.item.day} />
+        <NotificationCard
+          time={itemData.item.time}
+          day={itemData.item.day}
+          id={itemData.item.id}
+          isNoti={itemData.item.isNoti}
+        />
       </View>
     );
   };
@@ -189,10 +181,10 @@ export default function AddMedicineScreen({ navigation }) {
             setImageModal(!imageModal);
           }}
         >
-          <View style={[styles.centeredView, { height: "10%" }]}>
-            <View style={[styles.modalView]}>
+          <View style={[globalStyle.centeredView, { height: "10%" }]}>
+            <View style={[globalStyle.modalView]}>
               <TouchableOpacity
-                style={{ marginLeft: "91%" }}
+                style={{ marginLeft: 280 }}
                 onPress={() => setImageModal(!imageModal)}
               >
                 <EvilIcons name="close" size={24} color="black" />
@@ -204,52 +196,65 @@ export default function AddMedicineScreen({ navigation }) {
               <TouchableOpacity onPress={openCamera}>
                 <Text style={styles.modalText}>ถ่ายจากกล้อง</Text>
               </TouchableOpacity>
+              <Text style={styles.modalText}>เลือกจากรูปภาพตัวอย่าง</Text>
+              <View style={[globalStyle.line, { width: 300, marginBottom:10 }]}></View>
+              <View style={{ flexDirection: "row" }}>
+                <Image
+                  style={{ width: 90, height: 90 }}
+                  source={{
+                    uri: "https://reactnative.dev/img/tiny_logo.png",
+                  }}
+                ></Image>
+                <Image
+                  style={{ width: 90, height: 90 }}
+                  source={{
+                    uri: "https://reactnative.dev/img/tiny_logo.png",
+                  }}
+                ></Image>
+                <Image
+                  style={{ width: 90, height: 90 }}
+                  source={{
+                    uri: "https://reactnative.dev/img/tiny_logo.png",
+                  }}
+                ></Image>
+              </View>
             </View>
           </View>
         </Modal>
 
-        <Modal animationType="slide" transparent={true} visible={confirmModal}>
-          <View style={styles.centeredView}>
-            <View style={[styles.modalView]}>
+        <Modal
+          animationType="fade"
+          transparent={true}
+          visible={confirmModal}
+          onRequestClose={() => {
+            Alert.alert("Modal has been closed.");
+            setConfirmModal(!confirmModal);
+          }}
+        >
+          <View style={globalStyle.centeredView}>
+            <View style={globalStyle.modalView}>
               <TouchableOpacity
-                style={{ marginLeft: "91%" }}
+                style={{ marginLeft: 280 }}
                 onPress={() => setConfirmModal(!confirmModal)}
               >
                 <EvilIcons name="close" size={24} color="black" />
               </TouchableOpacity>
-              <Entypo name="cross" size={42} color="black" />
-              <Text
-                style={[
-                  styles.modalText,
-                  { fontSize: 25, marginTop: 10, padding: 0, marginBottom: 10 },
-                ]}
-              >
-                คุณแน่ใจนะ?
-              </Text>
-              <Text
-                style={[
-                  styles.modalText,
-                  { textAlign: "left", margin: 0, padding: 0 },
-                ]}
-              >
+              <Text style={globalStyle.modalText}>คุณแน่ใจนะ?</Text>
+              <Text style={globalStyle.modalText}>
                 ข้อมูลยาที่คุณกรอกจะหายไปทั้งหมด
               </Text>
               <View style={{ flexDirection: "row" }}>
                 <TouchableOpacity
-                  style={[styles.bottomTabs, { borderRightWidth: 0.5 }]}
+                  style={[globalStyle.button, globalStyle.buttonCancel]}
                   onPress={() => setConfirmModal(!confirmModal)}
                 >
-                  <Text style={[styles.modalText, { color: "#0080fe" }]}>
-                    ยกเลิก
-                  </Text>
+                  <Text style={[globalStyle.textStyle]}>ยกเลิก</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  style={[styles.bottomTabs]}
+                  style={[globalStyle.button, globalStyle.buttonClose]}
                   onPress={() => cancel()}
                 >
-                  <Text style={[styles.modalText, { color: "#0080fe" }]}>
-                    ตกลง
-                  </Text>
+                  <Text style={[globalStyle.textStyle]}>ตกลง</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -354,18 +359,15 @@ export default function AddMedicineScreen({ navigation }) {
 const styles = StyleSheet.create({
   bottomTabs: {
     flexDirection: "row",
-    marginTop: "6%",
+    marginTop: 20,
     width: "50%",
     justifyContent: "center",
     alignItems: "flex-end",
     alignSelf: "flex-end",
     // height: ,
     bottom: 0,
-    borderWidth: 0.5,
-    borderLeftWidth: 0,
-    borderRightWidth: 0,
-    borderColor: "grey",
-    padding: "5%",
+    padding: 10,
+    bottom: 0,
   },
   confirmBox: {
     flex: 1,
@@ -398,6 +400,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontFamily: "Prompt-Light",
     fontSize: 18,
+    marginBottom: 15,
   },
   centeredView: {
     flex: 1,
