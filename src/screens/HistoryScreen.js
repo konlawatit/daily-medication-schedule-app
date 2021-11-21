@@ -1,4 +1,5 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import { AccordionList } from "accordion-collapse-react-native";
 import {
   StyleSheet,
@@ -17,6 +18,7 @@ import DropDown from "react-native-dropdown-picker";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import Icon from "react-native-vector-icons/FontAwesome";
+import SelectDropdown from 'react-native-select-dropdown'
 
 //Components
 import HeaderTitle from "../components/HeaderTitle";
@@ -28,10 +30,19 @@ import { globalStyle } from "../stylesheet/globalStylesheet";
 
 export default function HistoryScreen({ navigation }) {
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  var historyList = useSelector((state) => state.medicine.history);
 
   const [date, setDate] = useState(new Date());
-  const [open, setOpen] = useState(false);
-  const [data, setData] = useState();
+  const [option,setOption] = useState("ดูทั้งหมด");
+  var dropDownOption = historyList.map(x=>x.name)
+  dropDownOption.splice(0,0,"ดูทั้งหมด")
+
+  if(option != "ดูทั้งหมด"){
+  historyList = historyList.filter(x=>x.name == option)
+  }
+
+
+
 
   const showDatePicker = () => {
     setDatePickerVisibility(true);
@@ -46,32 +57,10 @@ export default function HistoryScreen({ navigation }) {
     hideDatePicker();
   };
 
-  const tableHead = [];
-  const listData = [
-    {
-      time: "12:00",
-      title: "ยาแก้ปวด",
-      verify: true,
-      note: "ทานหลังอาหาร2เม็ด",
-      date: "13/10/2021"
-    },
-    {
-      time: "12:00",
-      title: "ยาแก้ปวด",
-      verify: true,
-      note: "ทานหลังอาหาร2เม็ด",
-      date: "12/10/2021"
-    },
-    {
-      time: "12:00",
-      title: "ยาแก้ปวด",
-      verify: true,
-      note: "ทานหลังอาหาร2เม็ด",
-      date: "12/10/2021"
-    }
-  ];
 
-  let listDataSort = listData.sort((a, b) => {
+
+
+  let listDataSort = historyList.sort((a, b) => {
     if (a.date < b.date) {
       return 1;
     }
@@ -106,7 +95,7 @@ export default function HistoryScreen({ navigation }) {
         </DataTable.Cell>
         <DataTable.Cell style={{ justifyContent: "center" }}>
           <Text style={{ fontSize: 16, fontFamily: "Prompt-Light" }}>
-            {itemData.title}
+            {itemData.name}
           </Text>
         </DataTable.Cell>
         <DataTable.Cell style={{ justifyContent: "center" }}>
@@ -127,12 +116,15 @@ export default function HistoryScreen({ navigation }) {
             padding: (0, 0, 10, 10)
           }}
         >
-          <Image
+          {itemData.image == null ?           (<Image
             style={styles.tinyLogo}
-            source={{
-              uri: "https://reactnative.dev/img/tiny_logo.png"
-            }}
-          />
+            source={require('../../assets/test.jpg')}
+            
+          />):(<Image
+          style={styles.tinyLogo}
+          source={{uri:itemData.image}}
+          
+        />)}
         </View>
         <View
           style={{
@@ -158,11 +150,26 @@ export default function HistoryScreen({ navigation }) {
       />
 
       <HeaderTitle title="ประวัติการทานยา" />
-      <Button title="Open" onPress={() => setOpen(true)} />
 
       <View style={styles.sectionFilter}>
         <View style={styles.sectionDropDown}>
-          <DropDownPicker />
+              <SelectDropdown
+              defaultButtonText="ดูทั้งหมด"
+            buttonTextStyle={{fontSize:16 ,fontFamily:"Prompt-Light",fontWeight:"bold"}}
+            rowTextStyle={{fontSize:16 ,fontFamily:"Prompt-Light",fontWeight:"bold"}}
+          buttonStyle={{borderRadius:10}}
+          dropdownStyle={{borderRadius:10}}
+          data={dropDownOption}
+          onSelect={(selectedItem, index) => {
+            setOption(selectedItem)
+          }}
+          buttonTextAfterSelection={(selectedItem, index) => {
+            return selectedItem
+          }}
+          rowTextForSelection={(item, index) => {
+            return item
+          }}
+        />
         </View>
         <View style={styles.sectionDate}>
           <TouchableOpacity
@@ -208,7 +215,7 @@ export default function HistoryScreen({ navigation }) {
         </DataTable.Header>
       </DataTable>
       <AccordionList
-        list={listData}
+        list={historyList}
         header={renderItem}
         body={collapseItem}
         keyExtractor={(item, index) => index.toString()}
@@ -266,6 +273,7 @@ const styles = StyleSheet.create({
     flex: 0.5
   },
   tinyLogo: {
+    borderRadius:5,
     width: 80,
     height: 80
   }

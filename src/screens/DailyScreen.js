@@ -27,6 +27,7 @@ import HeaderTitle from "../components/HeaderTitle";
 import DailyCard from "../components/DailyCard";
 
 export default function DailyScreen({ navigation }) {
+  var days = ['su','mo','tu','we','th','fr','sa'];
   var timeList = useSelector((state) => state.medicine.time);
   timeList = timeList.sort(function(a, b) {
     var keyA = a.time,
@@ -37,6 +38,8 @@ export default function DailyScreen({ navigation }) {
     return 0;
   });
   timeList = timeList.filter(x=>x.status==0)
+  var day = days[ new Date().getDay() ];
+  timeList = timeList.filter(x=>x.day[day]==1)
 
 
 

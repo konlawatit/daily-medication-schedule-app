@@ -68,9 +68,6 @@ export default function MedicineScreen({ navigation }) {
           <TextInput placeholder="ค้นหา" style={{ width: "100%" ,fontFamily:"Prompt-Light"}} />
         </View>
 
-        <View style={globalStyle.sectionDropDown}>
-          <DropDownPicker />
-        </View>
       </View>
 
       <FlatList

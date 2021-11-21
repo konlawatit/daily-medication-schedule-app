@@ -34,7 +34,7 @@ export default function DailyCard(props) {
 
 
   const toggleVerify = () => {
-    updateVerify(!verify, id,dispatch);
+    updateVerify(!verify, id,dispatch,idMed);
     setVerify(!verify);
     setModalVisible(!modalVisible)
   };
