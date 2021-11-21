@@ -22,8 +22,6 @@ import NotificationCard from "../components/NotificationCard";
 import { globalStyle } from "../stylesheet/globalStylesheet";
 
 //sqlite
-import { DatabaseConnection } from "../database/database-connection";
-const db = DatabaseConnection.getConnection();
 import {
   updateMedicine,
   deleteTime,
@@ -31,12 +29,7 @@ import {
 } from "../database/database-function";
 
 //state
-import {
-  stackTime,
-  stackDeleteTime,
-  updateTimeInTime,
-  setTime
-} from "../store/actions/medicineAction";
+import { stackTime, stackDeleteTime } from "../store/actions/medicineAction";
 
 export default function DrugInfoScreen({ navigation, route }) {
   // console.disableYellowBox = true;
@@ -45,63 +38,10 @@ export default function DrugInfoScreen({ navigation, route }) {
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
   const medicineInfo = useSelector((state) => state.medicine.selectMedicine);
   const [id, setId] = useState(route.params.id);
-
   let selectTimeList = useSelector((state) => {
     const time = state.medicine.time;
     return time.filter((data) => data.MEDICINE_id == id);
   });
-
-  const [uniqueValue, setUniqueValue] = useState(1)
-  let forceRemount = () => {
-    setUniqueValue(data => data+1)
-  }
-  
-  
-  
-  // let selectTimeList = useSelector((state) => state.medicine.time);
-  
-  
-  const [testTime, setTestTime] = useState()
-  console.log('2342333333333333333', selectTimeList)
-  
-  useEffect(() => {
-    console.log('helo worlddddddddddddddddddddddddddddddddddd')
-    // db.transaction((tx) => {
-      //   tx.executeSql(
-        //     `SELECT *
-        //     FROM MEDICINE
-      //     INNER JOIN TIME
-      //     ON MEDICINE.id = TIME.MEDICINE_id`,
-      //     [],
-      //     (tx, results) => {
-        //       let result = results.rows._array;
-        //       let newArray = result.map((data) => {
-          //         return {
-            //           ...data,
-            //           day: JSON.parse(data.day),
-            //           isNoti: data.isNoti === 1 ? true : false
-            //         };
-            //       });
-            
-            //       // dispatch(setTime(newArray))
-            //       console.log('>>>>>>>>>>>>>>>>>>>>>>>>')
-            //       // console.log("select time updateeeeeeeeee22222222222222222222222222222", results.rows._array);
-            //       dispatch(setTime(newArray));
-            //       setTestTime(newArray)
-            
-            
-            //     },
-            //     (_, err) => {
-              //       console.log("insert time error", err);
-              
-      //       return true;
-      //     }
-      //   );
-      // });
-    }, [])
-
-  
-  
 
   // const st = useSelector(state => state.medicine.stackTime)
 
@@ -153,20 +93,10 @@ export default function DrugInfoScreen({ navigation, route }) {
   useEffect(() => {}, []);
 
   const ContentThatGoesAboveTheFlatList = (confirmEdit) => {
-    let selectTimeList2 = useSelector((state) => {
-      const time = state.medicine.time;
-      return time.filter((data) => data.MEDICINE_id == id);
-    });
-
-    
-    
     const [name, setName] = useState(medicineInfo.name);
     const [note, setNote] = useState(medicineInfo.note);
     const [description, setDescription] = useState(medicineInfo.description);
     const [image, setImage] = useState(medicineInfo.image);
-
-    
-
     const renderItem = (itemData) => {
       return (
         <View style={{ alignItems: "center" }}>
@@ -175,7 +105,6 @@ export default function DrugInfoScreen({ navigation, route }) {
             time={itemData.item.time}
             day={itemData.item.day}
             isEdit={isEdit}
-            isNoti={itemData.item.isNoti}
             id={itemData.item.id}
           />
         </View>
@@ -201,13 +130,6 @@ export default function DrugInfoScreen({ navigation, route }) {
           colors={["rgba(255,255,255,1)", "transparent"]}
           style={globalStyle.background}
         />
-        <Button title="test" onPress={() => {
-            console.log('---------------------------------------------------')
-          console.log(selectTimeList)
-          forceRemount();
-          console.log(uniqueValue)
-          console.log('---------------------------------------------------')
-        }} />
 
         <View style={styles.infoContain}>
           {/* <EvilIcons
@@ -360,7 +282,6 @@ export default function DrugInfoScreen({ navigation, route }) {
           keyExtractor={(item, index) => item.id.toString()}
           renderItem={renderItem}
           style={{ flex: 1, width: "100%", marginBottom: 50 }}
-          // extraData={selectTimeList}
         />
       </SafeAreaView>
     );
@@ -369,7 +290,6 @@ export default function DrugInfoScreen({ navigation, route }) {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <FlatList
-        keyExtractor={(item, index) => id.toString()}
         style={{ flex: 1 }}
         contentContainerStyle={{ flexGrow: 1 }}
         data={[]}
@@ -432,8 +352,9 @@ export default function DrugInfoScreen({ navigation, route }) {
             <TouchableOpacity
               style={styles.confirmBox}
               onPress={() => {
+  
                 delMedicine();
-                navigation.navigate("Medicine");
+                navigation.navigate("Medicine")
               }}
             >
               <Text style={styles.confirmText}>ลบ</Text>

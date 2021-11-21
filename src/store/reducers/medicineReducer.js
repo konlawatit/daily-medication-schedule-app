@@ -1,49 +1,31 @@
 import {
   SELECT_MEDICINE,
   SET_MEDICINE,
-  SET_HISTORY,
   SET_TIME,
   STACK_TIME,
   CLEAR_STACK_TIME,
   STACK_DELETE_TIME,
   CLEAR_STACK_DELETE_TIME,
-  REDUCE_STACK_DELETE_TIME,
-  SELECT_TIME,
-  UPDATE_TINE_IN_TINE,
-  CLEAR_TIME
+  REDUCE_STACK_DELETE_TIME
 } from "../actions/medicineAction";
 
 const initialState = {
   medicine: [],
   time: [],
   selectMedicine: {},
-  selectTime: {},
   stackTime: [],
-  stackDeleteTime: [],
-  history:[]
+  stackDeleteTime: []
 };
 const mealsReducer = (state = initialState, action) => {
   switch (action.type) {
-    case SET_HISTORY:
-      return { ...state, history:action.getHistory}
     case SET_MEDICINE:
       return { ...state, medicine: action.getMedicine };
     case SET_TIME:
       return { ...state, time: action.getTime };
-    case CLEAR_TIME:
-      return {...state, time: state.time.map(data => data.id !== action.id)}
-    case UPDATE_TINE_IN_TINE:
-      return {...state, time: state.time.map(data => {
-        if (data.id === action.id) {
-          return {...data, time: action.time, day: action.day}
-        }
-        return data
-      })}
     case SELECT_MEDICINE:
       const medicine = state.medicine.filter((data) => data.id == action.id)[0];
+      console.log("id", action.id);
       return { ...state, selectMedicine: medicine };
-    case SELECT_TIME:
-      return {...state, selectTime: state.time.filter(data => data.id === action.id)[0]}
     case STACK_TIME:
       return { ...state, stackTime: [...state.stackTime, action.time] };
     // case STACK_DELETE_TIME:

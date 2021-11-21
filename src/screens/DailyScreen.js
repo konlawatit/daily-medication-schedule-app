@@ -27,21 +27,8 @@ import HeaderTitle from "../components/HeaderTitle";
 import DailyCard from "../components/DailyCard";
 
 export default function DailyScreen({ navigation }) {
-  var days = ['su','mo','tu','we','th','fr','sa'];
-  var timeList = useSelector((state) => state.medicine.time);
-  timeList = timeList.sort(function(a, b) {
-    var keyA = a.time,
-      keyB = b.time;
-    // Compare the 2 dates
-    if (keyA < keyB) return -1;
-    if (keyA > keyB) return 1;
-    return 0;
-  });
-  timeList = timeList.filter(x=>x.status==0)
-  var day = days[ new Date().getDay() ];
-  timeList = timeList.filter(x=>x.day[day]==1)
-
-
+  const [dailyMedicine, setDailyMedicine] = useState();
+  const timeList = useSelector((state) => state.medicine.time);
 
   const renderItem = (itemData) => {
     return (
@@ -51,8 +38,7 @@ export default function DailyScreen({ navigation }) {
             subTitle={itemData.item.name}
             verify={itemData.item.status}
             checkBox={true}
-            id={itemData.item.id}
-            idMed={itemData.item.MEDICINE_id}
+            id={itemData.item.MEDICINE_id}
             navigation={navigation}
             image={itemData.item.image}
           />

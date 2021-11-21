@@ -5,8 +5,7 @@ import {
   TextInput,
   FlatList,
   Image,
-  TouchableOpacity,
-  Platform
+  TouchableOpacity
 } from "react-native";
 import { EvilIcons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
@@ -46,20 +45,11 @@ export default function MedicineScreen({ navigation }) {
         style={globalStyle.background}
       />
 
-      
-      {Platform.OS == "ios" ? (
-       <TouchableOpacity style={{position:'absolute',zIndex:100,bottom:0,right:0}} onPress={() => navigation.navigate("addMedicine")} >
-          <Image source={require('../../assets/add.png')} />
-        </TouchableOpacity> 
-        
-      ) : (
-        <View style={{position:'absolute', justifyContent:'flex-end', flex:1, height: '100%', width:'100%'}} >
+      <View style={{position:'absolute', justifyContent:'flex-end', flex:1, height: '100%', width:'100%'}} >
         <TouchableOpacity style={{zIndex: 100,position:'absolute', alignSelf:'flex-end'}} onPress={() => navigation.navigate("addMedicine")} >
           <Image source={require('../../assets/add.png')} />
         </TouchableOpacity>
       </View>
-      )}
-
 
       <HeaderTitle title="รายการยา" />
       <View style={globalStyle.sectionFilter}>
@@ -68,6 +58,9 @@ export default function MedicineScreen({ navigation }) {
           <TextInput placeholder="ค้นหา" style={{ width: "100%" ,fontFamily:"Prompt-Light"}} />
         </View>
 
+        <View style={globalStyle.sectionDropDown}>
+          <DropDownPicker />
+        </View>
       </View>
 
       <FlatList
