@@ -25,6 +25,7 @@ export default function DailyCard(props) {
   let title = props.title;
   let subTitle = props.subTitle;
   const [verify, setVerify] = useState(props.verify == 1 ? true : false);
+  const [modalVisible, setModalVisible] = useState(props.verify == 1 ? true : false);
   let checkBox = props.checkBox ? props.checkBox : false;
   let id = props.id;
   let idMed = props.idMed;
