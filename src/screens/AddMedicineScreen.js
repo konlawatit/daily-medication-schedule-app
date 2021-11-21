@@ -51,7 +51,7 @@ export default function AddMedicineScreen({ navigation }) {
   let dispatch = useDispatch();
 
   const save = (name, note, description, image) => {
-    if (name&&note&&image) {
+    if (name) {
       addMedicine(name, note, description, timeList, image, dispatch);
       dispatch(clearStackTime());
       navigation.navigate("Medicine");
