@@ -402,6 +402,7 @@ export async function loginFirebase(
                 
               }
 
+              setDataToLocal(medicine, navigation, dispatch);
               // changeMedicineState(dispatch, navigation)
             },
             (_, err) => {

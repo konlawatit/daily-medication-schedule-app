@@ -11,16 +11,27 @@ import {
   Pressable,
   Alert,
   Modal,
-  TouchableOpacity
+  TouchableOpacity,
 } from "react-native";
 import { useDispatch } from "react-redux";
-import * as Speech from 'expo-speech';
 import { selectMedicine } from "../store/actions/medicineAction";
 
 import { updateVerify } from "../database/database-function";
 import { date } from "yup/lib/locale";
+import { globalStyle } from "../stylesheet/globalStylesheet";
 
 export default function DailyCard(props) {
+  const shadowStyle = {
+    width: 100,
+    height: 100,
+    color: "#000",
+    border: 2,
+    radius: 3,
+    opacity: 0.2,
+    x: 0,
+    y: 3,
+    style: { marginVertical: 5 },
+  };
   const [modalVisible, setModalVisible] = useState(false);
   //   let image2 = require("../../assets/" + props.image)
   let title = props.title;
@@ -28,67 +39,57 @@ export default function DailyCard(props) {
   const [verify, setVerify] = useState(props.verify == 1 ? true : false);
   let checkBox = props.checkBox ? props.checkBox : false;
   let id = props.id;
-  let idMed = props.idMed
+  let idMed = props.idMed;
   let image = props.image;
   const navigation = props.navigation;
-  let date = new Date()
-  let checkdate = (date.getHours()<10?'0':'')+date.getHours().toString()+":"+(date.getMinutes()<10?'0':'')+date.getMinutes().toString()
-
+  let date = new Date();
+  let checkdate =
+    (date.getHours() < 10 ? "0" : "") +
+    date.getHours().toString() +
+    ":" +
+    (date.getMinutes() < 10 ? "0" : "") +
+    date.getMinutes().toString();
 
   const dispatch = useDispatch();
 
-
   const toggleVerify = () => {
-    updateVerify(!verify, id,dispatch,idMed);
+    updateVerify(!verify, id, dispatch, idMed);
     setVerify(!verify);
-    setModalVisible(!modalVisible)
+    setModalVisible(!modalVisible);
   };
 
   return (
     <TouchableOpacity
-      style={title<=checkdate?styles.card2:styles.card}
+      style={title <= checkdate ? styles.card2 : styles.card}
       onPress={() => {
         // upLocalToFirebase()
         dispatch(selectMedicine(idMed));
         navigation.navigate("DrugInfo", { idMed });
       }}
     >
-      <View style={{ flex: 0.7}}>
-        {image ? (
-          <Image
-            source={{ uri: image }}
-            style={{ width: "100%", height: 150}}
-          />
-        ) : (
-          <Image
-            style={{ width: "100%", height: 150 }}
-            source={require("../../assets/test.jpg")}
-          />
-        )}
+      <View style={{ flex: 0.7 }}>
+        <Image source={{ uri: image }} style={{ width: "100%", height: 150 }} />
       </View>
       <View style={{ flex: 1, padding: 15 }}>
-        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-          <Text style={{ fontSize: 50, fontFamily: "Prompt-Light" }}>
-            {title}
-          </Text>
-          {/* <CheckBox style={{borderRadius: 20, transform: [{ scaleX: 2 }, { scaleY: 2 }] }} value={data} onValueChange={setData} /> */}
-          {checkBox ? (
-            <TouchableOpacity
-              style={styles.circle}
-              onPress={()=>setModalVisible(true)}
+        <TouchableOpacity onPress={() => setModalVisible(true)}>
+          {title <= checkdate ? (
+            <Text
+              style={[globalStyle.textThai, { color: "red", fontSize: 15 }]}
             >
-              {verify ? (
-                <Image
-                  style={{ width: "80%", height: "80%" }}
-                  source={require("../../assets/checkmark.png")}
-                />
-              ) : (
-                <View></View>
-              )}
-            </TouchableOpacity>
+              เลยเวลาทานมาแล้ว
+            </Text>
           ) : (
-            <View></View>
+            <Text
+              style={[globalStyle.textThai, { color: "green", fontSize: 15 }]}
+            >
+              จะถึงเวลาทาน
+            </Text>
           )}
+        </TouchableOpacity>
+        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+          <Text style={{ fontSize: 45, fontFamily: "Prompt-Light" }}>
+            {title} น.
+          </Text>
         </View>
 
         <View style={styles.line}></View>
@@ -102,33 +103,35 @@ export default function DailyCard(props) {
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => {
-          Alert.alert('Modal has been closed.');
+          Alert.alert("Modal has been closed.");
           setModalVisible(!modalVisible);
-        }}>
+        }}
+      >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <Text style={styles.modalText}>คุณแน่ใจหรือไม่ว่าได้รับประทาน</Text>
-            <Text style={styles.modalText}>"{subTitle}" เมื่อเวลา {title} น.</Text>
-            <View style={{flexDirection:'row'}}>
-            <Pressable
-              style={[styles.button, styles.buttonCancel]}
-              onPress={() => setModalVisible(!modalVisible)}>
-              <Text style={styles.textStyle}>Cancel</Text>
-            </Pressable>
-            <View style={{flex:0.2}}></View>
-            <Pressable
-              style={[styles.button, styles.buttonClose]}
-              onPress={toggleVerify}>
-              <Text style={styles.textStyle}>Confirm</Text>
-            </Pressable>
-
+            <Text style={styles.modalText}>
+              "{subTitle}" เมื่อเวลา {title} น.
+            </Text>
+            <View style={{ flexDirection: "row" }}>
+              <Pressable
+                style={[styles.button, styles.buttonCancel]}
+                onPress={() => setModalVisible(!modalVisible)}
+              >
+                <Text style={styles.textStyle}>Cancel</Text>
+              </Pressable>
+              <View style={{ flex: 0.2 }}></View>
+              <Pressable
+                style={[styles.button, styles.buttonClose]}
+                onPress={toggleVerify}
+              >
+                <Text style={styles.textStyle}>Confirm</Text>
+              </Pressable>
             </View>
           </View>
         </View>
       </Modal>
-
     </TouchableOpacity>
-
   );
 }
 
@@ -139,25 +142,25 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderColor: "grey",
     // backgroundColor:'grey',
-    opacity: 0.25
+    opacity: 0.25,
   },
   card: {
     width: "90%",
     borderWidth: 2,
-    borderColor: "green",
     flexDirection: "row",
+    borderColor: "green",
     borderRadius: 20,
     padding: 10,
     backgroundColor: "#ffff",
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 3
+      height: 12,
     },
-    shadowOpacity: 0.27,
-    shadowRadius: 4.65,
-    elevation: 6,
-    marginBottom: 0
+    shadowOpacity: 0.58,
+    shadowRadius: 16.0,
+
+    elevation: 24,
   },
   card2: {
     width: "90%",
@@ -170,35 +173,34 @@ const styles = StyleSheet.create({
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 3
+      height: 3,
     },
     shadowOpacity: 0.27,
     shadowRadius: 4.65,
     elevation: 6,
-    marginBottom: 10
+    marginBottom: 10,
   },
   circle: {
-    borderColor: "green",
     width: 40,
     height: 40,
     borderRadius: 50,
     borderWidth: 1,
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   },
   centeredView: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor:'rgba(0,0,0,0.5)'
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.5)",
   },
   modalView: {
     margin: 20,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 20,
     padding: 35,
-    alignItems: 'center',
-    shadowColor: '#000',
+    alignItems: "center",
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 2,
@@ -211,23 +213,24 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 10,
     elevation: 2,
-    flex:1
+    flex: 1,
   },
   buttonClose: {
-    backgroundColor: '#2196F3',
+    backgroundColor: "#2196F3",
   },
   buttonCancel: {
-    backgroundColor: '#eb3148',
+    backgroundColor: "#eb3148",
   },
   textStyle: {
-    color: 'white',
+    color: "white",
     fontFamily: "Prompt-Light",
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },  modalText: {
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  modalText: {
     marginBottom: 15,
-    fontSize:18,
+    fontSize: 18,
     fontFamily: "Prompt-Light",
-    textAlign: 'center',
+    textAlign: "center",
   },
 });

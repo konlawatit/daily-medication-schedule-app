@@ -1,20 +1,19 @@
 import fb from "firebase/app";
 import "firebase/auth";
-import "firebase/storage";
+import 'firebase/storage'; 
 import { getFirestore, setDoc, doc } from "firebase/firestore";
 import * as Google from "expo-google-app-auth";
 import * as Facebook from "expo-facebook";
 import firebaseConfig from "./firebaseConfig.json";
-import { LogBox } from "react-native";
+import { LogBox } from 'react-native';
 
-import { setUser } from "./src/store/actions/userAction";
 
 if (!fb.apps.length) {
   console.log("Connected with firebase");
   fb.initializeApp(firebaseConfig);
   fb.firestore().settings({ experimentalForceLongPolling: true });
 }
-LogBox.ignoreLogs(["Setting a timer for a long period of time"]);
+LogBox.ignoreLogs(['Setting a timer for a long period of time'])
 
 const GoogleProvider = new fb.auth.GoogleAuthProvider();
 
@@ -23,7 +22,9 @@ import { loginFirebase } from "./src/database/database-firebase";
 // import { changeMedicineState } from "./src/database/database-function";
 import { getNextTriggerDateAsync } from "expo-notifications";
 
-export const firebase = !fb.apps.length ? fb.initializeApp(firebaseConfig) : fb;
+export const firebase = !fb.apps.length
+  ? fb.initializeApp(firebaseConfig)
+  : fb;
 
 export async function signInAnonymous(username, password) {
   const firestore = fb.firestore();
@@ -118,7 +119,7 @@ function onSignIn(googleUser, dispatch, navigation, state) {
           await usersRef.doc(uid).set({
             medicine: [],
           });
-          const payloadUser = {
+          const payload = {
             uid: results.user.uid,
             email: results.user.email,
             provider: "google"
@@ -164,7 +165,7 @@ function onSignIn(googleUser, dispatch, navigation, state) {
   });
 }
 
-export async function logInFacebook(navigation, dispatch) {
+export async function logInFacebook() {
   try {
     await Facebook.initializeAsync({
       appId: "905477617072521"
@@ -186,25 +187,15 @@ export async function logInFacebook(navigation, dispatch) {
         .then(async (re) => {
           const uid = re.user.uid;
           const firestore = fb.firestore();
-          if (userExists(uid)) {
-            const payloadUser = {
-              uid: re.user.uid,
-              email: re.user.email,
-              provider: "facebook"
-            };
-            dispatch(setUser(payloadUser));
-            const payloadData = await getAllData(payloadUser.uid);
-            loginFirebase(payloadUser, payloadData, dispatch, navigation);
-          } else {
-            console.log('sssssssssssssssssssssssssp')
-            const usersRef = firestore.collection("users");
-            let payloadData = {
-              medicine: []
-            }
-            await usersRef.doc(uid).set(payloadData);
-            loginFirebase(payloadUser, payloadData, dispatch, navigation);
-          }
-          console.log(re);
+          const usersRef = firestore.collection("users").doc(uid);
+          const snapshot = await usersRef.get();
+          const payload = {
+            uid: re.user.uid,
+            email: re.user.email,
+            provider: "facebook"
+          };
+          loginFirebase(payload);
+          // console.log(re);
           console.log("sync facebook with firebase");
         })
         .catch((err) => console.log("sync facebook with firebase fail", err));
@@ -219,63 +210,52 @@ export async function logInFacebook(navigation, dispatch) {
   }
 }
 
-export async function userExists(uid) {
-  try {
-    const firestore = firebase.firestore();
-    const userRef = (await firestore.collection("users").doc(uid).get()).exists;
-    console.log("user Esiststs", userRef);
-  } catch (err) {
-    console.log("user Esists -->", err);
-  }
-}
 
 export async function getAllData(uid) {
   try {
     const firestore = firebase.firestore();
-    const userRef = firestore.collection("users").doc(uid);
-    let result;
-    await userRef.get().then((data) => {
-      result = data.data();
-    });
-    return result;
+        const userRef = firestore.collection('users').doc(uid)
+        let result
+        await userRef.get().then(data => {
+          result = data.data()
+        })
+        return result
   } catch (err) {
-    console.log("get all data error", err);
+    console.log('get all data error', err)
   }
 }
 
 export async function setData() {
   try {
     const firestore = firebase.firestore();
-    const userRef = firestore
-      .collection("users")
-      .doc("Mx4dra711kadIj2C9oIfUl3wKEC3");
-    await userRef.set({
-      history: [],
-      medicine: [
-        {
-          name: "ยาแก้ปวด",
-          note: "no",
-          description: "test",
-          image: "",
-          time: [
+        const userRef = firestore.collection('users').doc("Mx4dra711kadIj2C9oIfUl3wKEC3")
+        await userRef.set({
+          history: [],
+          medicine: [
             {
-              time: "13:00",
-              isNoti: true,
-              status: false,
-              day: '{"mo": 1,"tu": 1,"we": 1,"th":1,"fr":1,"sa":1,"su":1}'
-            }
-          ],
-          history: [
-            {
-              date: "21/11/2021",
-              time: "13:00"
-            }
+              name: 'ยาแก้ปวด',
+              note: 'no',
+              description: 'test',
+              image: '',
+              time: [
+                {
+                  time: '13:00',
+                  isNoti: true,
+                  status: false,
+                  day: '{"mo": 1,"tu": 1,"we": 1,"th":1,"fr":1,"sa":1,"su":1}'
+                }
+              ],
+              history: [
+                {
+                  date: '21/11/2021',
+                  time: '13:00',
+                } 
+              ]
+          }
           ]
-        }
-      ]
-    });
-    return result;
+        })
+        return result
   } catch (err) {
-    console.log("get all data error", err);
+    console.log('get all data error', err)
   }
 }
