@@ -57,7 +57,7 @@ export default function NotificationCard(props) {
     // <View style={[isEnabled ? styles.cardOn : styles.cardOff]} >
 
     <TouchableOpacity
-      style={styles.cardOn}
+      style={time < "18:00" ? (styles.cardOn):(styles.cardOff)}
       onPress={() => {
         props.navigation.navigate("EditNotificationTime", {id})
         dispatch(selectTime(id))
@@ -65,10 +65,16 @@ export default function NotificationCard(props) {
     >
       {/* <AntDesign name="delete" size={24} color="red" /> */}
       <View style={styles.imagePart}>
-        <Image
+        {time > "18:00" ? (
+          <Image
+          style={{ width: "60%", height: "50%", marginTop: 10 }}
+          source={require("../../assets/moon.png")}
+        />
+        ):
+        (<Image
           style={{ width: "60%", height: "50%", marginTop: 10 }}
           source={require("../../assets/sun.png")}
-        />
+        />)}
       </View>
       <View style={styles.infoPart}>
         <Text style={styles.time}>{time}</Text>
@@ -168,7 +174,7 @@ const styles = StyleSheet.create({
   cardOff: {
     flexDirection: "row",
     width: "90%",
-    backgroundColor: "rgba(85,194,255,8)",
+    backgroundColor: "#616161",
     height: 100,
     padding: 10,
     borderRadius: 10,

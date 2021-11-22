@@ -120,7 +120,6 @@ export default function DailyCard(props) {
               onPress={toggleVerify}>
               <Text style={styles.textStyle}>Confirm</Text>
             </Pressable>
-
             </View>
           </View>
         </View>
