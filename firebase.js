@@ -1,5 +1,6 @@
 import fb from "firebase/app";
 import "firebase/auth";
+import 'firebase/storage'; 
 import { getFirestore, setDoc, doc } from "firebase/firestore";
 import * as Google from "expo-google-app-auth";
 import * as Facebook from "expo-facebook";
