@@ -384,12 +384,12 @@ export async function loginFirebase(
                   payloadData.medicine
                 );
                 let medicine = payloadData.medicine;
-                upLocalToFirebase3(firebase, medicine, navigation, dispatch, uid)
+                upLocalToFirebase3(firebase, medicine, navigation, dispatch, payloadUser.uid)
                 // setDataToLocal(medicine, navigation, dispatch);
                 // delDB()
 
               } else {
-                upLocalToFirebase2(firebase, uid)
+                upLocalToFirebase2(firebase, payloadUser.uid)
                 changeMedicineState(dispatch, navigation);
                 changeTimeState(dispatch, navigation);
                 changeHistoryState(dispatch, navigation);

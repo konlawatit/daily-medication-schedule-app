@@ -160,6 +160,7 @@ export default function HeaderTitle(props) {
               style={styles.submitGoogle}
               underlayColor="grey"
               onPress={() => {
+                // console.log('onPre')
                 signInWithGoogleAsync(navigation, dispatch, "backup");
                 setLoginModal(!loginModal)
               }}
@@ -291,6 +292,7 @@ export default function HeaderTitle(props) {
 const styles = StyleSheet.create({
   headerTitleContain: {
     paddingTop: "5%",
+    marginTop: 20,
     width: "100%",
     alignItems: "center"
     // flex: 1
