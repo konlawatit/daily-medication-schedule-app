@@ -4,6 +4,7 @@ import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useDispatch } from "react-redux";
+import NetInfo from '@react-native-community/netinfo';
 
 import { FontAwesome5, FontAwesome, Fontisto } from "@expo/vector-icons";
 
@@ -22,6 +23,10 @@ import EditDrugInfoScreen from "../screens/EditDrugInfoScreen";
 import NotiScreen from "../screens/NotificationScreen";
 import NotificationTimeScreen from "../screens/NotificationTimeScreen";
 import EditNotificationTimeScreen from "../screens/EditNotificationTimeScreen";
+
+//sqlit
+import { upLocalToFirebase } from "../database/database-firestore";
+import { changeHistoryState, changeTimeState, changeMedicineState } from "../database/database-function";
 
 const MyTheme = {
   ...DefaultTheme,
@@ -82,11 +87,25 @@ function HomeNavigator() {
 import { initDB, dropDB } from "../database/database-function";
 import NotificationScreen from "../screens/NotificationScreen";
 export default function MyNavigator() {
+
   const dispatch = useDispatch();
+  const unsubscribe = NetInfo.addEventListener(state => {
+    console.log('Connection type', state.type);
+    console.log('Is connected?', state.isConnected);
+    if (state.isConnected) {
+      upLocalToFirebase()
+    }
+  });
+
+  changeHistoryState(dispatch)
+  changeTimeState(dispatch)
+  changeMedicineState(dispatch)
 
   useEffect(() => {
-    dropDB();
-    initDB(dispatch);
+    // dropDB();
+    // initDB(dispatch);
+
+
   }, []);
 
   return (

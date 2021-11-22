@@ -47,6 +47,7 @@ export default function DailyCard(props) {
     <TouchableOpacity
       style={title<=checkdate?styles.card2:styles.card}
       onPress={() => {
+        // upLocalToFirebase()
         dispatch(selectMedicine(idMed));
         navigation.navigate("DrugInfo", { idMed });
       }}

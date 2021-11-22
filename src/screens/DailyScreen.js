@@ -2,8 +2,7 @@ import React, { useContext, useEffect, useState, useRef } from "react";
 import Constants from 'expo-constants';
 import * as Notifications from "expo-notifications"
 import * as Permissions from "expo-permissions"
-import {
-  StyleSheet,
+import {  StyleSheet,
   Text,
   View,
   Button,
