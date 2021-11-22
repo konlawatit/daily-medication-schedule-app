@@ -58,7 +58,7 @@ export default function LoginScreen({navigation}) {
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.submitFacebook} underlayColor="grey" onPress={() => {
-          logInFacebook();
+          logInFacebook(navigation, dispatch);
         }}>
           <View style={styles.insideSubmit} >
               <View>

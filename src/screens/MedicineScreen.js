@@ -61,7 +61,7 @@ export default function MedicineScreen({ navigation }) {
       )}
 
 
-      <HeaderTitle title="รายการยา" />
+      <HeaderTitle title="รายการยา" navigation={navigation} />
       <View style={globalStyle.sectionFilter}>
         <View style={globalStyle.sectionTextInput}>
           <EvilIcons name="search" size={24} color="black" />

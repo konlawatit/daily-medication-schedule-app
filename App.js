@@ -9,9 +9,11 @@ import { Provider, useDispatch } from "react-redux"
 
 
 import medicineReducer from "./src/store/reducers/medicineReducer";
+import userReducer from "./src/store/reducers/userReducer";
 
 const rootReducer = combineReducers({
-  medicine: medicineReducer
+  medicine: medicineReducer,
+  user: userReducer
 })
 
 const store = createStore(rootReducer);

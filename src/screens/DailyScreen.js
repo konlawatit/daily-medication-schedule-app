@@ -2,7 +2,8 @@ import React, { useContext, useEffect, useState, useRef } from "react";
 import Constants from 'expo-constants';
 import * as Notifications from "expo-notifications"
 import * as Permissions from "expo-permissions"
-import {  StyleSheet,
+import {
+  StyleSheet,
   Text,
   View,
   Button,
@@ -64,7 +65,7 @@ export default function DailyScreen({ navigation }) {
       
       const date = new Date();
       const checkDate = (date.getHours()<10?'0':'')+date.getHours().toString()+":"+(date.getMinutes()<10?'0':'')+date.getMinutes().toString()
-      console.log(checkDate+":"+date.getSeconds().toString())
+      // console.log(checkDate+":"+date.getSeconds().toString())
       if(date.getSeconds()==0){
         console.log("Passed")
         timeList.forEach((item)=>{
@@ -175,7 +176,7 @@ export default function DailyScreen({ navigation }) {
 
       />
 
-      <HeaderTitle title="ยาที่ต้องทานวันนี้" />
+      <HeaderTitle title="ยาที่ต้องทานวันนี้" navigation={navigation} />
 
       <FlatList
         keyExtractor={(item, index) => item.id.toString()}
