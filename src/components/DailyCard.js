@@ -53,7 +53,7 @@ export default function DailyCard(props) {
       }}
     >
       <View style={{ flex: 0.7}}>
-        {image ? (
+        {image !== "" ? (
           <Image
             source={{ uri: image }}
             style={{ width: "100%", height: 150}}
