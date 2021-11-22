@@ -22,8 +22,30 @@ import DropDownPicker from "../components/DropDownPicker";
 import { globalStyle } from "../stylesheet/globalStylesheet";
 
 export default function MedicineScreen({ navigation }) {
-
-  const medicineList = useSelector(state => state.medicine.medicine)
+  const [search, setSearch] = useState("")
+  const [filteredDataSource, setFilteredDataSource] = useState([]);
+  var medicineList = useSelector(state => state.medicine.medicine)
+  const   updateSearch = (text) => {
+    if (text) {
+      // Inserted text is not blank
+      // Filter the masterDataSource
+      // Update FilteredDataSource
+      const newData = medicineList.filter(function (item) {
+        const itemData = item.name
+          ? item.name.toUpperCase()
+          : ''.toUpperCase();
+        const textData = text.toUpperCase();
+        return itemData.indexOf(textData) > -1;
+      });
+      setFilteredDataSource(newData);
+      setSearch(text);
+    } else {
+      // Inserted text is blank
+      // Update FilteredDataSource with masterDataSource
+      setFilteredDataSource(medicineList);
+      setSearch(text);
+    }
+  };
   const renderItem = (itemData) => {
     return (
       <View style={globalStyle.screen}>
