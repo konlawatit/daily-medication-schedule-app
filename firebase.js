@@ -65,12 +65,13 @@ export async function signInWithGoogleAsync(navigation, dispatch, state) {
     if (result.type === "success") {
       onSignIn(result, dispatch, navigation, state);
       // navigation.navigate("Home");
-      return result.accessToken;
+      // return result.accessToken;
+      return true
     } else {
-      return { cancelled: true };
+      return false;
     }
   } catch (e) {
-    return { error: true };
+    return false;
   }
 }
 

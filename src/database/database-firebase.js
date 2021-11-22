@@ -3,6 +3,8 @@ import { DatabaseConnection } from "../database/database-connection";
 const db = DatabaseConnection.getConnection();
 import { delDB } from "./database-function";
 
+import { setSpinner } from "../store/actions/userAction";
+
 import {
   changeMedicineState,
   changeTimeState,
@@ -328,7 +330,9 @@ export async function setDataToLocal(payload, navigation, dispatch, uid) {
       },
       (err) => console.log("treacsactionn setDataToLocal", err),
       () => {
+        
         navigation.navigate("Home");
+        dispatch(setSpinner(false))
       }
     );
   } catch (err) {
@@ -394,6 +398,8 @@ export async function loginFirebase(
                 changeTimeState(dispatch, navigation);
                 changeHistoryState(dispatch, navigation);
                 navigation.navigate("Home");
+                dispatch(setSpinner(false))
+                
               }
 
               // changeMedicineState(dispatch, navigation)
@@ -452,6 +458,7 @@ export async function loginFirebase(
                   setDataToLocal(medicine, navigation, dispatch, payloadUser.uid);
                 } else {
                   navigation.navigate("Home");
+                  dispatch(setSpinner(false))
                   changeMedicineState(dispatch, navigation);
                   changeTimeState(dispatch, navigation);
                   changeHistoryState(dispatch, navigation);

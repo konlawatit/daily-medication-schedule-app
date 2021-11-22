@@ -180,34 +180,7 @@ export default function HeaderTitle(props) {
               </View>
             </TouchableOpacity>
 
-            <TouchableOpacity
-              style={styles.submitFacebook}
-              underlayColor="grey"
-              onPress={() => {
-                logInFacebook();
-              }}
-            >
-              <View style={styles.insideSubmit}>
-                <View>
-                  <Image
-                    style={{ width: 30, height: 30 }}
-                    source={require("../../assets/facebook-logo.png")}
-                  />
-                </View>
-                <View style={{ marginLeft: "10%" }}>
-                  <Text
-                    style={{
-                      color: "white",
-                      fontSize: 16,
-                      fontFamily: "Prompt-Light",
-                      marginRight: 10
-                    }}
-                  >
-                    เข้าสู่ระบบด้วย Facebook
-                  </Text>
-                </View>
-              </View>
-            </TouchableOpacity>
+   
 
             {/* <View style={{ flexDirection: "row" }}>
               <TouchableOpacity
