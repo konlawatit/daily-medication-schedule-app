@@ -10,10 +10,10 @@ import {
   ScrollView,
   SafeAreaView,
   Switch,
-  FlatList,
-  Modal
+  FlatList
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
+import { EvilIcons } from "@expo/vector-icons";
 import { useSelector, useDispatch } from "react-redux";
 //Components
 import NotificationCard from "../components/NotificationCard";
@@ -27,7 +27,7 @@ const db = DatabaseConnection.getConnection();
 import {
   updateMedicine,
   deleteTime,
-  deleteMedicine,
+  deleteMedicine
 } from "../database/database-function";
 
 //state
@@ -35,14 +35,8 @@ import {
   stackTime,
   stackDeleteTime,
   updateTimeInTime,
-  setTime,
+  setTime
 } from "../store/actions/medicineAction";
-
-import { Ionicons, EvilIcons, Entypo, AntDesign } from "@expo/vector-icons";
-
-import * as ImagePicker from "expo-image-picker";
-
-import { Asset, useAssets } from "expo-asset";
 
 export default function DrugInfoScreen({ navigation, route }) {
   // console.disableYellowBox = true;
@@ -51,69 +45,69 @@ export default function DrugInfoScreen({ navigation, route }) {
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
   const medicineInfo = useSelector((state) => state.medicine.selectMedicine);
   const [id, setId] = useState(route.params.id);
-  const [confirmModal, setConfirmModal] = useState(false);
 
   let selectTimeList = useSelector((state) => {
     const time = state.medicine.time;
     return time.filter((data) => data.MEDICINE_id == id);
   });
 
-  const [uniqueValue, setUniqueValue] = useState(1);
+  const [uniqueValue, setUniqueValue] = useState(1)
   let forceRemount = () => {
-    setUniqueValue((data) => data + 1);
-  };
-
+    setUniqueValue(data => data+1)
+  }
+  
+  
+  
   // let selectTimeList = useSelector((state) => state.medicine.time);
-
-  const [testTime, setTestTime] = useState();
+  
+  
+  const [testTime, setTestTime] = useState()
   // console.log('select time list medicitn', selectTimeList)
-
+  
   useEffect(() => {
-    console.log("helo worlddddddddddddddddddddddddddddddddddd");
+    console.log('helo worlddddddddddddddddddddddddddddddddddd')
     // db.transaction((tx) => {
-    //   tx.executeSql(
-    //     `SELECT *
-    //     FROM MEDICINE
-    //     INNER JOIN TIME
-    //     ON MEDICINE.id = TIME.MEDICINE_id`,
-    //     [],
-    //     (tx, results) => {
-    //       let result = results.rows._array;
-    //       let newArray = result.map((data) => {
-    //         return {
-    //           ...data,
-    //           day: JSON.parse(data.day),
-    //           isNoti: data.isNoti === 1 ? true : false
-    //         };
-    //       });
+      //   tx.executeSql(
+        //     `SELECT *
+        //     FROM MEDICINE
+      //     INNER JOIN TIME
+      //     ON MEDICINE.id = TIME.MEDICINE_id`,
+      //     [],
+      //     (tx, results) => {
+        //       let result = results.rows._array;
+        //       let newArray = result.map((data) => {
+          //         return {
+            //           ...data,
+            //           day: JSON.parse(data.day),
+            //           isNoti: data.isNoti === 1 ? true : false
+            //         };
+            //       });
+            
+            //       // dispatch(setTime(newArray))
+            //       console.log('>>>>>>>>>>>>>>>>>>>>>>>>')
+            //       // console.log("select time updateeeeeeeeee22222222222222222222222222222", results.rows._array);
+            //       dispatch(setTime(newArray));
+            //       setTestTime(newArray)
+            
+            
+            //     },
+            //     (_, err) => {
+              //       console.log("insert time error", err);
+              
+      //       return true;
+      //     }
+      //   );
+      // });
+    }, [])
 
-    //       // dispatch(setTime(newArray))
-    //       console.log('>>>>>>>>>>>>>>>>>>>>>>>>')
-    //       // console.log("select time updateeeeeeeeee22222222222222222222222222222", results.rows._array);
-    //       dispatch(setTime(newArray));
-    //       setTestTime(newArray)
+  
+  
 
-    //     },
-    //     (_, err) => {
-    //       console.log("insert time error", err);
-
-    //       return true;
-    //     }
-    //   );
-    // });
-  }, []);
-
-
+  // const st = useSelector(state => state.medicine.stackTime)
 
   const [isEdit, setIsEdit] = useState(false);
   const [isConfirmEdit, setIsConfirmEdit] = useState(false);
   const [isCancleEdit, setIsCancleEdit] = useState(false);
-  const [renderImg] = useAssets([
-    require("../../assets/sample/1.png"),
-    require("../../assets/sample/2.png"),
-    require("../../assets/sample/3.png"),
-    require("../../assets/sample/4.png"),
-  ]);
 
   let delNoti = useSelector((state) => state.medicine.stackDeleteTime);
 
@@ -123,9 +117,8 @@ export default function DrugInfoScreen({ navigation, route }) {
       note,
       description,
       image,
-      id,
+      id
     };
-    console.log(image);
     if (delNoti.length == 0 && !(delNoti.length == selectTimeList.length)) {
       deleteTime(selectTimeList, dispatch);
       selectTimeList = [];
@@ -147,7 +140,6 @@ export default function DrugInfoScreen({ navigation, route }) {
 
   const delMedicine = () => {
     deleteMedicine(id, dispatch);
-    navigation.navigate("Medicine");
   };
 
   const cancleEdit = (setName, setNote, setDescription, setImage) => {
@@ -166,57 +158,14 @@ export default function DrugInfoScreen({ navigation, route }) {
       return time.filter((data) => data.MEDICINE_id == id);
     });
 
+    
+    
     const [name, setName] = useState(medicineInfo.name);
     const [note, setNote] = useState(medicineInfo.note);
     const [description, setDescription] = useState(medicineInfo.description);
     const [image, setImage] = useState(medicineInfo.image);
-    const [imageModal, setImageModal] = useState(false)
-  
 
-    const showImagePicker = async () => {
-      // Ask the user for the permission to access the media library
-      const permissionResult =
-        await ImagePicker.requestMediaLibraryPermissionsAsync();
-  
-      if (permissionResult.granted === false) {
-        alert("You've refused to allow this appp to access your photos!");
-        return;
-      }
-      setImageModal(false);
-      const result = await ImagePicker.launchImageLibraryAsync();
-  
-      // Explore the result
-
-  
-      if (!result.cancelled) {
-        setImage(result.uri);
-      }
-    };
-  
-    // This function is triggered when the "Open camera" button pressed
-    const openCamera = async () => {
-      // Ask the user for the permission to access the camera
-      const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
-  
-      if (permissionResult.granted === false) {
-        alert("You've refused to allow this appp to access your camera!");
-        return;
-      }
-      setImageModal(false);
-      const result = await ImagePicker.launchCameraAsync();
-  
-      // Explore the result
-      console.log(result);
-  
-      if (!result.cancelled) {
-        setImage(result.uri);
-      }
-    };
-  
-    const selectSample = async (img) => {
-      setImage(img.localUri);
-      setImageModal(!imageModal);
-    };
+    
 
     const renderItem = (itemData) => {
       return (
@@ -252,6 +201,13 @@ export default function DrugInfoScreen({ navigation, route }) {
           colors={["rgba(255,255,255,1)", "transparent"]}
           style={globalStyle.background}
         />
+        <Button title="test" onPress={() => {
+            console.log('---------------------------------------------------')
+          console.log(selectTimeList)
+          forceRemount();
+          console.log(uniqueValue)
+          console.log('---------------------------------------------------')
+        }} />
 
         <View style={styles.infoContain}>
           {/* <EvilIcons
@@ -265,76 +221,17 @@ export default function DrugInfoScreen({ navigation, route }) {
             color="black"
             onPress={() => navigation.navigate("EditDrugInfo", { id })}
           /> */}
-          <Modal
-            animationType="slide"
-            transparent={true}
-            visible={imageModal}
-            onRequestClose={() => {
-              Alert.alert("Modal has been closed.");
-              setImageModal(!imageModal);
-            }}
-          >
-            <View style={[globalStyle.centeredView, { height: "10%" }]}>
-              <View style={[globalStyle.modalView]}>
-                <TouchableOpacity
-                  style={{ marginLeft: 280 }}
-                  onPress={() => setImageModal(!imageModal)}
-                >
-                  <EvilIcons name="close" size={24} color="black" />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={showImagePicker}
-                  style={{ marginBottom: 15 }}
-                >
-                  <Text style={styles.modalText}>เลือกรูปภาพ</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  onPress={openCamera}
-                  style={{ marginBottom: 15 }}
-                >
-                  <Text style={styles.modalText}>ถ่ายจากกล้อง</Text>
-                </TouchableOpacity>
-                <Text style={[styles.modalText, { marginBottom: 15 }]}>
-                  เลือกจากรูปภาพตัวอย่าง
-                </Text>
-                <View
-                  style={[globalStyle.line, { width: 300, marginBottom: 15 }]}
-                ></View>
-                <FlatList
-                  numColumns={3}
-                  data={renderImg}
-                  keyExtractor={(item, index) => index.toString()}
-                  renderItem={({ item, index }) => (
-                    <TouchableOpacity onPress={() => selectSample(item)}>
-                      <Image
-                        source={item}
-                        key={index}
-                        style={{
-                          width: 90,
-                          height: 90,
-                          margin: 2,
-                        }}
-                      />
-                    </TouchableOpacity>
-                  )}
-                />
-              </View>
-            </View>
-          </Modal>
           <View style={{ flexDirection: "row", flex: 1 }}>
             <View style={{ flex: 0.7 }}>
-              {isEdit ? (
-                <TouchableOpacity onPress={()=> setImageModal(true)}>
-                  <Image
-                    style={{ width: "90%", height: "90%" }}
-                    source={{ uri: image }}
-                  />
-                </TouchableOpacity>
-              ) : (
+              {medicineInfo.image ? (
                 <Image
                   style={{ width: "90%", height: "90%" }}
                   source={{ uri: medicineInfo.image }}
+                />
+              ) : (
+                <Image
+                  style={{ width: "90%", height: "90%" }}
+                  source={require("../../assets/test.jpg")}
                 />
               )}
             </View>
@@ -343,7 +240,7 @@ export default function DrugInfoScreen({ navigation, route }) {
                 flex: 1,
                 paddingRight: 15,
                 paddingTop: 15,
-                paddingBottom: 10,
+                paddingBottom: 10
               }}
             >
               <View
@@ -351,7 +248,7 @@ export default function DrugInfoScreen({ navigation, route }) {
                   flexDirection: "row",
                   height: 50,
                   alignItems: "flex-end",
-                  marginTop: 10,
+                  marginTop: 10
                 }}
               >
                 {isEdit ? (
@@ -359,7 +256,7 @@ export default function DrugInfoScreen({ navigation, route }) {
                     style={{
                       fontFamily: "Prompt-Light",
                       fontSize: 30,
-                      width: "100%",
+                      width: "100%"
                     }}
                     value={name}
                     onChangeText={setName}
@@ -379,7 +276,7 @@ export default function DrugInfoScreen({ navigation, route }) {
                     fontFamily: "Prompt-Light",
                     fontSize: 18,
                     width: "100%",
-                    height: 65,
+                    height: 65
                   }}
                   value={note}
                   onChangeText={setNote}
@@ -390,7 +287,7 @@ export default function DrugInfoScreen({ navigation, route }) {
                   <Text
                     style={{
                       fontFamily: "Prompt-Light",
-                      fontSize: 18,
+                      fontSize: 18
                     }}
                   >
                     {medicineInfo.note}
@@ -405,7 +302,7 @@ export default function DrugInfoScreen({ navigation, route }) {
               width: "100%",
               height: "100%",
               borderColor: "grey",
-              flex: 1,
+              flex: 1
             }}
           >
             <Text style={[globalStyle.textThai, { fontSize: 18 }]}>
@@ -417,7 +314,7 @@ export default function DrugInfoScreen({ navigation, route }) {
                 style={{
                   fontFamily: "Prompt-Light",
                   fontSize: 18,
-                  width: "100%",
+                  width: "100%"
                 }}
                 value={description}
                 onChangeText={setDescription}
@@ -444,7 +341,7 @@ export default function DrugInfoScreen({ navigation, route }) {
                 style={{ marginLeft: "58%" }}
                 onPress={() =>
                   navigation.navigate("NotificationTime", {
-                    id: medicineInfo.id,
+                    id: medicineInfo.id
                   })
                 }
               >
@@ -490,7 +387,7 @@ export default function DrugInfoScreen({ navigation, route }) {
               flexDirection: "row",
               width: "100%",
               height: 60,
-              backgroundColor: "rgba(255,255,255,1)",
+              backgroundColor: "rgba(255,255,255,1)"
             }}
           >
             <TouchableOpacity
@@ -517,7 +414,7 @@ export default function DrugInfoScreen({ navigation, route }) {
               flexDirection: "row",
               width: "100%",
               height: 60,
-              backgroundColor: "rgba(255,255,255,1)",
+              backgroundColor: "rgba(255,255,255,1)"
             }}
           >
             <TouchableOpacity
@@ -535,8 +432,8 @@ export default function DrugInfoScreen({ navigation, route }) {
             <TouchableOpacity
               style={styles.confirmBox}
               onPress={() => {
-                setConfirmModal(true)
-                // navigation.navigate("Medicine");
+                delMedicine();
+                navigation.navigate("Medicine");
               }}
             >
               <Text style={styles.confirmText}>ลบ</Text>
@@ -544,44 +441,6 @@ export default function DrugInfoScreen({ navigation, route }) {
           </View>
         )}
       </View>
-      <Modal
-          animationType="fade"
-          transparent={true}
-          visible={confirmModal}
-          onRequestClose={() => {
-            Alert.alert("Modal has been closed.");
-            setConfirmModal(!confirmModal);
-          }}
-        >
-          <View style={globalStyle.centeredView}>
-            <View style={globalStyle.modalView}>
-              <TouchableOpacity
-                style={{ marginLeft: 280 }}
-                onPress={() => setConfirmModal(!confirmModal)}
-              >
-                <EvilIcons name="close" size={24} color="black" />
-              </TouchableOpacity>
-              <Text style={globalStyle.modalText}>คุณแน่ใจนะ?</Text>
-              <Text style={globalStyle.modalText}>
-                ข้อมูลยาที่คุณกรอกจะหายไปทั้งหมด
-              </Text>
-              <View style={{ flexDirection: "row" }}>
-                <TouchableOpacity
-                  style={[globalStyle.button, globalStyle.buttonCancel]}
-                  onPress={() => setConfirmModal(!confirmModal)}
-                >
-                  <Text style={[globalStyle.textStyle]}>ยกเลิก</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={[globalStyle.button, globalStyle.buttonClose]}
-                  onPress={() => delMedicine()}
-                >
-                  <Text style={[globalStyle.textStyle]}>ตกลง</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-        </Modal>
     </SafeAreaView>
   );
 }
@@ -595,7 +454,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#ffff",
     shadowColor: "#000",
     elevation: 5,
-    marginTop: 20,
+    marginTop: 20
   },
   section3: {
     flex: 1,
@@ -605,17 +464,17 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
     alignSelf: "flex-end",
     // height: ,
-    bottom: 0,
+    bottom: 0
   },
   confirmBox: {
     flex: 1,
     width: "100%",
     justifyContent: "center",
-    alignItems: "center",
+    alignItems: "center"
   },
   confirmText: {
     color: "rgba(0,0,0,1)",
     fontSize: 24,
-    fontFamily: "Prompt-Light",
-  },
+    fontFamily: "Prompt-Light"
+  }
 });

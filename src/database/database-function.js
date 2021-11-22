@@ -107,8 +107,8 @@ export function changeHistoryState(dispatch) {
   })
 }
 
-export function changeMedicineState(dispatch) {
-  
+export async function changeMedicineState(dispatch) {
+  try {
     db.transaction(tx => {
       tx.executeSql(
         `SELECT *
@@ -116,7 +116,6 @@ export function changeMedicineState(dispatch) {
         [],
         (tx, results) => {
           console.log("select medicine success");
-          dispatch(setMedicine([]));
           dispatch(setMedicine(results.rows._array));
           
         },
@@ -129,7 +128,9 @@ export function changeMedicineState(dispatch) {
     () => {
 
     })
-
+  } catch(err) {
+    console.log('change medicn state', err)
+  }
 }
 
 export function changeTimeState(dispatch) {
@@ -543,8 +544,6 @@ export function updateMedicine(payload, dispatch) {
           payload.id
         ],
         (tx, results) => {
-          dispatch(selectMedicine(payload.id));
-
           console.log("update medicine success");
         },
         (_, err) => {
@@ -560,8 +559,6 @@ export function updateMedicine(payload, dispatch) {
         (tx, results) => {
           // console.log(results.rows);
           console.log("select medicne success");
-          changeMedicineState(dispatch)
-          changeTimeState(dispatch)
           dispatch(setMedicine(results.rows._array));
           dispatch(selectMedicine(payload.id));
         },

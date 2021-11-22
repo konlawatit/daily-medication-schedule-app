@@ -12,6 +12,11 @@ export const REDUCE_STACK_DELETE_TIME = "REDUCE_STACK_DELETE_TIME"
 export const CLEAR_STACK_DELETE_TIME = "CLEAR_STACK_DELETE_TIME"
 export const UPDATE_TINE_IN_TINE = "UPDATE_TINE_IN_TINE"
 
+export const SET_USER = "SET_USER"
+
+export const setUser = (payload) => {
+  return {type: SET_USER, payload}
+}
 
 export const setHistory = (historyList) => {
   return { type: SET_HISTORY, getHistory: historyList };

@@ -22,12 +22,52 @@ import { changeHistoryState, changeMedicineState, changeTimeState, delDB } from 
 
 
 export default function HeaderTitle(props) {
+  const navigation = props.navigation;
+  const [confirmModal, setConfirmModal] = useState(false);
+  const [loginModal, setLoginModal] = useState(false);
+  const [netModal, setNetModal] = useState(false);
+
+  const dispatch = useDispatch();
+
+  const user = useSelector((state) => state.user.user);
   return (
     <View style={styles.headerTitleContain}>
       <View style={styles.hiddenLine}></View>
-      <View>
-        <Text style={{ fontSize: 25 ,fontFamily:"Prompt-Light"}}>{props.title}</Text>
-        <View style={styles.showLine}></View>
+      <View style={{ flexDirection: "row", width: "90%" }}>
+        <View>
+          <Text style={{ fontSize: 25, fontFamily: "Prompt-Light" }}>
+            {props.title}
+          </Text>
+        </View>
+        <TouchableOpacity
+          style={{ position: "absolute", right: 10, top: -10 }}
+          onPress={() => {
+            const unsubscribe = NetInfo.addEventListener((state) => {
+              console.log("Connection type", state.type);
+              console.log("Is connected?", state.isConnected);
+              if (state.isConnected) {
+                if (user.email !== "") {
+                  console.log(user);
+                  setConfirmModal(true);
+                } else {
+                  setLoginModal(true);
+                }
+              } else {
+                setNetModal();
+              }
+            });
+          }}
+        >
+          {/* <Text style={{ fontSize: 25, fontFamily: "Prompt-Light" }}> */}
+          <Ionicons
+            name="ios-cloud-upload"
+            size={25}
+            color="rgba(0,0,0,1)"
+            style={{ alignSelf: "center" }}
+          />
+          <Text>สำรองข้อมูล</Text>
+          {/* </Text> */}
+        </TouchableOpacity>
       </View>
       <View style={styles.showLine}></View>
 
@@ -227,7 +267,7 @@ const styles = StyleSheet.create({
     paddingTop: "5%",
     marginTop: 20,
     width: "100%",
-    alignItems: "center",
+    alignItems: "center"
     // flex: 1
   },
   hiddenLine: {

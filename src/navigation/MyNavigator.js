@@ -44,7 +44,7 @@ function HomeNavigator() {
         headerTransparent: true,
         headerTitleStyle: {
           paddingTop: "10%",
-          fontSize: 1,
+          fontSize: 30,
           // opacity: 0
         },
       }}

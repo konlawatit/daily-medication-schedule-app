@@ -27,14 +27,14 @@ import { Asset, useAssets } from "expo-asset";
 //Components
 import NotificationCard from "../components/NotificationCard";
 
+import * as MediaLibrary from "expo-media-library";
+
 import { addMedicine } from "../database/database-function";
 import { clearStackTime } from "../store/actions/medicineAction";
 
 import { Ionicons, EvilIcons, Entypo, AntDesign } from "@expo/vector-icons";
 
 import * as ImagePicker from "expo-image-picker";
-
-
 
 export default function AddMedicineScreen({ navigation }) {
   // console.disableYellowBox = true;
@@ -49,27 +49,19 @@ export default function AddMedicineScreen({ navigation }) {
   const [isSave, setIsSave] = useState(false);
   const [imageModal, setImageModal] = useState(false);
   const [confirmModal, setConfirmModal] = useState(false);
-  const [imgNull, setimgNull] = useState(false)
-  const [nameNull, setnameNull] = useState(false)
 
   const [check, setCheck] = useState(false);
 
   let dispatch = useDispatch();
+ 
 
   const save = (name, note, description, image) => {
-    if (name && image) {
+    if (name) {
       addMedicine(name, note, description, timeList, image, dispatch);
       dispatch(clearStackTime());
-      setimgNull(false)
-      setnameNull(false)
       navigation.navigate("Medicine");
     } else {
-      if(!image){
-        setimgNull(true)
-      }
-      if(!name){
-        setnameNull(true)
-      }
+      console.log("You need to input name first");
     }
   };
 
@@ -82,6 +74,7 @@ export default function AddMedicineScreen({ navigation }) {
     setCheck(!check);
     let payload = {};
   };
+
 
   const renderItem = (itemData) => {
     console.log("----> check", itemData.item);
@@ -169,9 +162,9 @@ export default function AddMedicineScreen({ navigation }) {
     };
 
     const selectSample = async (img) => {
-      setPickedImagePath(img.localUri);
+      setPickedImagePath(img.localUri)
       console.log(img.localUri);
-      setImageModal(!imageModal);
+      setImageModal(!imageModal)
     };
 
     return (
@@ -190,17 +183,16 @@ export default function AddMedicineScreen({ navigation }) {
             {pickedImagePath !== "" ? (
               <Image source={{ uri: pickedImagePath }} style={styles.image} />
             ) : (
-              <View style={{
-                flexDirection: 'column',
-                alignItems: 'center',
-                padding: 5,
-              }}>
-                <Ionicons name="add-circle-sharp" size={40} color="gray" />
-                <Text style={globalStyle.textThai}>เพิ่มรูปภาพยา</Text>
-              
-              </View>
+              <Image
+                source={require("../../assets/test.jpg")}
+                style={styles.image}
+              />
             )}
           </View>
+          <Image
+            style={globalStyle.addButton}
+            source={require("../../assets/add.png")}
+          />
         </TouchableOpacity>
         <Modal
           animationType="slide"
@@ -344,7 +336,10 @@ export default function AddMedicineScreen({ navigation }) {
               style={{ marginLeft: "58%" }}
               onPress={() => navigation.navigate("NotificationTime")}
             >
-              <Ionicons name="add-circle-sharp" size={40} color="gray" />
+              <Image
+                source={require("../../assets/add.png")} //Change your icon image here
+                style={globalStyle.ImageStyle}
+              />
             </TouchableOpacity>
           </View>
           <View style={globalStyle.showLine}></View>
@@ -379,16 +374,12 @@ export default function AddMedicineScreen({ navigation }) {
           style={[styles.confirmBox]}
           onPress={() => setConfirmModal(true)}
         >
-          <Entypo name="cross" size={20} color="#f44336" />
-          <Text style={[globalStyle.confirmText, { color: "#f44336" }]}>
-            ยกเลิก
-          </Text>
+          <Entypo name="cross" size={20} color="black" />
+          <Text style={styles.confirmText}>ยกเลิก</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.confirmBox} onPress={() => confirm()}>
-          <AntDesign name="check" size={20} color="green" />
-          <Text style={[globalStyle.confirmText, { color: "green" }]}>
-            บันทึก
-          </Text>
+          <AntDesign name="check" size={20} color="black" />
+          <Text style={styles.confirmText}>บันทึก</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -426,6 +417,11 @@ const styles = StyleSheet.create({
     width: "100%",
     justifyContent: "center",
     alignItems: "center",
+  },
+  confirmText: {
+    color: "rgba(0,0,0,1)",
+    fontSize: 18,
+    fontFamily: "Prompt-Light",
   },
   image: {
     width: "100%",

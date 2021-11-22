@@ -10,7 +10,8 @@ import {
   REDUCE_STACK_DELETE_TIME,
   SELECT_TIME,
   UPDATE_TINE_IN_TINE,
-  CLEAR_TIME
+  CLEAR_TIME,
+  SET_USER
 } from "../actions/medicineAction";
 
 const initialState = {
@@ -20,10 +21,17 @@ const initialState = {
   selectTime: {},
   stackTime: [],
   stackDeleteTime: [],
-  history:[]
+  history:[],
+  user: {
+    email: "",
+    uid: "",
+    provider: ""
+  }
 };
 const mealsReducer = (state = initialState, action) => {
   switch (action.type) {
+    case SET_USER:
+      return {...state, user: action.payload}
     case SET_HISTORY:
       return { ...state, history:action.getHistory}
     case SET_MEDICINE:

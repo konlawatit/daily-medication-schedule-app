@@ -14,7 +14,6 @@ import { EvilIcons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import DropDown from "react-native-dropdown-picker";
 import ScrollPicker from "react-native-wheel-scrollview-picker";
-import InfiniteScroll from 'react-native-infinite-looping-scroll';
 import { useDispatch } from "react-redux";
 
 //Components
@@ -44,12 +43,12 @@ export default function NotificationTimeScreen({ navigation, route }) {
     we: 1
   });
 
-  // const [options, setOptions] = useState([
-  //   { id: 1, title: "เสียงการแจ้งเตือน", subTitle: "Homecoming", value: false },
-  //   { id: 2, title: "ระบบสั่น", subTitle: "Homecoming", value: false },
-  //   { id: 3, title: "ข้าม", subTitle: "5 นาที", value: false },
-  //   { id: 4, title: "แจ้งเตือนซ้ำ", value: false }
-  // ]);
+  const [options, setOptions] = useState([
+    { id: 1, title: "เสียงการแจ้งเตือน", subTitle: "Homecoming", value: false },
+    { id: 2, title: "ระบบสั่น", subTitle: "Homecoming", value: false },
+    { id: 3, title: "ข้าม", subTitle: "5 นาที", value: false },
+    { id: 4, title: "แจ้งเตือนซ้ำ", value: false }
+  ]);
 
   const dispatch = useDispatch();
   const timeList = useSelector((state) => state.medicine.stackTime);
@@ -262,7 +261,7 @@ export default function NotificationTimeScreen({ navigation, route }) {
         <View style={styles.line}></View>
       </View>
       <View style={styles.section2}>
-        {/* <FlatList
+        <FlatList
           data={options}
           contentContainerStyle={{
             // height: "100%",
@@ -270,7 +269,7 @@ export default function NotificationTimeScreen({ navigation, route }) {
           }}
           renderItem={renderItem}
           keyExtractor={(item, index) => index.toString()}
-        /> */}
+        />
       </View>
       <View style={styles.section3}>
           <TouchableOpacity
@@ -311,7 +310,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end"
   },
   section2: {
-    flex: 0.5,
+    flex: 1,
 
     width: "75%"
     // justifyContent: 'space-evenly'

@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, Button, TextInput, Image, TouchableHighlight, T
 import { LinearGradient } from 'expo-linear-gradient';
 import { useDispatch, useSelector } from "react-redux";
 import NetInfo from '@react-native-community/netinfo';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 import { setSpinner } from "../store/actions/userAction";
 
@@ -22,6 +23,11 @@ export default function LoginScreen({navigation}) {
 
   return (
     <View style={styles.container}>
+        <Spinner
+          visible={spinner}
+          textContent={'Loading...'}
+          textStyle={{color:"#FFF"}}
+        />
      <LinearGradient
         // Background Linear Gradient
         colors={['rgba(85,194,255,0.5)', 'transparent']}
@@ -33,7 +39,7 @@ export default function LoginScreen({navigation}) {
         <Text style={styles.title} >Schedule</Text>
       </View>
       
-      <TouchableOpacity style={styles.submit} underlayColor="grey" onPress={() => navigation.navigate("Home")} >
+      <TouchableOpacity style={styles.submit} underlayColor="grey" onPress={goHome} >
           <View style={styles.insideSubmit} >
               <View>
                 <Image style={{width: 30, height: 30}} source={require('../../assets/profile.png')} />
