@@ -27,6 +27,7 @@ import { Asset, useAssets } from "expo-asset";
 //Components
 import NotificationCard from "../components/NotificationCard";
 
+import * as MediaLibrary from "expo-media-library";
 
 import { addMedicine } from "../database/database-function";
 import { clearStackTime } from "../store/actions/medicineAction";

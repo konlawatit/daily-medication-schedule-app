@@ -11,15 +11,27 @@ import {
   Pressable,
   Alert,
   Modal,
-  TouchableOpacity
+  TouchableOpacity,
 } from "react-native";
 import { useDispatch } from "react-redux";
 import { selectMedicine } from "../store/actions/medicineAction";
 
 import { updateVerify } from "../database/database-function";
 import { date } from "yup/lib/locale";
+import { globalStyle } from "../stylesheet/globalStylesheet";
 
 export default function DailyCard(props) {
+  const shadowStyle = {
+    width: 100,
+    height: 100,
+    color: "#000",
+    border: 2,
+    radius: 3,
+    opacity: 0.2,
+    x: 0,
+    y: 3,
+    style: { marginVertical: 5 },
+  };
   const [modalVisible, setModalVisible] = useState(false);
   //   let image2 = require("../../assets/" + props.image)
   let title = props.title;
@@ -27,67 +39,57 @@ export default function DailyCard(props) {
   const [verify, setVerify] = useState(props.verify == 1 ? true : false);
   let checkBox = props.checkBox ? props.checkBox : false;
   let id = props.id;
-  let idMed = props.idMed
+  let idMed = props.idMed;
   let image = props.image;
   const navigation = props.navigation;
-  let date = new Date()
-  let checkdate = (date.getHours()<10?'0':'')+date.getHours().toString()+":"+(date.getMinutes()<10?'0':'')+date.getMinutes().toString()
-
+  let date = new Date();
+  let checkdate =
+    (date.getHours() < 10 ? "0" : "") +
+    date.getHours().toString() +
+    ":" +
+    (date.getMinutes() < 10 ? "0" : "") +
+    date.getMinutes().toString();
 
   const dispatch = useDispatch();
 
-
   const toggleVerify = () => {
-    updateVerify(!verify, id,dispatch,idMed);
+    updateVerify(!verify, id, dispatch, idMed);
     setVerify(!verify);
-    setModalVisible(!modalVisible)
+    setModalVisible(!modalVisible);
   };
 
   return (
     <TouchableOpacity
-      style={title<=checkdate?styles.card2:styles.card}
+      style={title <= checkdate ? styles.card2 : styles.card}
       onPress={() => {
         // upLocalToFirebase()
         dispatch(selectMedicine(idMed));
         navigation.navigate("DrugInfo", { idMed });
       }}
     >
-      <View style={{ flex: 0.7}}>
-        {image !== "" ? (
-          <Image
-            source={{ uri: image }}
-            style={{ width: "100%", height: 150}}
-          />
-        ) : (
-          <Image
-            style={{ width: "100%", height: 150 }}
-            source={require("../../assets/test.jpg")}
-          />
-        )}
+      <View style={{ flex: 0.7 }}>
+        <Image source={{ uri: image }} style={{ width: "100%", height: 150 }} />
       </View>
       <View style={{ flex: 1, padding: 15 }}>
-        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-          <Text style={{ fontSize: 50, fontFamily: "Prompt-Light" }}>
-            {title}
-          </Text>
-          {/* <CheckBox style={{borderRadius: 20, transform: [{ scaleX: 2 }, { scaleY: 2 }] }} value={data} onValueChange={setData} /> */}
-          {checkBox ? (
-            <TouchableOpacity
-              style={styles.circle}
-              onPress={()=>setModalVisible(true)}
+        <TouchableOpacity onPress={() => setModalVisible(true)}>
+          {title <= checkdate ? (
+            <Text
+              style={[globalStyle.textThai, { color: "red", fontSize: 15 }]}
             >
-              {verify ? (
-                <Image
-                  style={{ width: "80%", height: "80%" }}
-                  source={require("../../assets/checkmark.png")}
-                />
-              ) : (
-                <View></View>
-              )}
-            </TouchableOpacity>
+              เลยเวลาทานมาแล้ว
+            </Text>
           ) : (
-            <View></View>
+            <Text
+              style={[globalStyle.textThai, { color: "green", fontSize: 15 }]}
+            >
+              จะถึงเวลาทาน
+            </Text>
           )}
+        </TouchableOpacity>
+        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+          <Text style={{ fontSize: 45, fontFamily: "Prompt-Light" }}>
+            {title} น.
+          </Text>
         </View>
 
         <View style={styles.line}></View>

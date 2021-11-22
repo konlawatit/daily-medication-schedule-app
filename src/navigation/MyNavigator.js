@@ -93,7 +93,7 @@ export default function MyNavigator() {
     console.log('Connection type', state.type);
     console.log('Is connected?', state.isConnected);
     if (state.isConnected) {
-      upLocalToFirebase()
+      // upLocalToFirebase()
     }
   });
 

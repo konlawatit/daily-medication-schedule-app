@@ -1,17 +1,33 @@
 import React, { useContext, useState } from "react";
 import { StyleSheet, Text, View, Button, TextInput, Image, TouchableHighlight, TouchableOpacity } from "react-native";
 import { LinearGradient } from 'expo-linear-gradient';
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import NetInfo from '@react-native-community/netinfo';
+import Spinner from 'react-native-loading-spinner-overlay';
+
+import { setSpinner } from "../store/actions/userAction";
 
 import { signInWithGoogleAsync, logInFacebook, setData } from '../../firebase'
 import { upLocalToFirebase } from "../database/database-firestore";
 
 export default function LoginScreen({navigation}) {
+  const spinner = useSelector(state => state.user.spinner)
+  // const [spinner, setspinner] = useState(false)
   const dispatch = useDispatch()
+  const goHome = ()=>{
+    // setspinner(true)
+    dispatch(setSpinner(true))
+    setTimeout(()=>{dispatch(setSpinner(false));navigation.navigate('Home')} , 500);
+  }
+  
 
   return (
     <View style={styles.container}>
+        <Spinner
+          visible={spinner}
+          textContent={'Loading...'}
+          textStyle={{color:"#FFF"}}
+        />
      <LinearGradient
         // Background Linear Gradient
         colors={['rgba(85,194,255,0.5)', 'transparent']}
@@ -23,7 +39,7 @@ export default function LoginScreen({navigation}) {
         <Text style={styles.title} >Schedule</Text>
       </View>
       
-      <TouchableOpacity style={styles.submit} underlayColor="grey" onPress={() => navigation.navigate("Home")} >
+      <TouchableOpacity style={styles.submit} underlayColor="grey" onPress={goHome} >
           <View style={styles.insideSubmit} >
               <View>
                 <Image style={{width: 30, height: 30}} source={require('../../assets/profile.png')} />
@@ -45,7 +61,12 @@ export default function LoginScreen({navigation}) {
             // upLocalToFirebase()
           }
         });
-          signInWithGoogleAsync(navigation, dispatch);
+        dispatch(setSpinner(true))
+          signInWithGoogleAsync(navigation, dispatch).then(check => {
+            if (!check) {
+              dispatch(setSpinner(false))
+            }
+          } )
         }} >
           <View style={styles.insideSubmit} >
               <View>
@@ -57,8 +78,8 @@ export default function LoginScreen({navigation}) {
           </View>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.submitFacebook} underlayColor="grey" onPress={() => {
-          logInFacebook();
+      {/* <TouchableOpacity style={styles.submitFacebook} underlayColor="grey" onPress={() => {
+          logInFacebook(navigation, dispatch);
         }}>
           <View style={styles.insideSubmit} >
               <View>
@@ -68,7 +89,7 @@ export default function LoginScreen({navigation}) {
                 <Text style={{color: "white", fontSize: 16, fontFamily: "Prompt-Light"}} >เข้าสู่ระบบด้วย Facebook</Text>
               </View>
           </View>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
 
     </View>
   );

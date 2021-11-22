@@ -1,19 +1,20 @@
 import fb from "firebase/app";
 import "firebase/auth";
-import 'firebase/storage'; 
+import "firebase/storage";
 import { getFirestore, setDoc, doc } from "firebase/firestore";
 import * as Google from "expo-google-app-auth";
 import * as Facebook from "expo-facebook";
 import firebaseConfig from "./firebaseConfig.json";
-import { LogBox } from 'react-native';
+import { LogBox } from "react-native";
 
+import { setUser } from "./src/store/actions/userAction";
 
 if (!fb.apps.length) {
   console.log("Connected with firebase");
   fb.initializeApp(firebaseConfig);
   fb.firestore().settings({ experimentalForceLongPolling: true });
 }
-LogBox.ignoreLogs(['Setting a timer for a long period of time'])
+LogBox.ignoreLogs(["Setting a timer for a long period of time"]);
 
 const GoogleProvider = new fb.auth.GoogleAuthProvider();
 
@@ -22,9 +23,7 @@ import { loginFirebase } from "./src/database/database-firebase";
 // import { changeMedicineState } from "./src/database/database-function";
 import { getNextTriggerDateAsync } from "expo-notifications";
 
-export const firebase = !fb.apps.length
-  ? fb.initializeApp(firebaseConfig)
-  : fb;
+export const firebase = !fb.apps.length ? fb.initializeApp(firebaseConfig) : fb;
 
 export async function signInAnonymous(username, password) {
   const firestore = fb.firestore();
@@ -54,24 +53,25 @@ export async function signInAnonymous(username, password) {
   }
 }
 
-export async function signInWithGoogleAsync(navigation, dispatch) {
+export async function signInWithGoogleAsync(navigation, dispatch, state) {
   try {
     const result = await Google.logInAsync({
       androidClientId:
         "745441194395-p60l0us8c2ia3e0t95bije801cgevafa.apps.googleusercontent.com",
-      // iosClientId: YOUR_CLIENT_ID_HERE,
+      iosClientId: "745441194395-sv65d1714ssdtsugu9ogfg0fmjifl1mu.apps.googleusercontent.com",
       scopes: ["profile", "email"]
     });
 
     if (result.type === "success") {
-      onSignIn(result, dispatch, navigation)
+      onSignIn(result, dispatch, navigation, state);
       // navigation.navigate("Home");
-      return result.accessToken;
+      // return result.accessToken;
+      return true
     } else {
-      return { cancelled: true };
+      return false;
     }
   } catch (e) {
-    return { error: true };
+    return false;
   }
 }
 
@@ -92,7 +92,7 @@ function isUserEqual(googleUser, firebaseUser) {
   return false;
 }
 
-function onSignIn(googleUser, dispatch, navigation) {
+function onSignIn(googleUser, dispatch, navigation, state) {
   // const dispatch = useDispatch()
   //   console.log("Google Auth Response", googleUser);
   // We need to register an Observer on Firebase Auth to make sure auth is initialized.
@@ -117,15 +117,17 @@ function onSignIn(googleUser, dispatch, navigation) {
           const usersRef = firestore.collection("users");
           await usersRef.doc(uid).set({
             medicine: [],
-            time: [],
-            history: []
           });
-          const payload = {
+          const payloadUser = {
             uid: results.user.uid,
             email: results.user.email,
             provider: "google"
           };
-          loginFirebase(payload);
+          let payloadData = {
+            medicine: []
+          };
+          dispatch(setUser(payloadUser));
+          loginFirebase(payloadUser, payloadData, dispatch, navigation, state, firebase);
         })
         .catch((error) => {
           // Handle Errors here.
@@ -147,12 +149,10 @@ function onSignIn(googleUser, dispatch, navigation) {
         email: firebaseUser.email,
         provider: "google"
       };
-      const payloadData = await getAllData(payloadUser.uid)
-      // console.log(payloadData)
-      console.log('payload data', payloadData)
-      loginFirebase(payloadUser, payloadData, dispatch, navigation)
-
-      
+      dispatch(setUser(payloadUser));
+      const payloadData = await getAllData(payloadUser.uid);
+      console.log("payload data --->", payloadData);
+      loginFirebase(payloadUser, payloadData, dispatch, navigation, state, firebase);
 
       console.log(
         "User already signed-in Firebase.",
@@ -164,7 +164,7 @@ function onSignIn(googleUser, dispatch, navigation) {
   });
 }
 
-export async function logInFacebook() {
+export async function logInFacebook(navigation, dispatch) {
   try {
     await Facebook.initializeAsync({
       appId: "905477617072521"
@@ -186,15 +186,25 @@ export async function logInFacebook() {
         .then(async (re) => {
           const uid = re.user.uid;
           const firestore = fb.firestore();
-          const usersRef = firestore.collection("users").doc(uid);
-          const snapshot = await usersRef.get();
-          const payload = {
-            uid: re.user.uid,
-            email: re.user.email,
-            provider: "facebook"
-          };
-          loginFirebase(payload);
-          // console.log(re);
+          if (userExists(uid)) {
+            const payloadUser = {
+              uid: re.user.uid,
+              email: re.user.email,
+              provider: "facebook"
+            };
+            dispatch(setUser(payloadUser));
+            const payloadData = await getAllData(payloadUser.uid);
+            loginFirebase(payloadUser, payloadData, dispatch, navigation);
+          } else {
+            console.log('sssssssssssssssssssssssssp')
+            const usersRef = firestore.collection("users");
+            let payloadData = {
+              medicine: []
+            }
+            await usersRef.doc(uid).set(payloadData);
+            loginFirebase(payloadUser, payloadData, dispatch, navigation);
+          }
+          console.log(re);
           console.log("sync facebook with firebase");
         })
         .catch((err) => console.log("sync facebook with firebase fail", err));
@@ -209,52 +219,63 @@ export async function logInFacebook() {
   }
 }
 
+export async function userExists(uid) {
+  try {
+    const firestore = firebase.firestore();
+    const userRef = (await firestore.collection("users").doc(uid).get()).exists;
+    console.log("user Esiststs", userRef);
+  } catch (err) {
+    console.log("user Esists -->", err);
+  }
+}
 
 export async function getAllData(uid) {
   try {
     const firestore = firebase.firestore();
-        const userRef = firestore.collection('users').doc(uid)
-        let result
-        await userRef.get().then(data => {
-          result = data.data()
-        })
-        return result
+    const userRef = firestore.collection("users").doc(uid);
+    let result;
+    await userRef.get().then((data) => {
+      result = data.data();
+    });
+    return result;
   } catch (err) {
-    console.log('get all data error', err)
+    console.log("get all data error", err);
   }
 }
 
 export async function setData() {
   try {
     const firestore = firebase.firestore();
-        const userRef = firestore.collection('users').doc("Mx4dra711kadIj2C9oIfUl3wKEC3")
-        await userRef.set({
-          history: [],
-          medicine: [
+    const userRef = firestore
+      .collection("users")
+      .doc("Mx4dra711kadIj2C9oIfUl3wKEC3");
+    await userRef.set({
+      history: [],
+      medicine: [
+        {
+          name: "ยาแก้ปวด",
+          note: "no",
+          description: "test",
+          image: "",
+          time: [
             {
-              name: 'ยาแก้ปวด',
-              note: 'no',
-              description: 'test',
-              image: '',
-              time: [
-                {
-                  time: '13:00',
-                  isNoti: true,
-                  status: false,
-                  day: '{"mo": 1,"tu": 1,"we": 1,"th":1,"fr":1,"sa":1,"su":1}'
-                }
-              ],
-              history: [
-                {
-                  date: '21/11/2021',
-                  time: '13:00',
-                } 
-              ]
-          }
+              time: "13:00",
+              isNoti: true,
+              status: false,
+              day: '{"mo": 1,"tu": 1,"we": 1,"th":1,"fr":1,"sa":1,"su":1}'
+            }
+          ],
+          history: [
+            {
+              date: "21/11/2021",
+              time: "13:00"
+            }
           ]
-        })
-        return result
+        }
+      ]
+    });
+    return result;
   } catch (err) {
-    console.log('get all data error', err)
+    console.log("get all data error", err);
   }
 }
