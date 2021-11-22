@@ -22,8 +22,12 @@ import { LinearGradient } from "expo-linear-gradient";
 
 import { globalStyle } from "../stylesheet/globalStylesheet";
 
+import { Asset, useAssets } from "expo-asset";
+
 //Components
 import NotificationCard from "../components/NotificationCard";
+
+import * as MediaLibrary from "expo-media-library";
 
 import { addMedicine } from "../database/database-function";
 import { clearStackTime } from "../store/actions/medicineAction";
@@ -56,8 +60,9 @@ export default function AddMedicineScreen({ navigation }) {
       addMedicine(name, note, description, timeList, image, dispatch);
       dispatch(clearStackTime());
       navigation.navigate("Medicine");
+    } else {
+      console.log("You need to input name first");
     }
-    console.log(name, note, description);
   };
 
   const cancel = () => {
@@ -71,12 +76,16 @@ export default function AddMedicineScreen({ navigation }) {
   };
 
 
-
   const renderItem = (itemData) => {
-    console.log('----> check', itemData.item)
+    console.log("----> check", itemData.item);
     return (
       <View style={{ alignItems: "center" }}>
-        <NotificationCard time={itemData.item.time} day={itemData.item.day} id={itemData.item.id} isNoti={itemData.item.isNoti} />
+        <NotificationCard
+          time={itemData.item.time}
+          day={itemData.item.day}
+          id={itemData.item.id}
+          isNoti={itemData.item.isNoti}
+        />
       </View>
     );
   };
@@ -86,6 +95,12 @@ export default function AddMedicineScreen({ navigation }) {
     const [note, setNote] = useState();
     const [description, setDescription] = useState();
     const [pickedImagePath, setPickedImagePath] = useState("");
+    const [renderImg] = useAssets([
+      require("../../assets/sample/1.png"),
+      require("../../assets/sample/2.png"),
+      require("../../assets/sample/3.png"),
+      require("../../assets/sample/4.png"),
+    ]);
 
     useEffect(() => {
       let payload = {
@@ -102,6 +117,7 @@ export default function AddMedicineScreen({ navigation }) {
     // The path of the picked image
 
     // This function is triggered when the "Select an image" button pressed
+
     const showImagePicker = async () => {
       // Ask the user for the permission to access the media library
       const permissionResult =
@@ -145,8 +161,14 @@ export default function AddMedicineScreen({ navigation }) {
       }
     };
 
+    const selectSample = async (img) => {
+      setPickedImagePath(img.localUri)
+      console.log(img.localUri);
+      setImageModal(!imageModal)
+    };
+
     return (
-      <View style={[globalStyle.Addcontainer,{marginTop:10}]}>
+      <View style={[globalStyle.Addcontainer, { marginTop: 10 }]}>
         <LinearGradient
           // Background Linear Gradient
           colors={["rgba(255,255,255,1)", "transparent"]}
@@ -181,67 +203,88 @@ export default function AddMedicineScreen({ navigation }) {
             setImageModal(!imageModal);
           }}
         >
-          <View style={[styles.centeredView, { height: "10%" }]}>
-            <View style={[styles.modalView]}>
+          <View style={[globalStyle.centeredView, { height: "10%" }]}>
+            <View style={[globalStyle.modalView]}>
               <TouchableOpacity
-                style={{ marginLeft: "91%" }}
+                style={{ marginLeft: 280 }}
                 onPress={() => setImageModal(!imageModal)}
               >
                 <EvilIcons name="close" size={24} color="black" />
               </TouchableOpacity>
-              <TouchableOpacity onPress={showImagePicker}>
+              <TouchableOpacity
+                onPress={showImagePicker}
+                style={{ marginBottom: 15 }}
+              >
                 <Text style={styles.modalText}>เลือกรูปภาพ</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity onPress={openCamera}>
+              <TouchableOpacity
+                onPress={openCamera}
+                style={{ marginBottom: 15 }}
+              >
                 <Text style={styles.modalText}>ถ่ายจากกล้อง</Text>
               </TouchableOpacity>
+              <Text style={[styles.modalText, { marginBottom: 15 }]}>
+                เลือกจากรูปภาพตัวอย่าง
+              </Text>
+              <View
+                style={[globalStyle.line, { width: 300, marginBottom: 15 }]}
+              ></View>
+              <FlatList
+                numColumns={3}
+                data={renderImg}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={({ item, index }) => (
+                  <TouchableOpacity onPress={() => selectSample(item)}>
+                    <Image
+                      source={item}
+                      key={index}
+                      style={{
+                        width: 90,
+                        height: 90,
+                        margin: 2,
+                      }}
+                    />
+                  </TouchableOpacity>
+                )}
+              />
             </View>
           </View>
         </Modal>
 
-        <Modal animationType="slide" transparent={true} visible={confirmModal}>
-          <View style={styles.centeredView}>
-            <View style={[styles.modalView]}>
+        <Modal
+          animationType="fade"
+          transparent={true}
+          visible={confirmModal}
+          onRequestClose={() => {
+            Alert.alert("Modal has been closed.");
+            setConfirmModal(!confirmModal);
+          }}
+        >
+          <View style={globalStyle.centeredView}>
+            <View style={globalStyle.modalView}>
               <TouchableOpacity
-                style={{ marginLeft: "91%" }}
+                style={{ marginLeft: 280 }}
                 onPress={() => setConfirmModal(!confirmModal)}
               >
                 <EvilIcons name="close" size={24} color="black" />
               </TouchableOpacity>
-              <Entypo name="cross" size={42} color="black" />
-              <Text
-                style={[
-                  styles.modalText,
-                  { fontSize: 25, marginTop: 10, padding: 0, marginBottom: 10 },
-                ]}
-              >
-                คุณแน่ใจนะ?
-              </Text>
-              <Text
-                style={[
-                  styles.modalText,
-                  { textAlign: "left", margin: 0, padding: 0 },
-                ]}
-              >
+              <Text style={globalStyle.modalText}>คุณแน่ใจนะ?</Text>
+              <Text style={globalStyle.modalText}>
                 ข้อมูลยาที่คุณกรอกจะหายไปทั้งหมด
               </Text>
               <View style={{ flexDirection: "row" }}>
                 <TouchableOpacity
-                  style={[styles.bottomTabs, { borderRightWidth: 0.5 }]}
+                  style={[globalStyle.button, globalStyle.buttonCancel]}
                   onPress={() => setConfirmModal(!confirmModal)}
                 >
-                  <Text style={[styles.modalText, { color: "#0080fe" }]}>
-                    ยกเลิก
-                  </Text>
+                  <Text style={[globalStyle.textStyle]}>ยกเลิก</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  style={[styles.bottomTabs]}
+                  style={[globalStyle.button, globalStyle.buttonClose]}
                   onPress={() => cancel()}
                 >
-                  <Text style={[styles.modalText, { color: "#0080fe" }]}>
-                    ตกลง
-                  </Text>
+                  <Text style={[globalStyle.textStyle]}>ตกลง</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -252,7 +295,7 @@ export default function AddMedicineScreen({ navigation }) {
           <View style={{ width: "80%", borderColor: "grey" }}>
             <Text style={globalStyle.textThai}>ชื่อตัวยา</Text>
             <TextInput
-              placeholder="กรอกชื่อตัวยา"
+              placeholder={"กรอกชื่อตัวยา"}
               value={name}
               onChangeText={setName}
               style={globalStyle.textInput}
@@ -367,7 +410,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 0.5,
     borderColor: "#DADADA",
     padding: 12,
-    bottom:0
+    bottom: 0,
   },
   confirmBox: {
     flex: 1,

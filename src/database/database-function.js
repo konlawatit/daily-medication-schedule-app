@@ -168,7 +168,7 @@ export function changeTimeState(dispatch) {
 export async function updateVerify(status, id, dispatch,idMed) {
   var fulldate = new Date()
   var date = fulldate.getDate().toString()+"/"+(fulldate.getMonth()+1).toString()+"/"+fulldate.getFullYear().toString()
-  var time = fulldate.getHours().toString()+"."+fulldate.getMinutes().toString()
+  var time = (fulldate.getHours()<10?'0':'')+fulldate.getHours().toString()+":"+(fulldate.getMinutes()<10?'0':'')+fulldate.getMinutes().toString()
   console.log(fulldate)
   db.transaction((tx) => {
     tx.executeSql(

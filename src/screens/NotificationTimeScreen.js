@@ -26,8 +26,10 @@ import { addTime } from "../database/database-function";
 export default function NotificationTimeScreen({ navigation, route }) {
   const [hour, setHour] = useState("02");
   const [min, setMin] = useState("02");
-  const [hourIndex, setHourIndex] = useState(1);
-  const [minIndex, setMinIndex] = useState(1);
+    const [hourArr, setHourArr] = useState(["00","01", "02", "03", "04", "05", "06","07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23"])
+  const [minArr, setMinArr] = useState(["00","01", "02", "03", "04", "05", "06", "07", "08", "09", "10","11", "12", "13", "14", "15", "16", "17", "18", "19", "20","21", "22", "23", "24", "25", "26", "27", "28", "29", "30","31","32","33","34","35","36","37","38","39","40","41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59"])
+  const [hourIndex, setHourIndex] = useState(12);
+  const [minIndex, setMinIndex] = useState(30);
   const [id, setId] = useState(route.params ? route.params.id : null )
 
 
@@ -86,8 +88,8 @@ export default function NotificationTimeScreen({ navigation, route }) {
         <View style={[styles.time]}>
           <ScrollPicker
             wrapperColor="rgba(255,255,255,0)"
-            dataSource={["01", "02", "03", "04", "05", "06"]}
-            selectedIndex={1}
+            dataSource={["00","01", "02", "03", "04", "05", "06","07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23"]}
+            selectedIndex={hourIndex}
             style={{ backgroundColor: "black" }}
             renderItem={(data, index) => {
               return (
@@ -123,8 +125,8 @@ export default function NotificationTimeScreen({ navigation, route }) {
           </View>
           <ScrollPicker
             wrapperColor="rgba(255,255,255,0)"
-            dataSource={["01", "02", "03", "04", "05", "06"]}
-            selectedIndex={1}
+            dataSource={["00","01", "02", "03", "04", "05", "06", "07", "08", "09", "10","11", "12", "13", "14", "15", "16", "17", "18", "19", "20","21", "22", "23", "24", "25", "26", "27", "28", "29", "30","31","32","33","34","35","36","37","38","39","40","41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59"]}
+            selectedIndex={minIndex}
             style={{ backgroundColor: "black" }}
             renderItem={(data, index) => {
               return (

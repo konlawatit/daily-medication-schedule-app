@@ -159,7 +159,7 @@ export default function HistoryScreen({ navigation }) {
             padding: (0, 0, 10, 10)
           }}
         >
-          {!itemData.image ?           (<Image
+          {!itemData.image?           (<Image
             style={styles.tinyLogo}
             source={require('../../assets/test.jpg')}
             
