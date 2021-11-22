@@ -53,17 +53,17 @@ export async function signInAnonymous(username, password) {
   }
 }
 
-export async function signInWithGoogleAsync(navigation, dispatch) {
+export async function signInWithGoogleAsync(navigation, dispatch, state) {
   try {
     const result = await Google.logInAsync({
       androidClientId:
         "745441194395-p60l0us8c2ia3e0t95bije801cgevafa.apps.googleusercontent.com",
-      // iosClientId: YOUR_CLIENT_ID_HERE,
+      iosClientId: "745441194395-sv65d1714ssdtsugu9ogfg0fmjifl1mu.apps.googleusercontent.com",
       scopes: ["profile", "email"]
     });
 
     if (result.type === "success") {
-      onSignIn(result, dispatch, navigation);
+      onSignIn(result, dispatch, navigation, state);
       // navigation.navigate("Home");
       return result.accessToken;
     } else {
@@ -91,7 +91,7 @@ function isUserEqual(googleUser, firebaseUser) {
   return false;
 }
 
-function onSignIn(googleUser, dispatch, navigation) {
+function onSignIn(googleUser, dispatch, navigation, state) {
   // const dispatch = useDispatch()
   //   console.log("Google Auth Response", googleUser);
   // We need to register an Observer on Firebase Auth to make sure auth is initialized.
@@ -116,8 +116,6 @@ function onSignIn(googleUser, dispatch, navigation) {
           const usersRef = firestore.collection("users");
           await usersRef.doc(uid).set({
             medicine: [],
-            time: [],
-            history: []
           });
           const payloadUser = {
             uid: results.user.uid,
@@ -127,7 +125,8 @@ function onSignIn(googleUser, dispatch, navigation) {
           let payloadData = {
             medicine: []
           };
-          loginFirebase(payloadUser, payloadData, dispatch, navigation);
+          dispatch(setUser(payloadUser));
+          loginFirebase(payloadUser, payloadData, dispatch, navigation, state, firebase);
         })
         .catch((error) => {
           // Handle Errors here.
@@ -151,10 +150,8 @@ function onSignIn(googleUser, dispatch, navigation) {
       };
       dispatch(setUser(payloadUser));
       const payloadData = await getAllData(payloadUser.uid);
-      // console.log(payloadData)
       console.log("payload data --->", payloadData);
-      userExists(payloadUser.uid);
-      loginFirebase(payloadUser, payloadData, dispatch, navigation);
+      loginFirebase(payloadUser, payloadData, dispatch, navigation, state, firebase);
 
       console.log(
         "User already signed-in Firebase.",

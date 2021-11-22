@@ -16,6 +16,10 @@ import NetInfo from "@react-native-community/netinfo";
 import { upLocalToFirebase } from "../database/database-firestore";
 
 import { signInWithGoogleAsync, logInFacebook, setData } from "../../firebase";
+import { clearUser } from "../store/actions/userAction";
+import { changeHistoryState, changeMedicineState, changeTimeState, delDB } from "../database/database-function";
+
+
 
 export default function HeaderTitle(props) {
   const navigation = props.navigation;
@@ -101,7 +105,17 @@ export default function HeaderTitle(props) {
               </Text>
             </View>
             {/* <Text style={globalStyle.modalText}>คุณแน่ใจนะ?</Text> */}
-            <Text style={globalStyle.modalText}>ออกจากระบบ</Text>
+            <TouchableOpacity onPress={() => {
+              dispatch(clearUser())
+              delDB()
+              changeMedicineState(dispatch)
+              changeHistoryState(dispatch)
+              changeTimeState(dispatch)
+              setConfirmModal(false)
+              navigation.navigate("Login")
+            }}>
+              <Text style={globalStyle.modalText}>ออกจากระบบ</Text>
+              </TouchableOpacity>
             <Text style={globalStyle.modalText}>ต้องการสำรองข้อมูลหรือไม่</Text>
             <View style={{ flexDirection: "row" }}>
               <TouchableOpacity
@@ -114,7 +128,7 @@ export default function HeaderTitle(props) {
                 style={[globalStyle.button, globalStyle.buttonClose]}
                 onPress={() => {
                   //ok
-                  upLocalToFirebase();
+                  upLocalToFirebase(user.uid);
                 }}
               >
                 <Text style={[globalStyle.textStyle]}>ตกลง</Text>
@@ -146,7 +160,7 @@ export default function HeaderTitle(props) {
               style={styles.submitGoogle}
               underlayColor="grey"
               onPress={() => {
-                signInWithGoogleAsync(navigation, dispatch);
+                signInWithGoogleAsync(navigation, dispatch, "backup");
                 setLoginModal(!loginModal)
               }}
             >
@@ -248,7 +262,7 @@ export default function HeaderTitle(props) {
               </Text>
             </View>
             {/* <Text style={globalStyle.modalText}>คุณแน่ใจนะ?</Text> */}
-            <Text style={globalStyle.modalText}>ออกจากระบบ</Text>
+            
             <Text style={globalStyle.modalText}>ต้องการสำรองข้อมูลหรือไม่</Text>
             <View style={{ flexDirection: "row" }}>
               <TouchableOpacity
@@ -261,7 +275,7 @@ export default function HeaderTitle(props) {
                 style={[globalStyle.button, globalStyle.buttonClose]}
                 onPress={() => {
                   //ok
-                  upLocalToFirebase();
+                  upLocalToFirebase(user.uid);
                 }}
               >
                 <Text style={[globalStyle.textStyle]}>ตกลง</Text>
@@ -296,8 +310,8 @@ const styles = StyleSheet.create({
     opacity: 0.25
   },
   submitGoogle: {
-    marginRight: 40,
-    marginLeft: 40,
+    // marginRight: 40,
+    // marginLeft: 40,
     paddingLeft: "5%",
     backgroundColor: "#fff",
     borderRadius: 10,
@@ -317,8 +331,8 @@ const styles = StyleSheet.create({
     elevation: 5
   },
   submitFacebook: {
-    marginRight: 40,
-    marginLeft: 40,
+    // marginRight: 40,
+    // marginLeft: 40,
     marginTop: 10,
     paddingLeft: "5%",
     backgroundColor: "#4267B2",

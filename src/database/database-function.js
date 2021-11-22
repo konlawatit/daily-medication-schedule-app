@@ -985,3 +985,23 @@ export async function delDB() {
     console.log('del db err', err)
   }
 }
+
+export async function delFirebase(dispatch) {
+  try {
+    db.transaction((tx) => {
+      tx.executeSql(
+        "DELETE FROM FIREBASE",
+        [],
+        (tx, results) => {
+          console.log('delete medicine')
+        },
+        (tx, error) => {
+          console.log('delete medicien', error);
+        }
+      );
+    },
+    (err) => console.log(err));
+  } catch (err) {
+    console.log('del db err', err)
+  }
+}

@@ -4,7 +4,7 @@ import { firebase } from "../../firebase";
 import { DatabaseConnection } from "../database/database-connection";
 const db = DatabaseConnection.getConnection();
 
-export function upLocalToFirebase() {
+export function upLocalToFirebase(uid) {
   const firestore = firebase.firestore();
   db.transaction(
     (tx) => {
@@ -71,7 +71,7 @@ export function upLocalToFirebase() {
                         console.log('--------------med list---', medList)
                         let userRef = firestore
                           .collection("users")
-                          .doc("Mx4dra711kadIj2C9oIfUl3wKEC3");
+                          .doc(uid);
                         userRef
                           .set({
                             history: [],
@@ -93,24 +93,6 @@ export function upLocalToFirebase() {
                         console.log("up local to firebase history", err);
                       }
                     );
-                    // push firebase
-                    // let userRef = firestore.collection('users').doc()
-                    // payload.medicine.push(medList);
-                    // let userRef = firestore
-                    //   .collection("users")
-                    //   .doc("Mx4dra711kadIj2C9oIfUl3wKEC3");
-                    // userRef
-                    //   .set({
-                    //     history: [],
-                    //     medicine: []
-                    //   })
-                    //   .then(() => {
-                    //     userRef.update({
-                    //       medicine:
-                    //         firebase.firestore.FieldValue.arrayUnion(medList)
-                    //     });
-                    //   });
-
                     console.log("medicine 1 -->", payload);
                   },
                   (_, err) => {
@@ -126,15 +108,6 @@ export function upLocalToFirebase() {
             }
           );
 
-          tx.executeSql(
-            `SELECT *
-          FROM HISTORY`,
-            [],
-            (tx, results) => {},
-            (tx, err) => {
-              console.log("up to firebase ", err);
-            }
-          );
         }},
         (_, err) => {
           console.log("up local to firebase", err);
