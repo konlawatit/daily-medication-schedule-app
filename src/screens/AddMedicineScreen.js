@@ -75,10 +75,6 @@ export default function AddMedicineScreen({ navigation }) {
     let payload = {};
   };
 
-  const selectSample = (img) => {
-      
-      console.log(img);
-    };
 
   const renderItem = (itemData) => {
     console.log("----> check", itemData.item);
@@ -99,13 +95,7 @@ export default function AddMedicineScreen({ navigation }) {
     const [note, setNote] = useState();
     const [description, setDescription] = useState();
     const [pickedImagePath, setPickedImagePath] = useState("");
-    const [sampleImage, setSampleImage] = useState([
-      { id: 1, source: "../../assets/sample/1.png" },
-      { id: 2, source: "../../assets/sample/2.png" },
-      { id: 3, source: "../../assets/sample/3.png" },
-      { id: 4, source: "../../assets/sample/4.png" },
-    ]);
-    const [renderImg, setrenderImg] = useState([
+    const [renderImg] = useAssets([
       require("../../assets/sample/1.png"),
       require("../../assets/sample/2.png"),
       require("../../assets/sample/3.png"),
@@ -171,6 +161,11 @@ export default function AddMedicineScreen({ navigation }) {
       }
     };
 
+    const selectSample = async (img) => {
+      setPickedImagePath(img.localUri)
+      console.log(img.localUri);
+      setImageModal(!imageModal)
+    };
 
     return (
       <View style={[globalStyle.Addcontainer, { marginTop: 10 }]}>
