@@ -87,7 +87,10 @@ export default function MedicineScreen({ navigation }) {
       <View style={globalStyle.sectionFilter}>
         <View style={globalStyle.sectionTextInput}>
           <EvilIcons name="search" size={24} color="black" />
-          <TextInput placeholder="ค้นหา" style={{ width: "100%" ,fontFamily:"Prompt-Light"}} />
+          <TextInput onChangeText={(text) => updateSearch(text)}
+          onClear={(text) => updateSearch('')}
+          placeholder="Type Here..."
+          value={search}style={{ width: "100%" ,fontFamily:"Prompt-Light"}} />
         </View>
 
       </View>
@@ -95,7 +98,7 @@ export default function MedicineScreen({ navigation }) {
       <FlatList
         keyExtractor={(item, index) => item.id.toString()}
         style={{ marginTop: 10, marginBottom: "0%" }}
-        data={medicineList}
+        data={search?filteredDataSource:medicineList}
         renderItem={renderItem}
       />
     </View>
