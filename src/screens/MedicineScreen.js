@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import {
   StyleSheet,
   View,
+  Button,
   TextInput,
   FlatList,
   Image,
@@ -22,8 +23,30 @@ import DropDownPicker from "../components/DropDownPicker";
 import { globalStyle } from "../stylesheet/globalStylesheet";
 
 export default function MedicineScreen({ navigation }) {
-
-  const medicineList = useSelector(state => state.medicine.medicine)
+  const [search, setSearch] = useState("")
+  const [filteredDataSource, setFilteredDataSource] = useState([]);
+  var medicineList = useSelector(state => state.medicine.medicine)
+  const   updateSearch = (text) => {
+    if (text) {
+      // Inserted text is not blank
+      // Filter the masterDataSource
+      // Update FilteredDataSource
+      const newData = medicineList.filter(function (item) {
+        const itemData = item.name
+          ? item.name.toUpperCase()
+          : ''.toUpperCase();
+        const textData = text.toUpperCase();
+        return itemData.indexOf(textData) > -1;
+      });
+      setFilteredDataSource(newData);
+      setSearch(text);
+    } else {
+      // Inserted text is blank
+      // Update FilteredDataSource with masterDataSource
+      setFilteredDataSource(medicineList);
+      setSearch(text);
+    }
+  };
   const renderItem = (itemData) => {
     return (
       <View style={globalStyle.screen}>
@@ -65,7 +88,10 @@ export default function MedicineScreen({ navigation }) {
       <View style={globalStyle.sectionFilter}>
         <View style={globalStyle.sectionTextInput}>
           <EvilIcons name="search" size={24} color="black" />
-          <TextInput placeholder="ค้นหา" style={{ width: "100%" ,fontFamily:"Prompt-Light"}} />
+          <TextInput onChangeText={(text) => updateSearch(text)}
+          onClear={(text) => updateSearch('')}
+          placeholder="Type Here..."
+          value={search}style={{ width: "100%" ,fontFamily:"Prompt-Light"}} />
         </View>
 
       </View>
@@ -73,7 +99,7 @@ export default function MedicineScreen({ navigation }) {
       <FlatList
         keyExtractor={(item, index) => item.id.toString()}
         style={{ marginTop: 10, marginBottom: "0%" }}
-        data={medicineList}
+        data={search?filteredDataSource:medicineList}
         renderItem={renderItem}
       />
     </View>
