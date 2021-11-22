@@ -17,6 +17,7 @@ import { useDispatch } from "react-redux";
 import { selectMedicine } from "../store/actions/medicineAction";
 
 import { updateVerify } from "../database/database-function";
+import { date } from "yup/lib/locale";
 
 export default function DailyCard(props) {
   const [modalVisible, setModalVisible] = useState(false);
@@ -29,6 +30,9 @@ export default function DailyCard(props) {
   let idMed = props.idMed
   let image = props.image;
   const navigation = props.navigation;
+  let date = new Date()
+  let checkdate = (date.getHours()<10?'0':'')+date.getHours().toString()+":"+(date.getMinutes()<10?'0':'')+date.getMinutes().toString()
+
 
   const dispatch = useDispatch();
 
@@ -41,17 +45,17 @@ export default function DailyCard(props) {
 
   return (
     <TouchableOpacity
-      style={styles.card}
+      style={title<=checkdate?styles.card2:styles.card}
       onPress={() => {
         dispatch(selectMedicine(idMed));
         navigation.navigate("DrugInfo", { idMed });
       }}
     >
-      <View style={{ flex: 0.7 }}>
+      <View style={{ flex: 0.7}}>
         {image ? (
           <Image
             source={{ uri: image }}
-            style={{ width: "100%", height: 150 }}
+            style={{ width: "100%", height: 150}}
           />
         ) : (
           <Image
@@ -156,7 +160,7 @@ const styles = StyleSheet.create({
   card2: {
     width: "90%",
     borderWidth: 2,
-    borderColor: "grey",
+    borderColor: "red",
     flexDirection: "row",
     borderRadius: 20,
     padding: 10,

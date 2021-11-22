@@ -12,6 +12,8 @@ import {
 import { Feather,MaterialIcons,FontAwesome } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import DropDown from "react-native-dropdown-picker";
+import { updateVerify } from "../database/database-function";
+import { useDispatch } from "react-redux";
 
 
 //Components
@@ -27,35 +29,13 @@ export default function NotificationScreen({ navigation,route }) {
 
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
-  const [items, setItems] = useState([
-    { label: "Apple", value: 0 },
-    { label: "Banana", value: 1 },
-  ]);
 
-  const listData = [
-    {
-      time: "12:00",
-      title: "ยาแก้ปวด",
-      verify: true,
-      note: "ทานหลังอาหาร2เม็ด",
-    },
-    { time: "12:00", title: "ยาแก้ปวด", verify: true },
-    { time: "12:00", title: "ยาแก้ปวด", verify: true },
-    { time: "12:00", title: "ยาแก้ปวด", verify: true },
-    { time: "12:00", title: "ยาแก้ปวด", verify: true },
-  ];
+  const dispatch = useDispatch();
 
-  const renderItem = (itemData) => {
-    return (
-      <View style={styles.screen}>
-        <MedicineCard
-          title={itemData.item.title}
-          image="checkmark.png"
-          subTitle={itemData.item.note}
-          navigation={navigation}
-        />
-      </View>
-    );
+  const toggleVerify = () => {
+    updateVerify(true, route.params.data.id,dispatch,route.params.data.MEDICINE_id);
+    console.log("gogo gogogog")
+    navigation.navigate("Home")
   };
 
   return (
@@ -107,7 +87,7 @@ export default function NotificationScreen({ navigation,route }) {
             </View>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => {}}
+            onPress={toggleVerify}
             style={{ flex: 1, alignItems: "center" }}
           >
             <View>
