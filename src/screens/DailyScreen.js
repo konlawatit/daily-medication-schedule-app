@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState, useRef } from "react";
 import Constants from 'expo-constants';
 import * as Notifications from "expo-notifications"
 import * as Permissions from "expo-permissions"
-import * as Speech from 'expo-speech';
 import {
   StyleSheet,
   Text,
@@ -40,9 +39,6 @@ Notifications.setNotificationHandler({
   },
 })
 export default function DailyScreen({ navigation }) {
-  const speak = (text) => {
-    Speech.speak(text,{language:"th-TH",rate:1.05});
-  };
   const [expoPushToken, setExpoPushToken] = useState('');
   const [notification, setNotification] = useState(false);
   const notificationListener = useRef();
@@ -92,13 +88,11 @@ export default function DailyScreen({ navigation }) {
     notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
       console.log("Notification Received!")
       navigation.navigate("Noti",{data:notification.request.content.data})
-      speak("ถึงเวลารับประทาน "+notification.request.content.data.name+" "+notification.request.content.data.note)
     });
 
     responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
       console.log("Notification Clicked!")
       navigation.navigate("Noti",{data:response.notification.request.content.data})
-      speak("ถึงเวลารับประทาน "+response.notification.request.content.data.name+" "+response.notification.request.content.data.note)
     });
 
     return () => {
@@ -182,7 +176,7 @@ export default function DailyScreen({ navigation }) {
 
       />
 
-      <HeaderTitle title="ยาที่ต้องทานวันนี้" navigation={navigation} />
+      <HeaderTitle title="ยาที่ต้องทานวันนี้" />
 
       <FlatList
         keyExtractor={(item, index) => item.id.toString()}

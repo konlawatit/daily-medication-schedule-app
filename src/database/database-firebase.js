@@ -6,6 +6,7 @@ import { delDB } from "./database-function";
 import { changeMedicineState, changeTimeState, changeHistoryState } from "./database-function";
 
 export async function setDataToLocal(payload, navigation, dispatch) {
+  console.log('seeeeeeeeeeeeeeeeeeeeeeeeeeee', payload)
   try {
     db.transaction(
       (tx) => {
@@ -122,19 +123,10 @@ export async function loginFirebase(
                 );
               }
 
-              console.log('222222->',payloadData)
+              let medicine = payloadData.medicine;
+              let history = payloadData.history;
 
-              if (payloadData.medicine.length > 0) {
-                console.log('select medicine ---------->', payloadData.medicine)
-                let medicine = payloadData.medicine;
-                setDataToLocal(medicine, navigation, dispatch);
-              }
-
-              navigation.navigate("Home")
-              changeMedicineState(dispatch, navigation);
-              changeTimeState(dispatch, navigation);
-              changeHistoryState(dispatch, navigation)
-
+              setDataToLocal(medicine, navigation, dispatch);
               // changeMedicineState(dispatch, navigation)
             },
             (_, err) => {

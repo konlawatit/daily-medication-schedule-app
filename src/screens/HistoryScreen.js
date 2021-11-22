@@ -192,7 +192,7 @@ export default function HistoryScreen({ navigation }) {
         style={styles.background}
       />
 
-      <HeaderTitle title="ประวัติการทานยา" navigation={navigation} />
+      <HeaderTitle title="ประวัติการทานยา" />
       <View style={styles.sectionFilter}>
       <View style={styles.sectionDropDown}>
               <SelectDropdown

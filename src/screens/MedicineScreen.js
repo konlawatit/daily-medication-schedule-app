@@ -2,7 +2,6 @@ import React, { useContext, useState } from "react";
 import {
   StyleSheet,
   View,
-  Button,
   TextInput,
   FlatList,
   Image,
@@ -84,7 +83,7 @@ export default function MedicineScreen({ navigation }) {
       )}
 
 
-      <HeaderTitle title="รายการยา" navigation={navigation} />
+      <HeaderTitle title="รายการยา" />
       <View style={globalStyle.sectionFilter}>
         <View style={globalStyle.sectionTextInput}>
           <EvilIcons name="search" size={24} color="black" />
