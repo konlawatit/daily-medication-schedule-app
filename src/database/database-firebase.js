@@ -77,7 +77,7 @@ export async function upLocalToFirebase2(firebase, uid) {
                           console.log('--------------med list---', medList)
                           let userRef = firestore
                             .collection("users")
-                            .doc("uid");
+                            .doc(uid);
                           userRef
                             .set({
                               history: [],
