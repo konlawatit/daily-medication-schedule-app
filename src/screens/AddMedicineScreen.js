@@ -53,6 +53,7 @@ export default function AddMedicineScreen({ navigation }) {
   const [check, setCheck] = useState(false);
 
   let dispatch = useDispatch();
+ 
 
   const save = (name, note, description, image) => {
     if (name) {

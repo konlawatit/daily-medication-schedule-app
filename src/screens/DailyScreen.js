@@ -41,6 +41,8 @@ export default function DailyScreen({ navigation }) {
   var day = days[ new Date().getDay() ];
   timeList = timeList.filter(x=>x.day[day]==1)
 
+  // console.log('time list ->',timeList)
+
 
 
   const renderItem = (itemData) => {
