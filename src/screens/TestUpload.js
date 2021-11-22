@@ -30,20 +30,19 @@ export default function TestUpload({ navigation }) {
 
     if (!result.cancelled) {
       setPickedImagePath(result.uri);
-      uploadImage(result.uri, 'test-1').then(data => {
-          console.log('test ->', data)
-      })
-      console.log(result.uri);
+      console.log( await uploadImage(result.uri, 'test-1'))
     }
   };
 
-  const uploadImage = async (uri, imageName) => {
+  const uploadImage = async (uid, uri, imageName) => {
       const response = await fetch(uri);
       const blob = await response.blob();
 
       let ref = firebase.storage().ref().child("images/" + imageName)
+    //   console.log(await ref.getDownloadURL())
     //   console.log('ref --->', ref.storage)
-      return ref.put(blob)
+        ref.put(blob)
+      return await ref.getDownloadURL()
   }
 
   return (
