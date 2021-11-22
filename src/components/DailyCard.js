@@ -14,6 +14,7 @@ import {
   TouchableOpacity
 } from "react-native";
 import { useDispatch } from "react-redux";
+import * as Speech from 'expo-speech';
 import { selectMedicine } from "../store/actions/medicineAction";
 
 import { updateVerify } from "../database/database-function";
