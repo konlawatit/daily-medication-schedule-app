@@ -51,6 +51,7 @@ export default function DrugInfoScreen({ navigation, route }) {
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
   const medicineInfo = useSelector((state) => state.medicine.selectMedicine);
   const [id, setId] = useState(route.params.id);
+  const [confirmModal, setConfirmModal] = useState(false);
 
   let selectTimeList = useSelector((state) => {
     const time = state.medicine.time;
@@ -146,6 +147,7 @@ export default function DrugInfoScreen({ navigation, route }) {
 
   const delMedicine = () => {
     deleteMedicine(id, dispatch);
+    navigation.navigate("Medicine");
   };
 
   const cancleEdit = (setName, setNote, setDescription, setImage) => {
@@ -533,8 +535,8 @@ export default function DrugInfoScreen({ navigation, route }) {
             <TouchableOpacity
               style={styles.confirmBox}
               onPress={() => {
-                delMedicine();
-                navigation.navigate("Medicine");
+                setConfirmModal(true)
+                // navigation.navigate("Medicine");
               }}
             >
               <Text style={styles.confirmText}>ลบ</Text>
@@ -542,6 +544,44 @@ export default function DrugInfoScreen({ navigation, route }) {
           </View>
         )}
       </View>
+      <Modal
+          animationType="fade"
+          transparent={true}
+          visible={confirmModal}
+          onRequestClose={() => {
+            Alert.alert("Modal has been closed.");
+            setConfirmModal(!confirmModal);
+          }}
+        >
+          <View style={globalStyle.centeredView}>
+            <View style={globalStyle.modalView}>
+              <TouchableOpacity
+                style={{ marginLeft: 280 }}
+                onPress={() => setConfirmModal(!confirmModal)}
+              >
+                <EvilIcons name="close" size={24} color="black" />
+              </TouchableOpacity>
+              <Text style={globalStyle.modalText}>คุณแน่ใจนะ?</Text>
+              <Text style={globalStyle.modalText}>
+                ข้อมูลยาที่คุณกรอกจะหายไปทั้งหมด
+              </Text>
+              <View style={{ flexDirection: "row" }}>
+                <TouchableOpacity
+                  style={[globalStyle.button, globalStyle.buttonCancel]}
+                  onPress={() => setConfirmModal(!confirmModal)}
+                >
+                  <Text style={[globalStyle.textStyle]}>ยกเลิก</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[globalStyle.button, globalStyle.buttonClose]}
+                  onPress={() => delMedicine()}
+                >
+                  <Text style={[globalStyle.textStyle]}>ตกลง</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </Modal>
     </SafeAreaView>
   );
 }

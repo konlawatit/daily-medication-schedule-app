@@ -38,6 +38,9 @@ export const globalStyle = StyleSheet.create({
     borderWidth: 1,
     alignItems: "center",
     justifyContent: "center",
+    backgroundColor:"white",
+    padding:1,
+    justifyContent:"center"
   },
   //เพิ่มรูปภาพ
   addButton: {
@@ -158,12 +161,11 @@ export const globalStyle = StyleSheet.create({
   button: {
     borderRadius: 20,
     padding: 10,
-    elevation: 2,
     flex:1,
     margin:5
   },
   buttonClose: {
-    backgroundColor: '#2196F3',
+    backgroundColor: '#8bc34a',
   },
   buttonCancel: {
     backgroundColor: '#eb3148',
@@ -179,5 +181,10 @@ export const globalStyle = StyleSheet.create({
     fontSize:18,
     fontFamily: "Prompt-Light",
     textAlign: 'center',
+  },
+  confirmText: {
+    color: "rgba(0,0,0,1)",
+    fontSize: 20,
+    fontFamily: "Prompt-Regular",
   },
 });

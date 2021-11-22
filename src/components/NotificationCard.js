@@ -10,14 +10,17 @@ import {
   ScrollView,
   SafeAreaView,
   Switch,
-  FlatList
+  FlatList,
 } from "react-native";
 import { useDispatch } from "react-redux";
 import { LinearGradient } from "expo-linear-gradient";
 import { MaterialIcons, AntDesign } from "@expo/vector-icons";
 
 //action
-import { stackDeleteTime, reduceStackDeleteTime } from "../store/actions/medicineAction";
+import {
+  stackDeleteTime,
+  reduceStackDeleteTime,
+} from "../store/actions/medicineAction";
 import { deleteNotificationCategoryAsync } from "expo-notifications";
 
 //sqlite
@@ -32,49 +35,60 @@ export default function NotificationCard(props) {
   const [isEnabled, setIsEnabled] = useState(props.isNoti == 1 ? true : false);
   const [time, setTime] = useState(props.time);
   const [day, setDay] = useState(props.day);
-  const [id, setId] = useState(props.id)
+  const [id, setId] = useState(props.id);
   // console.log('is noy',props.isNoti)
 
+  const toggleSwitch = () => {
+    setIsEnabled((previousState) => {
+      updateIsNoti(!isEnabled, id, dispatch);
+      return !previousState;
+    });
+  };
 
-  const toggleSwitch = () =>{
-    setIsEnabled(
-      (previousState) => {
-        updateIsNoti(!isEnabled, id, dispatch)
-        return !previousState
-      }
-    );
-  }
-  
-    const delNoti = () => {
-      dispatch(reduceStackDeleteTime(id))
-    }
+  const delNoti = () => {
+    dispatch(reduceStackDeleteTime(id));
+  };
 
   const dayCheck = (d) => {
     return d == 1 ? "white" : "grey";
+  };
+
+  const dayTimeCheck = (t) => {
+    if(t<="18:00"&& t>="06:00"){
+      console.log("00:00"<"06:00")
+      return true
+    }
+    return false
   };
 
   return (
     // <View style={[isEnabled ? styles.cardOn : styles.cardOff]} >
 
     <TouchableOpacity
-      style={time < "18:00" ? (styles.cardOn):(styles.cardOff)}
+      style={[
+        styles.cardOn,
+        dayTimeCheck(time)
+          ? { backgroundColor: "rgba(85,194,255,8)" }
+          : { backgroundColor: "#616161" },
+      ]}
       onPress={() => {
-        props.navigation.navigate("EditNotificationTime", {id})
-        dispatch(selectTime(id))
+        props.navigation.navigate("EditNotificationTime", { id });
+        dispatch(selectTime(id));
       }}
     >
       {/* <AntDesign name="delete" size={24} color="red" /> */}
       <View style={styles.imagePart}>
         {time > "18:00" ? (
           <Image
-          style={{ width: "60%", height: "50%", marginTop: 10 }}
-          source={require("../../assets/moon.png")}
-        />
-        ):
-        (<Image
-          style={{ width: "60%", height: "50%", marginTop: 10 }}
-          source={require("../../assets/sun.png")}
-        />)}
+            style={{ width: "60%", height: "50%", marginTop: 10 }}
+            source={require("../../assets/moon.png")}
+          />
+        ) : (
+          <Image
+            style={{ width: "60%", height: "50%", marginTop: 10 }}
+            source={require("../../assets/sun.png")}
+          />
+        )}
       </View>
       <View style={styles.infoPart}>
         <Text style={styles.time}>{time}</Text>
@@ -123,10 +137,10 @@ export default function NotificationCard(props) {
             alignSelf: "flex-start",
             right: -10,
             top: -10,
-            zIndex: 101
+            zIndex: 101,
           }}
           onPress={() => {
-            delNoti()
+            delNoti();
           }}
         >
           <MaterialIcons name="cancel" size={30} color="red" />
@@ -143,14 +157,14 @@ const styles = StyleSheet.create({
   time: {
     fontFamily: "Prompt-Light",
     fontSize: 40,
-    color: "white"
+    color: "white",
   },
   daysOfweek: {
     marginBottom: 5,
     marginRight: 5,
     marginLeft: 5,
     // color: "white" ,
-    fontFamily: "Prompt-Light"
+    fontFamily: "Prompt-Light",
   },
   cardOn: {
     flexDirection: "row",
@@ -164,12 +178,12 @@ const styles = StyleSheet.create({
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 6
+      height: 6,
     },
     shadowOpacity: 0.39,
     shadowRadius: 100.3,
     elevation: 5,
-    alignItems: "center"
+    alignItems: "center",
   },
   cardOff: {
     flexDirection: "row",
@@ -182,28 +196,28 @@ const styles = StyleSheet.create({
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 6
+      height: 6,
     },
     shadowOpacity: 0.39,
     shadowRadius: 100.3,
     elevation: 5,
     alignItems: "center",
-    opacity: 0.5
+    opacity: 0.5,
   },
   imagePart: {
     flex: 0.3,
     alignItems: "center",
     justifyContent: "flex-start",
     width: "100%",
-    height: "100%"
+    height: "100%",
   },
   infoPart: {
     flex: 1,
-    justifyContent: "flex-start"
+    justifyContent: "flex-start",
   },
   switchPart: {
     flex: 0.5,
     justifyContent: "center",
-    alignItems: "center"
-  }
+    alignItems: "center",
+  },
 });
