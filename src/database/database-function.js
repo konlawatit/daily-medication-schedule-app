@@ -765,46 +765,46 @@ export function initDB(dispatch) {
       (error) => console.log("craete table error", error)
     );
 
-    tx.executeSql(
-      `INSERT INTO "MEDICINE" ("name","note","description","image") VALUES ('ยาแก้ปวด','ไม่มี','Module parse failed: Unexpected token (10:22)',NULL),
-      ('ยานอนหลับ','กิน1เม็ด','กินนิดเดียว',NULL)`,
-      [],
-      (tx, results) => {
-        console.log("Insert medicine");
-      },
-      (_, err) => {
-        console.log("insert medicine error", err);
-        return true;
-      }
-    );
+    // tx.executeSql(
+    //   `INSERT INTO "MEDICINE" ("name","note","description","image") VALUES ('ยาแก้ปวด','ไม่มี','Module parse failed: Unexpected token (10:22)',NULL),
+    //   ('ยานอนหลับ','กิน1เม็ด','กินนิดเดียว',NULL)`,
+    //   [],
+    //   (tx, results) => {
+    //     console.log("Insert medicine");
+    //   },
+    //   (_, err) => {
+    //     console.log("insert medicine error", err);
+    //     return true;
+    //   }
+    // );
 
     
-    tx.executeSql(
-      `INSERT INTO "HISTORY" ("date","time","MEDICINE_id") VALUES ('21/11/2021','13:00',1),
-      ('21/11/2021','14:00',2)`,
-      [],
-      (tx, results) => {
-        console.log("Insert History");
-      },
-      (_, err) => {
-        console.log("insert History error", err);
-        return true;
-      }
-    );
+    // tx.executeSql(
+    //   `INSERT INTO "HISTORY" ("date","time","MEDICINE_id") VALUES ('21/11/2021','13:00',1),
+    //   ('21/11/2021','14:00',2)`,
+    //   [],
+    //   (tx, results) => {
+    //     console.log("Insert History");
+    //   },
+    //   (_, err) => {
+    //     console.log("insert History error", err);
+    //     return true;
+    //   }
+    // );
 
-    tx.executeSql(
-      `INSERT INTO TIME ("time","status", "isNoti","day","MEDICINE_id") VALUES ('12:00',0,1,'{"mo": 0,"tu": 1,"we": 0,"th":1,"fr":0,"sa":1,"su":0}',1),
-      ('13:00',0,1,'{"mo": 1,"tu": 1,"we": 1,"th":1,"fr":1,"sa":1,"su":1}',1),
-      ('13:00',0,1,'{"mo": 1,"tu": 1,"we": 1,"th":1,"fr":1,"sa":1,"su":1}',2)`,
-      [],
-      (tx, results) => {
-        console.log("Insert TIME");
-      },
-      (_, err) => {
-        console.log("insert TIME error", err);
-        return true;
-      }
-    );
+    // tx.executeSql(
+    //   `INSERT INTO TIME ("time","status", "isNoti","day","MEDICINE_id") VALUES ('12:00',0,1,'{"mo": 0,"tu": 1,"we": 0,"th":1,"fr":0,"sa":1,"su":0}',1),
+    //   ('13:00',0,1,'{"mo": 1,"tu": 1,"we": 1,"th":1,"fr":1,"sa":1,"su":1}',1),
+    //   ('13:00',0,1,'{"mo": 1,"tu": 1,"we": 1,"th":1,"fr":1,"sa":1,"su":1}',2)`,
+    //   [],
+    //   (tx, results) => {
+    //     console.log("Insert TIME");
+    //   },
+    //   (_, err) => {
+    //     console.log("insert TIME error", err);
+    //     return true;
+    //   }
+    // );
 
     tx.executeSql(
       `SELECT *

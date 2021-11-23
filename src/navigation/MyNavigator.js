@@ -105,7 +105,7 @@ export default function MyNavigator() {
 
   useEffect(() => {
     // dropDB();
-    // initDB(dispatch);
+    initDB(dispatch);
 
 
   }, []);

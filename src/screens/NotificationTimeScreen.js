@@ -261,15 +261,7 @@ export default function NotificationTimeScreen({ navigation, route }) {
         <View style={styles.line}></View>
       </View>
       <View style={styles.section2}>
-        <FlatList
-          data={options}
-          contentContainerStyle={{
-            // height: "100%",
-            justifyContent: "space-evenly"
-          }}
-          renderItem={renderItem}
-          keyExtractor={(item, index) => index.toString()}
-        />
+
       </View>
       <View style={styles.section3}>
           <TouchableOpacity
@@ -303,7 +295,8 @@ const styles = StyleSheet.create({
   section1: {
     flex: 0.9,
     width: "90%",
-    marginBottom: 10,
+    marginTop:300,
+    marginBottom: 50,
     // height: "100%",
     // justifyContent: 'center',
     alignItems: "center",

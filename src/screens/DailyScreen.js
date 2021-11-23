@@ -114,7 +114,7 @@ export default function DailyScreen({ navigation }) {
     Notifications.scheduleNotificationAsync({
       content: {
         title: "📬  ถึงเวลารับประทาน"+item.name,
-        body: item.time+"น.  "+item.description,
+        body: item.time+"น.  "+item.note,
         sound: "TF050.WAV",
         data: item,
       },
