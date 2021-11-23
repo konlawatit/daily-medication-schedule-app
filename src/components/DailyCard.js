@@ -19,6 +19,7 @@ import { selectMedicine } from "../store/actions/medicineAction";
 import { updateVerify } from "../database/database-function";
 import { date } from "yup/lib/locale";
 import { globalStyle } from "../stylesheet/globalStylesheet";
+import {Fontisto} from "@expo/vector-icons";
 
 export default function DailyCard(props) {
   const shadowStyle = {
@@ -68,7 +69,17 @@ export default function DailyCard(props) {
       }}
     >
       <View style={{ flex: 0.7 }}>
-        <Image source={{ uri: image }} style={{ width: "100%", height: 150 }} />
+        {image ? (
+          <Image
+            source={{ uri: image }}
+            style={{ width: "100%", height: 150 }}
+          />
+        ) : (
+          <Image
+            source={require("../../assets/test.jpg")}
+            style={{ width: "100%", height: 150 }}
+          />
+        )}
       </View>
       <View style={{ flex: 1, padding: 15 }}>
         <TouchableOpacity onPress={() => setModalVisible(true)}>
@@ -103,33 +114,35 @@ export default function DailyCard(props) {
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => {
-          Alert.alert('Modal has been closed.');
+          Alert.alert("Modal has been closed.");
           setModalVisible(!modalVisible);
-        }}>
+        }}
+      >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <Text style={styles.modalText}>คุณแน่ใจหรือไม่ว่าได้รับประทาน</Text>
-            <Text style={styles.modalText}>"{subTitle}" เมื่อเวลา {title} น.</Text>
-            <View style={{flexDirection:'row'}}>
-            <Pressable
-              style={[styles.button, styles.buttonCancel]}
-              onPress={() => setModalVisible(!modalVisible)}>
-              <Text style={styles.textStyle}>Cancel</Text>
-            </Pressable>
-            <View style={{flex:0.2}}></View>
-            <Pressable
-              style={[styles.button, styles.buttonClose]}
-              onPress={toggleVerify}>
-              <Text style={styles.textStyle}>Confirm</Text>
-            </Pressable>
-
+            <Text style={styles.modalText}>
+              "{subTitle}" เมื่อเวลา {title} น.
+            </Text>
+            <View style={{ flexDirection: "row" }}>
+              <Pressable
+                style={[styles.button, styles.buttonCancel]}
+                onPress={() => setModalVisible(!modalVisible)}
+              >
+                <Text style={styles.textStyle}>Cancel</Text>
+              </Pressable>
+              <View style={{ flex: 0.2 }}></View>
+              <Pressable
+                style={[styles.button, styles.buttonClose]}
+                onPress={toggleVerify}
+              >
+                <Text style={styles.textStyle}>Confirm</Text>
+              </Pressable>
             </View>
           </View>
         </View>
       </Modal>
-
     </TouchableOpacity>
-
   );
 }
 
@@ -140,7 +153,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderColor: "grey",
     // backgroundColor:'grey',
-    opacity: 0.25
+    opacity: 0.25,
   },
   card: {
     width: "90%",
@@ -153,12 +166,12 @@ const styles = StyleSheet.create({
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 3
+      height: 3,
     },
     shadowOpacity: 0.27,
     shadowRadius: 4.65,
     elevation: 6,
-    marginBottom: 0
+    marginBottom: 0,
   },
   card2: {
     width: "90%",
@@ -171,12 +184,12 @@ const styles = StyleSheet.create({
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 3
+      height: 3,
     },
     shadowOpacity: 0.27,
     shadowRadius: 4.65,
     elevation: 6,
-    marginBottom: 10
+    marginBottom: 10,
   },
   circle: {
     borderColor: "green",
@@ -185,21 +198,21 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     borderWidth: 1,
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   },
   centeredView: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor:'rgba(0,0,0,0.5)'
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.5)",
   },
   modalView: {
     margin: 20,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 20,
     padding: 35,
-    alignItems: 'center',
-    shadowColor: '#000',
+    alignItems: "center",
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 2,
@@ -212,23 +225,24 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 10,
     elevation: 2,
-    flex:1
+    flex: 1,
   },
   buttonClose: {
-    backgroundColor: '#2196F3',
+    backgroundColor: "#2196F3",
   },
   buttonCancel: {
-    backgroundColor: '#eb3148',
+    backgroundColor: "#eb3148",
   },
   textStyle: {
-    color: 'white',
+    color: "white",
     fontFamily: "Prompt-Light",
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },  modalText: {
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  modalText: {
     marginBottom: 15,
-    fontSize:18,
+    fontSize: 18,
     fontFamily: "Prompt-Light",
-    textAlign: 'center',
+    textAlign: "center",
   },
 });

@@ -96,10 +96,15 @@ export default function AddMedicineScreen({ navigation }) {
     const [description, setDescription] = useState();
     const [pickedImagePath, setPickedImagePath] = useState("");
     const [renderImg] = useAssets([
-      require("../../assets/sample/1.png"),
-      require("../../assets/sample/2.png"),
-      require("../../assets/sample/3.png"),
+      require("../../assets/sample/1.jpg"),
+      require("../../assets/sample/2.jpeg"),
+      require("../../assets/sample/3.jpg"),
       require("../../assets/sample/4.png"),
+      require("../../assets/sample/5.jpeg"),
+      require("../../assets/sample/6.jpeg"),
+      require("../../assets/sample/7.jpg"),
+      require("../../assets/sample/8.jpg"),
+      require("../../assets/sample/9.jpg")
     ]);
 
     useEffect(() => {

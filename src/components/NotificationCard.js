@@ -78,15 +78,15 @@ export default function NotificationCard(props) {
     >
       {/* <AntDesign name="delete" size={24} color="red" /> */}
       <View style={styles.imagePart}>
-        {time > "18:00" ? (
+        {dayTimeCheck(time) ? (
           <Image
             style={{ width: "60%", height: "50%", marginTop: 10 }}
-            source={require("../../assets/moon.png")}
+            source={require("../../assets/sun.png")}
           />
         ) : (
           <Image
             style={{ width: "60%", height: "50%", marginTop: 10 }}
-            source={require("../../assets/sun.png")}
+            source={require("../../assets/moon.png")}
           />
         )}
       </View>

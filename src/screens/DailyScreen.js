@@ -181,7 +181,7 @@ export default function DailyScreen({ navigation }) {
         style={globalStyle.background}
 
       />
-
+      {/* <Button title="test" onPress={()=>speak("ควยหน้าหี")}></Button> */}
       <HeaderTitle title="ยาที่ต้องทานวันนี้" navigation={navigation} />
 
       <FlatList

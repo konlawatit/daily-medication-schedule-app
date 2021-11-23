@@ -14,6 +14,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import DropDown from "react-native-dropdown-picker";
 import { updateVerify } from "../database/database-function";
 import { useDispatch } from "react-redux";
+import * as Speech from 'expo-speech';
 
 
 //Components
@@ -37,6 +38,9 @@ export default function NotificationScreen({ navigation,route }) {
     console.log("gogo gogogog")
     navigation.navigate("Home")
   };
+  const speak = () => {
+    Speech.speak(("ถึงเวลาทาน "+route.params.data.name+" หมายเหตุ "+route.params.data.note),{language:"th-TH",rate:1.05});
+  };
 
   return (
     <View style={styles.container}>
@@ -48,7 +52,7 @@ export default function NotificationScreen({ navigation,route }) {
       <View style={styles.section1}>
         <Image
           source={require("../../assets/test.jpg")}
-          style={{ width: 200, height: 200, borderRadius: 400 / 2 }}
+          style={{ width: 200, height: 200}}
         />
       </View>
         <Text style={{ fontFamily: "Prompt-Regular", fontSize: 70}}>
@@ -64,7 +68,7 @@ export default function NotificationScreen({ navigation,route }) {
       <View style={styles.section3}>
         <View style={styles.sectionIconName}>
           <Text style={styles.textIcon}>ยกเลิก</Text>
-          <Text style={styles.textIcon}>เลื่อน 5 นาที</Text>
+          <Text style={styles.textIcon}>ฟังข้อมูล</Text>
           <Text style={styles.textIcon}>ยืนยัน</Text>
         </View>
         <View style={styles.sectionIcon}>
@@ -79,11 +83,11 @@ export default function NotificationScreen({ navigation,route }) {
             </View>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => {}}
+            onPress={() => speak()}
             style={{ flex: 1, alignItems: "center" }}
           >
             <View>
-            <MaterialIcons name="history" size={70} color="black" />
+            <FontAwesome name="assistive-listening-systems" size={70} color="black" />
             </View>
           </TouchableOpacity>
           <TouchableOpacity

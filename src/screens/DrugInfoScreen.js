@@ -107,9 +107,9 @@ export default function DrugInfoScreen({ navigation, route }) {
   const [isConfirmEdit, setIsConfirmEdit] = useState(false);
   const [isCancleEdit, setIsCancleEdit] = useState(false);
   const [renderImg] = useAssets([
-    require("../../assets/sample/1.png"),
-    require("../../assets/sample/2.png"),
-    require("../../assets/sample/3.png"),
+    require("../../assets/sample/1.jpg"),
+    require("../../assets/sample/2.jpeg"),
+    require("../../assets/sample/3.jpg"),
     require("../../assets/sample/4.png"),
   ]);
 
