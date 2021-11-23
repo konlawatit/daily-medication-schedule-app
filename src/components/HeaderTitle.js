@@ -6,9 +6,10 @@ import {
   Dimensions,
   TouchableOpacity,
   Modal,
-  Image
+  Image,
+  LogBox
 } from "react-native";
-import { Ionicons, EvilIcons } from "@expo/vector-icons";
+import { Ionicons, EvilIcons, MaterialIcons } from "@expo/vector-icons";
 import { globalStyle } from "../stylesheet/globalStylesheet";
 import { useSelector, useDispatch } from "react-redux";
 import NetInfo from "@react-native-community/netinfo";
@@ -19,7 +20,7 @@ import { signInWithGoogleAsync, logInFacebook, setData } from "../../firebase";
 import { clearUser } from "../store/actions/userAction";
 import { changeHistoryState, changeMedicineState, changeTimeState, delDB } from "../database/database-function";
 
-
+LogBox.ignoreLogs(["Unhandled promise rejection: TypeError: Network request failed"]);
 
 export default function HeaderTitle(props) {
   const navigation = props.navigation;
@@ -53,7 +54,7 @@ export default function HeaderTitle(props) {
                   setLoginModal(true);
                 }
               } else {
-                setNetModal();
+                setNetModal(true);
               }
             });
           }}
@@ -88,7 +89,7 @@ export default function HeaderTitle(props) {
             >
               <EvilIcons name="close" size={24} color="black" />
             </TouchableOpacity>
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <View style={{ flexDirection: "row", alignItems: "center", marginTop: 15 }}>
               {user.provider === "google" ? (
                 <Image
                   source={require("../../assets/google-logo.png")}
@@ -103,9 +104,7 @@ export default function HeaderTitle(props) {
               <Text style={[globalStyle.modalText, { marginTop: 15 }]}>
                 {user.email}
               </Text>
-            </View>
-            {/* <Text style={globalStyle.modalText}>คุณแน่ใจนะ?</Text> */}
-            <TouchableOpacity onPress={() => {
+              <TouchableOpacity onPress={() => {
               dispatch(clearUser())
               delDB()
               changeMedicineState(dispatch)
@@ -114,8 +113,10 @@ export default function HeaderTitle(props) {
               setConfirmModal(false)
               navigation.navigate("Login")
             }}>
-              <Text style={globalStyle.modalText}>ออกจากระบบ</Text>
+              <MaterialIcons name="logout" style={{marginLeft: 10}} size={24} color="black" />
               </TouchableOpacity>
+            </View>
+            {/* <Text style={globalStyle.modalText}>คุณแน่ใจนะ?</Text> */}
             <Text style={globalStyle.modalText}>ต้องการสำรองข้อมูลหรือไม่</Text>
             <View style={{ flexDirection: "row" }}>
               <TouchableOpacity
@@ -172,32 +173,13 @@ export default function HeaderTitle(props) {
                     source={require("../../assets/google-logo.png")}
                   />
                 </View>
-                <View style={{ marginLeft: "13%" }}>
+                <View style={{ marginLeft: "10%" }}>
                   <Text style={[styles.submitText, { marginRight: 10 }]}>
                     เข้าสู่ระบบด้วย Google
                   </Text>
                 </View>
               </View>
             </TouchableOpacity>
-
-   
-
-            {/* <View style={{ flexDirection: "row" }}>
-              <TouchableOpacity
-                style={[globalStyle.button, globalStyle.buttonCancel]}
-                onPress={() => setLoginModal(!loginModal)}
-              >
-                <Text style={[globalStyle.textStyle]}>ยกเลิก</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[globalStyle.button, globalStyle.buttonClose]}
-                onPress={() => {
-                  //ok
-                }}
-              >
-                <Text style={[globalStyle.textStyle]}>ตกลง</Text>
-              </TouchableOpacity>
-            </View> */}
           </View>
         </View>
       </Modal>
@@ -219,42 +201,9 @@ export default function HeaderTitle(props) {
             >
               <EvilIcons name="close" size={24} color="black" />
             </TouchableOpacity>
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              {user.provider === "google" ? (
-                <Image
-                  source={require("../../assets/google-logo.png")}
-                  style={{ width: 20, height: 20, marginRight: 10 }}
-                />
-              ) : (
-                <Image
-                  source={require("../../assets/facebook-logo.png")}
-                  style={{ width: 20, height: 20, marginRight: 10 }}
-                />
-              )}
-              <Text style={[globalStyle.modalText, { marginTop: 15 }]}>
-                {user.email}
-              </Text>
-            </View>
-            {/* <Text style={globalStyle.modalText}>คุณแน่ใจนะ?</Text> */}
+
             
-            <Text style={globalStyle.modalText}>ต้องการสำรองข้อมูลหรือไม่</Text>
-            <View style={{ flexDirection: "row" }}>
-              <TouchableOpacity
-                style={[globalStyle.button, globalStyle.buttonCancel]}
-                onPress={() => setNetModal(!netModal)}
-              >
-                <Text style={[globalStyle.textStyle]}>ยกเลิก</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[globalStyle.button, globalStyle.buttonClose]}
-                onPress={() => {
-                  //ok
-                  upLocalToFirebase(user.uid);
-                }}
-              >
-                <Text style={[globalStyle.textStyle]}>ตกลง</Text>
-              </TouchableOpacity>
-            </View>
+            <Text style={globalStyle.modalText}>ต้องการอินเตอร์เน็ตในการสำรองข้อมูล</Text>
           </View>
         </View>
       </Modal>
