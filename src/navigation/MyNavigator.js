@@ -52,7 +52,9 @@ function HomeNavigator() {
       <Tab.Screen
         name="Daily"
         component={Daily}
+    
         options={{
+          
           animation: "slide_from_right",
           tabBarIcon: ({ color, size }) => (
             <FontAwesome name="calendar" size={size} color={color} />

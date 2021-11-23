@@ -180,4 +180,15 @@ export const globalStyle = StyleSheet.create({
     fontFamily: "Prompt-Light",
     textAlign: 'center',
   },
+  confirmBox: {
+    flex: 1,
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  confirmText: {
+    color: "rgba(0,0,0,1)",
+    fontSize: 18,
+    fontFamily:"Prompt-Light"
+  },
 });

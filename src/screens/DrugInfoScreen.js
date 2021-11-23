@@ -11,7 +11,7 @@ import {
   SafeAreaView,
   Switch,
   FlatList,
-  Modal
+  Modal,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useSelector, useDispatch } from "react-redux";
@@ -103,8 +103,6 @@ export default function DrugInfoScreen({ navigation, route }) {
     // });
   }, []);
 
-
-
   const [isEdit, setIsEdit] = useState(false);
   const [isConfirmEdit, setIsConfirmEdit] = useState(false);
   const [isCancleEdit, setIsCancleEdit] = useState(false);
@@ -170,49 +168,48 @@ export default function DrugInfoScreen({ navigation, route }) {
     const [note, setNote] = useState(medicineInfo.note);
     const [description, setDescription] = useState(medicineInfo.description);
     const [image, setImage] = useState(medicineInfo.image);
-    const [imageModal, setImageModal] = useState(false)
-  
+    const [imageModal, setImageModal] = useState(false);
 
     const showImagePicker = async () => {
       // Ask the user for the permission to access the media library
       const permissionResult =
         await ImagePicker.requestMediaLibraryPermissionsAsync();
-  
+
       if (permissionResult.granted === false) {
         alert("You've refused to allow this appp to access your photos!");
         return;
       }
       setImageModal(false);
       const result = await ImagePicker.launchImageLibraryAsync();
-  
+
       // Explore the result
 
-  
       if (!result.cancelled) {
         setImage(result.uri);
       }
     };
-  
+
     // This function is triggered when the "Open camera" button pressed
     const openCamera = async () => {
       // Ask the user for the permission to access the camera
-      const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
-  
+      const permissionResult =
+        await ImagePicker.requestCameraPermissionsAsync();
+
       if (permissionResult.granted === false) {
         alert("You've refused to allow this appp to access your camera!");
         return;
       }
       setImageModal(false);
       const result = await ImagePicker.launchCameraAsync();
-  
+
       // Explore the result
       console.log(result);
-  
+
       if (!result.cancelled) {
         setImage(result.uri);
       }
     };
-  
+
     const selectSample = async (img) => {
       setImage(img.localUri);
       setImageModal(!imageModal);
@@ -325,7 +322,7 @@ export default function DrugInfoScreen({ navigation, route }) {
           <View style={{ flexDirection: "row", flex: 1 }}>
             <View style={{ flex: 0.7 }}>
               {isEdit ? (
-                <TouchableOpacity onPress={()=> setImageModal(true)}>
+                <TouchableOpacity onPress={() => setImageModal(true)}>
                   <Image
                     style={{ width: "90%", height: "90%" }}
                     source={{ uri: image }}
@@ -493,44 +490,29 @@ export default function DrugInfoScreen({ navigation, route }) {
               backgroundColor: "rgba(255,255,255,1)",
             }}
           >
-            <TouchableOpacity
-              style={styles.confirmBox}
-              onPress={() => {
-                setIsEdit(!isEdit);
-                // navigation.navigate("EditDrugInfo", { id });
-              }}
-            >
-              <Text style={styles.confirmText}>ยกเลิก</Text>
-            </TouchableOpacity>
+            
             <TouchableOpacity
               style={styles.confirmBox}
               onPress={() => {
                 setIsConfirmEdit(!isConfirmEdit);
               }}
             >
-              <Text style={styles.confirmText}>ยืนยัน</Text>
+              <Text style={styles.confirmText}>ยืนยันการแก้ไข</Text>
             </TouchableOpacity>
           </View>
         ) : (
-          <View
-            style={{
-              flexDirection: "row",
-              width: "100%",
-              height: 60,
-              backgroundColor: "rgba(255,255,255,1)",
-            }}
-          >
+          <View style={globalStyle.bottomTabs}>
             <TouchableOpacity
-              style={styles.confirmBox}
+              style={globalStyle.confirmBox}
               onPress={() => {
                 dispatch(stackDeleteTime(id));
                 console.log(delNoti);
                 setIsEdit(!isEdit);
 
-                // navigation.navigate("EditDrugInfo", { id });
               }}
             >
-              <Text style={styles.confirmText}>แก้ไข</Text>
+              <AntDesign name="edit" size={30} color="#fcb603" />
+              <Text style={[globalStyle.confirmText,{color:"#fcb603"}]}>แก้ไข</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.confirmBox}
@@ -539,49 +521,60 @@ export default function DrugInfoScreen({ navigation, route }) {
                 // navigation.navigate("Medicine");
               }}
             >
-              <Text style={styles.confirmText}>ลบ</Text>
+              <AntDesign name="delete" size={30} color="red" />
+              <Text style={[globalStyle.confirmText,{color:"red"}]}>ลบ</Text>
             </TouchableOpacity>
           </View>
+          // <View
+          //   style={{
+          //     flexDirection: "row",
+          //     width: "100%",
+          //     height: 60,
+          //     backgroundColor: "rgba(255,255,255,1)",
+          //   }}
+          // >
+    
+          // </View>
         )}
       </View>
       <Modal
-          animationType="fade"
-          transparent={true}
-          visible={confirmModal}
-          onRequestClose={() => {
-            Alert.alert("Modal has been closed.");
-            setConfirmModal(!confirmModal);
-          }}
-        >
-          <View style={globalStyle.centeredView}>
-            <View style={globalStyle.modalView}>
+        animationType="fade"
+        transparent={true}
+        visible={confirmModal}
+        onRequestClose={() => {
+          Alert.alert("Modal has been closed.");
+          setConfirmModal(!confirmModal);
+        }}
+      >
+        <View style={globalStyle.centeredView}>
+          <View style={globalStyle.modalView}>
+            <TouchableOpacity
+              style={{ marginLeft: 280 }}
+              onPress={() => setConfirmModal(!confirmModal)}
+            >
+              <EvilIcons name="close" size={24} color="black" />
+            </TouchableOpacity>
+            <Text style={globalStyle.modalText}>คุณแน่ใจนะ?</Text>
+            <Text style={globalStyle.modalText}>
+              ข้อมูลยาที่คุณกรอกจะหายไปทั้งหมด
+            </Text>
+            <View style={{ flexDirection: "row" }}>
               <TouchableOpacity
-                style={{ marginLeft: 280 }}
+                style={[globalStyle.button, globalStyle.buttonCancel]}
                 onPress={() => setConfirmModal(!confirmModal)}
               >
-                <EvilIcons name="close" size={24} color="black" />
+                <Text style={[globalStyle.textStyle]}>ยกเลิก</Text>
               </TouchableOpacity>
-              <Text style={globalStyle.modalText}>คุณแน่ใจนะ?</Text>
-              <Text style={globalStyle.modalText}>
-                ข้อมูลยาที่คุณกรอกจะหายไปทั้งหมด
-              </Text>
-              <View style={{ flexDirection: "row" }}>
-                <TouchableOpacity
-                  style={[globalStyle.button, globalStyle.buttonCancel]}
-                  onPress={() => setConfirmModal(!confirmModal)}
-                >
-                  <Text style={[globalStyle.textStyle]}>ยกเลิก</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={[globalStyle.button, globalStyle.buttonClose]}
-                  onPress={() => delMedicine()}
-                >
-                  <Text style={[globalStyle.textStyle]}>ตกลง</Text>
-                </TouchableOpacity>
-              </View>
+              <TouchableOpacity
+                style={[globalStyle.button, globalStyle.buttonClose]}
+                onPress={() => delMedicine()}
+              >
+                <Text style={[globalStyle.textStyle]}>ตกลง</Text>
+              </TouchableOpacity>
             </View>
           </View>
-        </Modal>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 }

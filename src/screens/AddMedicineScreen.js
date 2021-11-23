@@ -371,15 +371,15 @@ export default function AddMedicineScreen({ navigation }) {
 
       <View style={globalStyle.bottomTabs}>
         <TouchableOpacity
-          style={[styles.confirmBox]}
+          style={[globalStyle.confirmBox]}
           onPress={() => setConfirmModal(true)}
         >
           <Entypo name="cross" size={20} color="black" />
-          <Text style={styles.confirmText}>ยกเลิก</Text>
+          <Text style={globalStyle.confirmText}>ยกเลิก</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.confirmBox} onPress={() => confirm()}>
+        <TouchableOpacity style={globalStyle.confirmBox} onPress={() => confirm()}>
           <AntDesign name="check" size={20} color="black" />
-          <Text style={styles.confirmText}>บันทึก</Text>
+          <Text style={globalStyle.confirmText}>บันทึก</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -411,17 +411,6 @@ const styles = StyleSheet.create({
     borderColor: "#DADADA",
     padding: 12,
     bottom: 0,
-  },
-  confirmBox: {
-    flex: 1,
-    width: "100%",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  confirmText: {
-    color: "rgba(0,0,0,1)",
-    fontSize: 18,
-    fontFamily: "Prompt-Light",
   },
   image: {
     width: "100%",
