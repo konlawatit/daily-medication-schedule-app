@@ -41,7 +41,7 @@ export function upLocalToFirebase(uid) {
                 let image = ''
                 if (data.image !== "") {
                   image = `${Math.floor(Math.random() * 10)}${Math.floor(Math.random() * 10)}${Math.floor(Math.random() * 10)}${Math.floor(Math.random() * 10)}${Math.floor(Math.random() * 10)}`
-                  uploadImage(uid, data.image, image)
+                  // uploadImage(uid, data.image, image)
                 }
                 //  else {
                 //   im
@@ -53,7 +53,7 @@ export function upLocalToFirebase(uid) {
                   name: data.name,
                   note: data.note,
                   description: data.description,
-                  image: image,
+                  image: data.image,
                   time: [],
                   history: []
                 };

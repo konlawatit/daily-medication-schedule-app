@@ -63,6 +63,8 @@ export default function DrugInfoScreen({ navigation, route }) {
     setUniqueValue((data) => data + 1);
   };
 
+  
+
   // let selectTimeList = useSelector((state) => state.medicine.time);
 
   const [testTime, setTestTime] = useState();
@@ -140,7 +142,7 @@ export default function DrugInfoScreen({ navigation, route }) {
     setTimeout(function () {
       setIsEdit(false);
       setIsConfirmEdit(false);
-    }, 200);
+    }, 500);
   };
 
   const delMedicine = () => {
@@ -322,16 +324,26 @@ export default function DrugInfoScreen({ navigation, route }) {
           <View style={{ flexDirection: "row", flex: 1 }}>
             <View style={{ flex: 0.7 }}>
               {isEdit ? (
+                
                 <TouchableOpacity onPress={() => setImageModal(true)}>
-                  <Image
+                  {image ? (
+                    <Image
+                      style={{ width: "90%", height: "90%" }}
+                      source={{ uri: image }}
+                    />
+                  ) : (
+                    <Image
                     style={{ width: "90%", height: "90%" }}
-                    source={{ uri: image }}
+                    source={require("../../assets/test.jpg")}
                   />
+                  )}
                 </TouchableOpacity>
               ) : (
+                
+                
                 <Image
                   style={{ width: "90%", height: "90%" }}
-                  source={{ uri: medicineInfo.image }}
+                  source={ medicineInfo.image ? { uri: medicineInfo.image } : require("../../assets/test.jpg") }
                 />
               )}
             </View>
@@ -491,6 +503,17 @@ export default function DrugInfoScreen({ navigation, route }) {
             }}
           >
             
+            <TouchableOpacity
+              style={styles.confirmBox}
+              onPress={() => {
+                setIsEdit(!isEdit)
+                // setIsConfirmEdit(isConfirmEdit);
+                // setIsCancleEdit(!isCancleEdit)
+                // setIsConfirmEdit(!isConfirmEdit);
+              }}
+            >
+              <Text style={styles.confirmText}>ยกเลิกการแก้ไข</Text>
+            </TouchableOpacity>
             <TouchableOpacity
               style={styles.confirmBox}
               onPress={() => {

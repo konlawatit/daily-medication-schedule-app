@@ -18,13 +18,13 @@ import {
   
   TouchableHighlight
 } from "react-native";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { LinearGradient } from "expo-linear-gradient";
 
 import {globalStyle} from "../stylesheet/globalStylesheet";
 
 //sqlite
-import { getDailyMedicine } from "../database/database-function";
+import { getDailyMedicine, resetStatusTime } from "../database/database-function";
 
 //Components
 import HeaderTitle from "../components/HeaderTitle";
@@ -40,6 +40,7 @@ Notifications.setNotificationHandler({
   },
 })
 export default function DailyScreen({ navigation }) {
+  const dispatch = useDispatch()
   const speak = (text) => {
     Speech.speak(text,{language:"th-TH",rate:1.05});
   };
@@ -62,18 +63,23 @@ export default function DailyScreen({ navigation }) {
   var day = days[ new Date().getDay() ];
   timeList = timeList.filter(x=>x.day[day]==1)
 
+  // console.log(timeList)
   // NOTI BLOCK
   useEffect(() => {
     const interval = setInterval(() => {
       setIntervalID(intervalID+1)
-      
       const date = new Date();
+      
+      
       const checkDate = (date.getHours()<10?'0':'')+date.getHours().toString()+":"+(date.getMinutes()<10?'0':'')+date.getMinutes().toString()
+      if (checkDate === "00:00") {
+        resetStatusTime(dispatch)
+      }
       // console.log(checkDate+":"+date.getSeconds().toString())
       if(date.getSeconds()==0){
         console.log("Passed")
         timeList.forEach((item)=>{
-          if(item.isNoti==1){
+          if(item.isNoti==1 || item.isNoti==true){
             if(checkDate == item.time){
               triggerLocalNotificationHandler(item)
             }

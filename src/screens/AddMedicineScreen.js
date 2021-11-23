@@ -50,6 +50,8 @@ export default function AddMedicineScreen({ navigation }) {
   const [imageModal, setImageModal] = useState(false);
   const [confirmModal, setConfirmModal] = useState(false);
 
+  const [stackDelTime, setStackDelTime] = useState([])
+
   const [check, setCheck] = useState(false);
 
   let dispatch = useDispatch();
@@ -77,14 +79,16 @@ export default function AddMedicineScreen({ navigation }) {
 
 
   const renderItem = (itemData) => {
-    console.log("----> check", itemData.item);
+    // console.log("----> check", itemData);
     return (
       <View style={{ alignItems: "center" }}>
         <NotificationCard
+        navigation={false}
           time={itemData.item.time}
           day={itemData.item.day}
           id={itemData.item.id}
           isNoti={itemData.item.isNoti}
+
         />
       </View>
     );

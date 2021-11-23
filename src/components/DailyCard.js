@@ -53,6 +53,7 @@ export default function DailyCard(props) {
 
   const dispatch = useDispatch();
 
+
   const toggleVerify = () => {
     updateVerify(!verify, id, dispatch, idMed);
     setVerify(!verify);
@@ -65,7 +66,7 @@ export default function DailyCard(props) {
       onPress={() => {
         // upLocalToFirebase()
         dispatch(selectMedicine(idMed));
-        navigation.navigate("DrugInfo", { idMed });
+        navigation.navigate("DrugInfo", { id:idMed });
       }}
     >
       <View style={{ flex: 0.7 }}>
