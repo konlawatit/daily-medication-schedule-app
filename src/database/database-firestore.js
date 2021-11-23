@@ -4,7 +4,16 @@ import { firebase } from "../../firebase";
 import { DatabaseConnection } from "../database/database-connection";
 const db = DatabaseConnection.getConnection();
 
-export function upLocalToFirebase() {
+const uploadImage = async (uid, uri, name) => {
+  const response = await fetch(uri);
+  const blob = await response.blob();
+
+  let ref = firebase.storage().ref().child(`images/${uid}/${name}`)
+  return ref.put(blob)
+}
+
+//เซฟทัพ
+export function upLocalToFirebase(uid) {
   const firestore = firebase.firestore();
   db.transaction(
     (tx) => {
@@ -22,17 +31,29 @@ export function upLocalToFirebase() {
             [],
             (tx, results) => {
               const medicine = results.rows._array;
+              console.log('medicine select save to firestore --->', medicine)
               let payload = {
                 history: [],
                 medicine: []
               };
 
-              medicine.forEach((data) => {
+              medicine.forEach(async (data) => {
+                let image = ''
+                if (data.image !== "") {
+                  image = `${Math.floor(Math.random() * 10)}${Math.floor(Math.random() * 10)}${Math.floor(Math.random() * 10)}${Math.floor(Math.random() * 10)}${Math.floor(Math.random() * 10)}`
+                  uploadImage(uid, data.image, image)
+                }
+                //  else {
+                //   im
+                // }
+                console.log('iamge namemmmm ', image)
+
+
                 let medList = {
                   name: data.name,
                   note: data.note,
                   description: data.description,
-                  iamge: data.image,
+                  image: image,
                   time: [],
                   history: []
                 };
@@ -71,7 +92,7 @@ export function upLocalToFirebase() {
                         console.log('--------------med list---', medList)
                         let userRef = firestore
                           .collection("users")
-                          .doc("Mx4dra711kadIj2C9oIfUl3wKEC3");
+                          .doc(uid);
                         userRef
                           .set({
                             history: [],
@@ -93,24 +114,6 @@ export function upLocalToFirebase() {
                         console.log("up local to firebase history", err);
                       }
                     );
-                    // push firebase
-                    // let userRef = firestore.collection('users').doc()
-                    // payload.medicine.push(medList);
-                    // let userRef = firestore
-                    //   .collection("users")
-                    //   .doc("Mx4dra711kadIj2C9oIfUl3wKEC3");
-                    // userRef
-                    //   .set({
-                    //     history: [],
-                    //     medicine: []
-                    //   })
-                    //   .then(() => {
-                    //     userRef.update({
-                    //       medicine:
-                    //         firebase.firestore.FieldValue.arrayUnion(medList)
-                    //     });
-                    //   });
-
                     console.log("medicine 1 -->", payload);
                   },
                   (_, err) => {
@@ -126,15 +129,6 @@ export function upLocalToFirebase() {
             }
           );
 
-          tx.executeSql(
-            `SELECT *
-          FROM HISTORY`,
-            [],
-            (tx, results) => {},
-            (tx, err) => {
-              console.log("up to firebase ", err);
-            }
-          );
         }},
         (_, err) => {
           console.log("up local to firebase", err);

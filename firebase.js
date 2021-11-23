@@ -12,9 +12,10 @@ import { setUser } from "./src/store/actions/userAction";
 if (!fb.apps.length) {
   console.log("Connected with firebase");
   fb.initializeApp(firebaseConfig);
-  fb.firestore().settings({ experimentalForceLongPolling: true });
+  fb.firestore().settings({ experimentalForceLongPolling: true, ignoreUndefinedProperties: true });
 }
-LogBox.ignoreLogs(["Setting a timer for a long period of time"]);
+LogBox.ignoreLogs(["Setting a timer for a long period of time", "Unhandled promise rejection: TypeError"]);
+LogBox.ignoreAllLogs()
 
 const GoogleProvider = new fb.auth.GoogleAuthProvider();
 
@@ -24,6 +25,7 @@ import { loginFirebase } from "./src/database/database-firebase";
 import { getNextTriggerDateAsync } from "expo-notifications";
 
 export const firebase = !fb.apps.length ? fb.initializeApp(firebaseConfig) : fb;
+
 
 export async function signInAnonymous(username, password) {
   const firestore = fb.firestore();
