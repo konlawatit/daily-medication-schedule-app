@@ -85,6 +85,17 @@ const db = DatabaseConnection.getConnection();
 //   );
 // }
 
+export function resetStatusTime(dispatch) {
+  db.transaction(tx => {
+    tx.executeSql(`UPDATE TIME SET status=0`,[],(tx, results) => {
+      changeTimeState(dispatch)
+      console.log('reset status tiem success')
+    }, (tx, err) => {
+      console.log('reset status err', err)
+    })
+  })
+}
+
 export function changeHistoryState(dispatch) {
   db.transaction(tx => {
     tx.executeSql(
@@ -107,8 +118,8 @@ export function changeHistoryState(dispatch) {
   })
 }
 
-export async function changeMedicineState(dispatch) {
-  try {
+export function changeMedicineState(dispatch) {
+
     db.transaction(tx => {
       tx.executeSql(
         `SELECT *
@@ -116,6 +127,8 @@ export async function changeMedicineState(dispatch) {
         [],
         (tx, results) => {
           console.log("select medicine success");
+          
+
           dispatch(setMedicine(results.rows._array));
           
         },
@@ -126,11 +139,7 @@ export async function changeMedicineState(dispatch) {
       );
     }, err => console.log('transaction change medicin state' ,err),
     () => {
-
     })
-  } catch(err) {
-    console.log('change medicn state', err)
-  }
 }
 
 export function changeTimeState(dispatch) {
@@ -559,8 +568,12 @@ export function updateMedicine(payload, dispatch) {
         (tx, results) => {
           // console.log(results.rows);
           console.log("select medicne success");
+          
+          changeMedicineState(dispatch)
+          dispatch(setMedicine([]));
           dispatch(setMedicine(results.rows._array));
           dispatch(selectMedicine(payload.id));
+          changeTimeState(dispatch)
         },
         (_, err) => {
           console.log("select medicine error", err);

@@ -72,8 +72,10 @@ export default function NotificationCard(props) {
           : { backgroundColor: "#616161" },
       ]}
       onPress={() => {
-        props.navigation.navigate("EditNotificationTime", { id });
-        dispatch(selectTime(id));
+        if (props.navigation !== false) {
+          props.navigation.navigate("EditNotificationTime", { id });
+          dispatch(selectTime(id));
+        }
       }}
     >
       {/* <AntDesign name="delete" size={24} color="red" /> */}
