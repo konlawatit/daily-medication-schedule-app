@@ -40,7 +40,7 @@ export async function upLocalToFirebase2(firebase, uid) {
                     name: data.name,
                     note: data.note,
                     description: data.description,
-                    iamge: data.image,
+                    image: data.image,
                     time: [],
                     history: []
                   };
@@ -161,7 +161,7 @@ export function upLocalToFirebase3(firebase, medicine234, navigation, dispatch, 
                   name: data.name,
                   note: data.note,
                   description: data.description,
-                  iamge: data.image,
+                  image: data.image,
                   time: [],
                   history: []
                 };

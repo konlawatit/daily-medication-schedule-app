@@ -104,7 +104,6 @@ export default function MyNavigator() {
   changeMedicineState(dispatch)
 
   useEffect(() => {
-    // dropDB();
     initDB(dispatch);
 
 

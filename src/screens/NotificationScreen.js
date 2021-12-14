@@ -51,7 +51,7 @@ export default function NotificationScreen({ navigation,route }) {
       />
       <View style={styles.section1}>
         <Image
-          source={require("../../assets/test.jpg")}
+          source={{uri:route.params.data.image}}
           style={{ width: 200, height: 200}}
         />
       </View>

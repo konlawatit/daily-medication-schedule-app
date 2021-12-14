@@ -15,7 +15,7 @@ import {
 } from "react-native";
 import { useDispatch } from "react-redux";
 import { selectMedicine } from "../store/actions/medicineAction";
-import { Feather } from '@expo/vector-icons';
+import { Feather, FontAwesome } from '@expo/vector-icons';
 
 import { updateVerify } from "../database/database-function";
 import { date } from "yup/lib/locale";
@@ -93,7 +93,7 @@ export default function DailyCard(props) {
           
           
         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-          <Text style={{ fontSize: 45, fontFamily: "Prompt-Light" }}>
+          <Text style={{ fontSize: 40, fontFamily: "Prompt-Light" }}>
             {title} น.
           </Text>
         </View>
@@ -103,8 +103,11 @@ export default function DailyCard(props) {
         <Text style={{ fontSize: 30, fontFamily: "Prompt-Light" }}>
           {subTitle}
         </Text>
-        <TouchableOpacity onPress={() => setModalVisible(true)} style={{alignItems:"flex-end"}}>
-          <Feather name="check-circle" size={28} color="black" />
+        <TouchableOpacity onPress={() => setModalVisible(true)} style={{flexDirection:'row'}}>
+        <Text style={{ fontSize: 14, fontFamily: "Prompt-Light" ,flex:1,color:'blue'}}>
+          ยืนยันการแจ้งเตือน&nbsp;
+          <FontAwesome name="hand-o-left" size={16} color="blue"/>
+        </Text>
         </TouchableOpacity>
 
       </View>

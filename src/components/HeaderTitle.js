@@ -130,6 +130,7 @@ export default function HeaderTitle(props) {
                 onPress={() => {
                   //ok
                   upLocalToFirebase(user.uid);
+                  setConfirmModal(!confirmModal)
                 }}
               >
                 <Text style={[globalStyle.textStyle]}>ตกลง</Text>

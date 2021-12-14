@@ -35,7 +35,7 @@ export default function HistoryScreen({ navigation }) {
 
   const [date, setDate] = useState(new Date());
   const [startDate, setStartDate] = useState("ตั้งแต่");
-  const [endDate, setEndDate] = useState("ถึง");
+  const [endDate, setEndDate] = useState("ถึงวันที่");
   const [option, setOption] = useState("ดูทั้งหมด");
   function getUnique(array) {
     let i = 0;
@@ -229,7 +229,7 @@ export default function HistoryScreen({ navigation }) {
             />
           </View>
         </View>
-        {/* <View style={styles.sectionFilter}>
+        <View style={styles.sectionFilter}>
           <View style={styles.sectionDate}>
             <View style={{ flexDirection: "row" }}>
               <TouchableOpacity
@@ -266,7 +266,7 @@ export default function HistoryScreen({ navigation }) {
                   }}
                   isVisible={isDatePickerVisible}
                   mode="date"
-                  display="calendar"
+                  display="spinner"
                   isDarkModeEnabled={false}
                   onConfirm={handleConfirm}
                   onCancel={hideDatePicker}
@@ -281,6 +281,7 @@ export default function HistoryScreen({ navigation }) {
                   style={{
                     flex: 1,
                     justifyContent: "center",
+                    alignItems:"flex-start"
                   }}
                 >
                   <Text
@@ -317,7 +318,7 @@ export default function HistoryScreen({ navigation }) {
               </TouchableOpacity>
             </View>
           </View>
-        </View> */}
+        </View>
       </View>
 
       <DataTable>

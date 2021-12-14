@@ -73,7 +73,7 @@ export default function TestUpload({ navigation }) {
           //   console.log(downloadedFile);
         }}
       />
-      <Button title="upload iamge" onPress={() => {
+      <Button title="upload image" onPress={() => {
           showImagePicker();
       }} />
     </View>

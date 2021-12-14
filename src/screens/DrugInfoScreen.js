@@ -113,6 +113,11 @@ export default function DrugInfoScreen({ navigation, route }) {
     require("../../assets/sample/2.jpeg"),
     require("../../assets/sample/3.jpg"),
     require("../../assets/sample/4.png"),
+    require("../../assets/sample/5.jpeg"),
+    require("../../assets/sample/6.jpeg"),
+    require("../../assets/sample/7.jpg"),
+    require("../../assets/sample/8.jpg"),
+    require("../../assets/sample/9.jpg")
   ]);
 
   let delNoti = useSelector((state) => state.medicine.stackDeleteTime);
@@ -512,7 +517,7 @@ export default function DrugInfoScreen({ navigation, route }) {
                 // setIsConfirmEdit(!isConfirmEdit);
               }}
             >
-              <Text style={styles.confirmText}>ยกเลิกการแก้ไข</Text>
+              <Text style={styles.confirmText}>ยกเลิก</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.confirmBox}
@@ -520,7 +525,7 @@ export default function DrugInfoScreen({ navigation, route }) {
                 setIsConfirmEdit(!isConfirmEdit);
               }}
             >
-              <Text style={styles.confirmText}>ยืนยันการแก้ไข</Text>
+              <Text style={styles.confirmText}>ยืนยัน</Text>
             </TouchableOpacity>
           </View>
         ) : (

@@ -272,15 +272,6 @@ export default function EditNotificationTimeScreen({ navigation, route }) {
         <View style={styles.line}></View>
       </View>
       <View style={styles.section2}>
-        <FlatList
-          data={options}
-          contentContainerStyle={{
-            // height: "100%",
-            justifyContent: "space-evenly"
-          }}
-          renderItem={renderItem}
-          keyExtractor={(item, index) => item.id.toString()}
-        />
       </View>
       <View style={styles.section3}>
         <View
@@ -321,6 +312,7 @@ const styles = StyleSheet.create({
     paddingTop: 30
   },
   section1: {
+    marginTop:200,
     flex: 0.9,
     width: "90%",
     marginBottom: 10,
